@@ -3,7 +3,7 @@
 	<artifactId>async-map</artifactId>
 	<version>0.0.15</version>
 	<description>Interface and utilities for asynchronous maps in Java.</description>
-	<url>https://github.com/mxro/async-map</url>
+	<url>https://github.com/javadelight/delight-keyvalue</url>
 
 
 	<properties>
@@ -366,11 +366,6 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:git@github.com:mxro/async-map.git</connection>
-		<url>https://github.com/mxro/async-map</url>
-		<developerConnection>scm:git:git@github.com:mxro/async-map.git
-		</developerConnection>
-	</scm>
+	
 
 </project>
