@@ -1,7 +1,9 @@
-async-map
+[![Build Status](https://travis-ci.org/javadelight/delight-keyvalue.svg)](https://travis-ci.org/javadelight/delight-keyvalue)
+
+delight-keyvalue
 =========
 
-[![Build Status](https://travis-ci.org/mxro/async-map.svg?branch=master)](https://travis-ci.org/mxro/async-map)
+
 
 Definition of an asynchronous Map interface and utilities to work with the same.
 
