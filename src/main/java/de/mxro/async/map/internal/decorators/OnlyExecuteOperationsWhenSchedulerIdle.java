@@ -33,7 +33,7 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
-        if (scheduler.isRunning()) {
+        if (!scheduler.suspendIfNotRunning()) {
             scheduler.schedule(new Operation<Object>() {
 
                 @Override
@@ -44,8 +44,6 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
             }, AsyncCommon.asValueCallback(callback));
             return;
         }
-
-        scheduler.suspend();
 
         decorated.put(key, value, resumeScheduler(callback));
     }
