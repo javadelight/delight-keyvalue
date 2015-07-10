@@ -50,8 +50,9 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
     @Override
     public void putSync(final K key, final V value) {
-        // TODO Auto-generated method stub
-
+        if (!scheduler.isRunning()) {
+            decorated.put(key, value);
+        }
     }
 
     @Override
