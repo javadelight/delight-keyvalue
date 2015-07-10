@@ -47,7 +47,7 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
 
         scheduler.suspend();
 
-        decorated.put(key, value, callback);
+        decorated.put(key, value, resumeScheduler(callback));
     }
 
     @Override
