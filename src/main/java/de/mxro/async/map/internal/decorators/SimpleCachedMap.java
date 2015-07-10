@@ -6,12 +6,12 @@ import delight.functional.Fn;
 
 import java.util.Map;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
-class SimpleCachedMap<K, V> implements AsyncMap<K, V> {
+class SimpleCachedMap<K, V> implements Store<K, V> {
 
-	private final AsyncMap<K, V> decorated;
+	private final Store<K, V> decorated;
 	private final Map<K, Object> cache;
 
 	private final static Object NULL = Fn.object();
@@ -104,7 +104,7 @@ class SimpleCachedMap<K, V> implements AsyncMap<K, V> {
 		this.decorated.performOperation(operation);
 	}
 
-	public SimpleCachedMap(Map<K, Object> cache, AsyncMap<K, V> decorated) {
+	public SimpleCachedMap(Map<K, Object> cache, Store<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 		this.cache = cache;

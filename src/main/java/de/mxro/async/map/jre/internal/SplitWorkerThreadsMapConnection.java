@@ -13,15 +13,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
 import de.mxro.async.map.operations.MapOperation;
 
-public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, V> {
+public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> {
 
     private final boolean ENABLE_LOG = false;
 
-    private final AsyncMap<K, V> decorated;
+    private final Store<K, V> decorated;
     private ExecutorService executor;
     private ConcurrentHashMap<K, Object> pendingPuts;
     private final int workerThreads;
@@ -278,7 +278,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
         decorated.performOperation(operation);
     }
 
-    public SplitWorkerThreadsMapConnection(final AsyncMap<K, V> connection, final int workerThreads) {
+    public SplitWorkerThreadsMapConnection(final Store<K, V> connection, final int workerThreads) {
         super();
         this.decorated = connection;
         this.workerThreads = workerThreads;

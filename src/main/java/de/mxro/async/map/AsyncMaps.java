@@ -22,7 +22,7 @@ public class AsyncMaps {
      * @param forMap
      * @return
      */
-    public final static <K, V> AsyncMap<K, V> purgeInvalidValues(final AsyncMap<K, V> forMap) {
+    public final static <K, V> Store<K, V> purgeInvalidValues(final Store<K, V> forMap) {
         return AsyncMapDecorators.purgeInvalidValues(forMap);
     }
 
@@ -38,8 +38,8 @@ public class AsyncMaps {
      * @param decorated
      * @return
      */
-    public static <K, V> AsyncMap<K, V> enforceAsynchronousPut(final int delay, final Concurrency concurrency,
-            final AsyncMap<K, V> decorated) {
+    public static <K, V> Store<K, V> enforceAsynchronousPut(final int delay, final Concurrency concurrency,
+            final Store<K, V> decorated) {
         return AsyncMapDecorators.enforceAsynchronousPut(delay, concurrency, decorated);
     }
 
@@ -52,47 +52,47 @@ public class AsyncMaps {
      * @param decorated
      * @return
      */
-    public static <K, V> AsyncMap<K, V> cache(final Map<K, Object> cache, final AsyncMap<K, V> decorated) {
+    public static <K, V> Store<K, V> cache(final Map<K, Object> cache, final Store<K, V> decorated) {
         return AsyncMapDecorators.cache(cache, decorated);
     }
 
-    public static <K, V> AsyncMap<K, V> tierCaches(final AsyncMap<K, V> primaryCache,
-            final AsyncMap<K, V> secondaryCache) {
+    public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache,
+            final Store<K, V> secondaryCache) {
         return AsyncMapDecorators.tierCaches(primaryCache, secondaryCache);
     }
 
-    public final static <K, V> AsyncMap<K, V> filterKeys(final Function<K, K> filter, final AsyncMap<K, V> decorated) {
+    public final static <K, V> Store<K, V> filterKeys(final Function<K, K> filter, final Store<K, V> decorated) {
         return AsyncMapDecorators.filterKeys(filter, decorated);
     }
 
-    public final static <K, V> AsyncMap<K, V> filterValues(final Function<V, V> beforeStorage,
-            final Function<V, V> afterStorage, final AsyncMap<K, V> decorated) {
+    public final static <K, V> Store<K, V> filterValues(final Function<V, V> beforeStorage,
+            final Function<V, V> afterStorage, final Store<K, V> decorated) {
         return AsyncMapDecorators.filterValues(beforeStorage, afterStorage, decorated);
     }
 
-    public final static <K, V> AsyncMap<K, V> ignoreKeys(final Function<K, Boolean> filter,
-            final AsyncMap<K, V> decorated) {
+    public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter,
+            final Store<K, V> decorated) {
         return AsyncMapDecorators.ignoreKeys(filter, decorated);
     }
 
     /**
      * <p>
-     * Calls the {@link AsyncMap#start(de.mxro.async.callbacks.SimpleCallback)}
+     * Calls the {@link Store#start(de.mxro.async.callbacks.SimpleCallback)}
      * method of this map automatically when an asynchronous operation is
      * called.
      * 
      * @return
      * @see LazyStartupMap
      */
-    public static <K, V> AsyncMap<K, V> lazyStartup(final AsyncMap<K, V> decorated) {
+    public static <K, V> Store<K, V> lazyStartup(final Store<K, V> decorated) {
         return AsyncMapDecorators.lazyStartup(decorated);
     }
 
-    public static <K, V> AsyncMap<K, V> hashMap() {
+    public static <K, V> Store<K, V> hashMap() {
         return new HashMapAsyncMap<K, V>();
     }
 
-    public static <K, V> AsyncMap<K, V> trace(final Closure<String> messageReceiver, final AsyncMap<K, V> decorated) {
+    public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
         return AsyncMapDecorators.trace(messageReceiver, decorated);
     }
 

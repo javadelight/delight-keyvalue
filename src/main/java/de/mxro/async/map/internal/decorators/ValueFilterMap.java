@@ -4,7 +4,7 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Function;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
 /**
@@ -15,11 +15,11 @@ import de.mxro.async.map.operations.MapOperation;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-class ValueFilterMap<K, V> implements AsyncMap<K, V> {
+class ValueFilterMap<K, V> implements Store<K, V> {
 
     private final Function<V, V> beforeStorage;
     private final Function<V, V> afterStorage;
-    private final AsyncMap<K, V> decorated;
+    private final Store<K, V> decorated;
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
@@ -83,7 +83,7 @@ class ValueFilterMap<K, V> implements AsyncMap<K, V> {
     }
 
     public ValueFilterMap(final Function<V, V> beforeStorage, final Function<V, V> afterStorage,
-            final AsyncMap<K, V> decorated) {
+            final Store<K, V> decorated) {
         super();
         this.beforeStorage = beforeStorage;
         this.afterStorage = afterStorage;

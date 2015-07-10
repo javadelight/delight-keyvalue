@@ -16,15 +16,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 
-class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
+class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
 
     private final boolean ENABLE_LOG = false;
 
-    private final AsyncMap<K, V> decorated;
+    private final Store<K, V> decorated;
     private final int delay;
     private final Concurrency concurrency;
     private final Map<K, List<PutOperation<K, V>>> pendingPuts;
@@ -373,7 +373,7 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
         decorated.performOperation(operation);
     }
 
-    public EnforceAsynchronousPutMap(final int delay, final Concurrency con, final AsyncMap<K, V> decorated) {
+    public EnforceAsynchronousPutMap(final int delay, final Concurrency con, final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
         this.delay = delay;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
 /**
@@ -22,11 +22,11 @@ import de.mxro.async.map.operations.MapOperation;
  * @param <K>
  * @param <V>
  */
-class LazyStartupMap<K, V> implements AsyncMap<K, V> {
+class LazyStartupMap<K, V> implements Store<K, V> {
 
     private static final String ERROR_MESSAGE = "Lazy start map is not started up. Needs to be started using a call to start or a call to one of its asynchronous operations.";
     final Value<Boolean> started;
-    final AsyncMap<K, V> decorated;
+    final Store<K, V> decorated;
     final List<SimpleCallback> starting;
     /**
      * An unsynchronized variable, which allows faster access to the started
@@ -283,7 +283,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 
     }
 
-    public LazyStartupMap(final AsyncMap<K, V> decorated) {
+    public LazyStartupMap(final Store<K, V> decorated) {
         super();
         this.started_fast_access = false;
         this.started = new Value<Boolean>(false);

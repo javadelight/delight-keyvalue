@@ -5,10 +5,10 @@ import delight.async.callbacks.ValueCallback;
 
 import java.util.HashMap;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
-public class HashMapAsyncMap<K, V> implements AsyncMap<K, V> {
+public class HashMapAsyncMap<K, V> implements Store<K, V> {
 
     private final HashMap<K, V> map;
 

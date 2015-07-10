@@ -2,10 +2,10 @@ package de.mxro.async.map.operations;
 
 import delight.async.callbacks.SimpleCallback;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 
 /**
- * An object representation of a remove operation on an {@link AsyncMap}.
+ * An object representation of a remove operation on an {@link Store}.
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *

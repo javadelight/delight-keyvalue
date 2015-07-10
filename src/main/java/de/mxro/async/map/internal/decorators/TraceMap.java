@@ -4,13 +4,13 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
-final class TraceMap<K, V> implements AsyncMap<K, V> {
+final class TraceMap<K, V> implements Store<K, V> {
 
     private final Closure<String> messageReceiver;
-    private final AsyncMap<K, V> decorated;
+    private final Store<K, V> decorated;
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
@@ -92,7 +92,7 @@ final class TraceMap<K, V> implements AsyncMap<K, V> {
         decorated.performOperation(operation);
     }
 
-    public TraceMap(final Closure<String> messageReceiver, final AsyncMap<K, V> decorated) {
+    public TraceMap(final Closure<String> messageReceiver, final Store<K, V> decorated) {
         super();
         this.messageReceiver = messageReceiver;
         this.decorated = decorated;

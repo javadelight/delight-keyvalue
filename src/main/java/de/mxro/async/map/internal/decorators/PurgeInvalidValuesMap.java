@@ -3,19 +3,19 @@ package de.mxro.async.map.internal.decorators;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
 /**
  * <p>
- * Use in case seralizations can get outdated in a cache.
+ * Use in case serializations can get outdated in a cache.
  * 
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
-class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
+class PurgeInvalidValuesMap<K, V> implements Store<K, V> {
 
-    private final AsyncMap<K, V> decorated;
+    private final Store<K, V> decorated;
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
@@ -120,7 +120,7 @@ class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
         decorated.performOperation(operation);
     }
 
-    public PurgeInvalidValuesMap(final AsyncMap<K, V> decorated) {
+    public PurgeInvalidValuesMap(final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
     }

@@ -3,13 +3,13 @@ package de.mxro.async.map.internal.decorators;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
-class TieredCachesMap<K, V> implements AsyncMap<K, V> {
+class TieredCachesMap<K, V> implements Store<K, V> {
 
-    private final AsyncMap<K, V> secondaryCache;
-    private final AsyncMap<K, V> primaryCache;
+    private final Store<K, V> secondaryCache;
+    private final Store<K, V> primaryCache;
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
@@ -191,7 +191,7 @@ class TieredCachesMap<K, V> implements AsyncMap<K, V> {
         this.primaryCache.performOperation(operation);
     }
 
-    public TieredCachesMap(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
+    public TieredCachesMap(final Store<K, V> cache, final Store<K, V> decorated) {
         super();
         this.secondaryCache = decorated;
         this.primaryCache = cache;

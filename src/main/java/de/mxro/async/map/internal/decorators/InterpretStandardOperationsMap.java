@@ -3,7 +3,7 @@ package de.mxro.async.map.internal.decorators;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.GetOperation;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
@@ -17,9 +17,9 @@ import de.mxro.async.map.operations.RemoveOperation;
  * @param <K>
  * @param <V>
  */
-class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
+class InterpretStandardOperationsMap<K, V> implements Store<K, V> {
 
-	private final AsyncMap<K, V> decorated;
+	private final Store<K, V> decorated;
 
 	@Override
 	public void put(K key, V value, SimpleCallback callback) {
@@ -97,7 +97,7 @@ class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
 		this.decorated.performOperation(operation);
 	}
 
-	public InterpretStandardOperationsMap(AsyncMap<K, V> decorated) {
+	public InterpretStandardOperationsMap(Store<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 	}

@@ -3,21 +3,21 @@ package de.mxro.async.map.jre;
 import java.util.Collections;
 import java.util.WeakHashMap;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.Store;
 import de.mxro.async.map.AsyncMaps;
 import de.mxro.async.map.jre.internal.SplitWorkerThreadsMapConnection;
 
 public class AsyncMapsJre {
 
-	public static final <K, V> AsyncMap<K, V> cacheWithWeakReferences(
-			AsyncMap<K, V> decorated) {
+	public static final <K, V> Store<K, V> cacheWithWeakReferences(
+			Store<K, V> decorated) {
 		return AsyncMaps.cache(
 				Collections.synchronizedMap(new WeakHashMap<K, Object>()),
 				decorated);
 	}
 
-	public static final <K, V> AsyncMap<K, V> divideWork(int workerThreads,
-			AsyncMap<K, V> decorated) {
+	public static final <K, V> Store<K, V> divideWork(int workerThreads,
+			Store<K, V> decorated) {
 		return new SplitWorkerThreadsMapConnection<K, V>(decorated,
 				workerThreads);
 	}

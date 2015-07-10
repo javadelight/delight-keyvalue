@@ -17,7 +17,7 @@ import de.mxro.service.Service;
  * @param <K>
  * @param <V>
  */
-public interface AsyncMap<K, V> extends Service {
+public interface Store<K, V> extends Service {
 
     public void put(K key, V value, SimpleCallback callback);
 
