@@ -9,7 +9,7 @@ import java.util.Map;
 import de.mxro.async.map.internal.HashMapAsyncMap;
 import de.mxro.async.map.internal.decorators.AsyncMapDecorators;
 
-public class AsyncMaps {
+public class Stores {
 
     /**
      * <p>

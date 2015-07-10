@@ -1,19 +1,20 @@
 package de.mxro.async.map.tests
 
-import de.mxro.async.map.AsyncMaps
+import de.mxro.async.map.Stores
 import de.mxro.async.map.jre.AsyncMapsJre
 import delight.async.AsyncCommon
 import delight.async.jre.Async
 import org.junit.Test
+import delight.async.callbacks.SimpleCallback
 
 class TestThatParellelWorkerProcessesPuts {
 	
 	@Test
 	def void test() {
 		
-		val map = AsyncMapsJre.divideWork(4, AsyncMaps.hashMap())
+		val map = AsyncMapsJre.divideWork(4, Stores.hashMap())
 		
-		Async.waitFor [ callback | 
+		Async.waitFor [ SimpleCallback callback | 
 			map.start(AsyncCommon.wrap(callback))
 		]
 		
@@ -29,6 +30,7 @@ class TestThatParellelWorkerProcessesPuts {
 		Async.waitFor [ callback |
 			map.stop(AsyncCommon.wrap(callback))
 		]
+	
 		
 	}
 	
