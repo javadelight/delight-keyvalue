@@ -24,7 +24,7 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
                     decorated.put(key, value, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
                 }
 
-            }, AsyncCommon.wrap(callback));
+            }, AsyncCommon.asValueCallback(callback));
             return;
         }
     }
