@@ -14,6 +14,7 @@ class TestThatParellelWorkerProcessesPuts {
 		
 		val map = AsyncMapsJre.divideWork(4, Stores.hashMap())
 		
+		
 		Async.waitFor [ callback | 
 			map.start(AsyncCommon.wrap(callback))
 		]

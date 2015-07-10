@@ -1,23 +1,53 @@
 package de.mxro.async.map.tests;
 
+import de.mxro.async.map.Store;
+import de.mxro.async.map.Stores;
+import de.mxro.async.map.jre.AsyncMapsJre;
+import delight.async.AsyncCommon;
+import delight.async.Operation;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+import delight.async.jre.Async;
+import delight.functional.Success;
 import org.junit.Test;
 
 @SuppressWarnings("all")
 public class TestThatParellelWorkerProcessesPuts {
   @Test
   public void test() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nAmbiguous feature call.\nThe methods\n\twrap(ValueCallback<Success>) in AsyncCommon and\n\t<T> wrap(SimpleCallback) in AsyncCommon\nboth match."
-      + "\nAmbiguous feature call.\nThe methods\n\twrap(ValueCallback<Success>) in AsyncCommon and\n\t<T> wrap(SimpleCallback) in AsyncCommon\nboth match."
-      + "\nAmbiguous feature call.\nThe methods\n\twrap(ValueCallback<Success>) in AsyncCommon and\n\t<T> wrap(SimpleCallback) in AsyncCommon\nboth match."
-      + "\nAmbiguous feature call.\nThe methods\n\twrap(ValueCallback<Success>) in AsyncCommon and\n\t<T> wrap(SimpleCallback) in AsyncCommon\nboth match."
-      + "\nType mismatch: cannot convert from (ValueCallback<Success>)=>void to Operation<Object>"
-      + "\nType mismatch: cannot convert from (ValueCallback<Success>)=>void to Operation<Object>"
-      + "\nType mismatch: cannot convert from (ValueCallback<Success>)=>void to Operation<Object>"
-      + "\nType mismatch: cannot convert from (ValueCallback<Success>)=>void to Operation<Object>"
-      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or use the closures in a more specific context."
-      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or use the closures in a more specific context."
-      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or use the closures in a more specific context."
-      + "\nThere is no context to infer the closure\'s argument types from. Consider typing the arguments or use the closures in a more specific context.");
+    Store<String, String> _hashMap = Stores.<String, String>hashMap();
+    final Store<String, String> map = AsyncMapsJre.<String, String>divideWork(4, _hashMap);
+    final Operation<Success> _function = new Operation<Success>() {
+      @Override
+      public void apply(final ValueCallback<Success> callback) {
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
+        map.start(_wrap);
+      }
+    };
+    Async.<Success>waitFor(_function);
+    final Operation<Success> _function_1 = new Operation<Success>() {
+      @Override
+      public void apply(final ValueCallback<Success> callback) {
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
+        map.put("1", "one", _wrap);
+      }
+    };
+    Async.<Success>waitFor(_function_1);
+    final Operation<Success> _function_2 = new Operation<Success>() {
+      @Override
+      public void apply(final ValueCallback<Success> callback) {
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
+        map.put("1", "one", _wrap);
+      }
+    };
+    Async.<Success>waitFor(_function_2);
+    final Operation<Success> _function_3 = new Operation<Success>() {
+      @Override
+      public void apply(final ValueCallback<Success> callback) {
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
+        map.stop(_wrap);
+      }
+    };
+    Async.<Success>waitFor(_function_3);
   }
 }
