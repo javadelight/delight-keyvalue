@@ -51,8 +51,18 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
     @Override
     public void putSync(final K key, final V value) {
         if (!scheduler.isRunning()) {
-            decorated.put(key, value);
+            decorated.putSync(key, value);
+            return;
         }
+
+        scheduler.schedule(new Operation<Object>() {
+
+            @Override
+            public void apply(final ValueCallback<Object> callback) {
+                decorated.putSync(key, value);
+            }
+
+        }, AsyncCommon.asValueCallback(AsyncCommon.doNothing()));
     }
 
     @Override
