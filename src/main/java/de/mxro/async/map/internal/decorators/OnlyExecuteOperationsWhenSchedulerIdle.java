@@ -14,6 +14,23 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
     SequentialOperationScheduler scheduler;
     Store<K, V> decorated;
 
+    private final SimpleCallback resumeScheduler(final SimpleCallback callback) {
+        return new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                scheduler.resume();
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                scheduler.resume();
+                callback.onSuccess();
+            }
+        };
+    }
+
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
         if (scheduler.isRunning()) {
@@ -27,6 +44,10 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
             }, AsyncCommon.asValueCallback(callback));
             return;
         }
+
+        scheduler.suspend();
+
+        decorated.put(key, value, callback);
     }
 
     @Override
