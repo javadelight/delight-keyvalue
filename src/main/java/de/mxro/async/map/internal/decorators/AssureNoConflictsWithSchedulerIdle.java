@@ -102,8 +102,8 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
     @Override
     public V getSync(final K key) {
-        // TODO Auto-generated method stub
-        return null;
+
+        return decorated.getSync(key);
     }
 
     @Override
