@@ -21,7 +21,7 @@ public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V>
 
                 @Override
                 public void apply(final ValueCallback<Object> callback) {
-                    decorated.put(key, value, AsyncCommon.);
+                    decorated.put(key, value, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
                 }
 
             }, AsyncCommon.wrap(callback));

@@ -15,20 +15,20 @@ class TestThatParellelWorkerProcessesPuts {
 		
 		
 		Async.waitFor [ callback | 
-			map.start(AsyncCommon.wrap(callback))
+			map.start(AsyncCommon.asSimpleCallback(callback))
 		]
 		
 		
 		Async.waitFor [ callback | 
-			map.put("1", "one", AsyncCommon.wrap(callback))
+			map.put("1", "one", AsyncCommon.asSimpleCallback(callback))
 		]
 		
 		Async.waitFor [ callback | 
-			map.put("1", "one", AsyncCommon.wrap(callback))
+			map.put("1", "one", AsyncCommon.asSimpleCallback(callback))
 		]
 		
 		Async.waitFor [ callback |
-			map.stop(AsyncCommon.wrap(callback))
+			map.stop(AsyncCommon.asSimpleCallback(callback))
 		]
 	
 		

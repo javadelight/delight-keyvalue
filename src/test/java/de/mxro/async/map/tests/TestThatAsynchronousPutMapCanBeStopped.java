@@ -21,32 +21,32 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     final Operation<Success> _function = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = AsyncCommon.wrap(callback);
-        map.start(_wrap);
+        SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
+        map.start(_asSimpleCallback);
       }
     };
     Async.<Success>waitFor(_function);
     final Operation<Success> _function_1 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = AsyncCommon.wrap(callback);
-        map.put("1", "one", _wrap);
+        SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
+        map.put("1", "one", _asSimpleCallback);
       }
     };
     Async.<Success>waitFor(_function_1);
     final Operation<Success> _function_2 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = AsyncCommon.wrap(callback);
-        map.put("2", "two", _wrap);
+        SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
+        map.put("2", "two", _asSimpleCallback);
       }
     };
     Async.<Success>waitFor(_function_2);
     final Operation<Success> _function_3 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = AsyncCommon.wrap(callback);
-        map.stop(_wrap);
+        SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
+        map.stop(_asSimpleCallback);
       }
     };
     Async.<Success>waitFor(_function_3);
