@@ -86,14 +86,14 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
         if (!scheduler.suspendIfNotRunning()) {
-            scheduler.schedule(new Operation<Object>() {
+            scheduler.schedule(new Operation<V>() {
 
                 @Override
-                public void apply(final ValueCallback<Object> callback) {
-                    decorated.get(key, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
+                public void apply(final ValueCallback<V> callback) {
+                    decorated.get(key, callback);
                 }
 
-            }, AsyncCommon.asValueCallback(callback));
+            }, callback);
             return;
         }
 
