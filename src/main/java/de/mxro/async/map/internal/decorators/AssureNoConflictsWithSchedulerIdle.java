@@ -9,7 +9,7 @@ import delight.concurrency.schedule.SequentialOperationScheduler;
 import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
-public class OnlyExecuteOperationsWhenSchedulerIdle<K, V> implements Store<K, V> {
+public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
     SequentialOperationScheduler scheduler;
     Store<K, V> decorated;
