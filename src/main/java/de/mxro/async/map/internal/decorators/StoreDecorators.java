@@ -8,7 +8,7 @@ import java.util.Map;
 
 import de.mxro.async.map.Store;
 
-public class AsyncMapDecorators {
+public class StoreDecorators {
 
     /**
      * <p>

@@ -7,7 +7,7 @@ import delight.functional.Function;
 import java.util.Map;
 
 import de.mxro.async.map.internal.HashMapAsyncMap;
-import de.mxro.async.map.internal.decorators.AsyncMapDecorators;
+import de.mxro.async.map.internal.decorators.StoreDecorators;
 
 public class Stores {
 
@@ -23,7 +23,7 @@ public class Stores {
      * @return
      */
     public final static <K, V> Store<K, V> purgeInvalidValues(final Store<K, V> forMap) {
-        return AsyncMapDecorators.purgeInvalidValues(forMap);
+        return StoreDecorators.purgeInvalidValues(forMap);
     }
 
     /**
@@ -40,7 +40,7 @@ public class Stores {
      */
     public static <K, V> Store<K, V> enforceAsynchronousPut(final int delay, final Concurrency concurrency,
             final Store<K, V> decorated) {
-        return AsyncMapDecorators.enforceAsynchronousPut(delay, concurrency, decorated);
+        return StoreDecorators.enforceAsynchronousPut(delay, concurrency, decorated);
     }
 
     /**
@@ -53,26 +53,26 @@ public class Stores {
      * @return
      */
     public static <K, V> Store<K, V> cache(final Map<K, Object> cache, final Store<K, V> decorated) {
-        return AsyncMapDecorators.cache(cache, decorated);
+        return StoreDecorators.cache(cache, decorated);
     }
 
     public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache,
             final Store<K, V> secondaryCache) {
-        return AsyncMapDecorators.tierCaches(primaryCache, secondaryCache);
+        return StoreDecorators.tierCaches(primaryCache, secondaryCache);
     }
 
     public final static <K, V> Store<K, V> filterKeys(final Function<K, K> filter, final Store<K, V> decorated) {
-        return AsyncMapDecorators.filterKeys(filter, decorated);
+        return StoreDecorators.filterKeys(filter, decorated);
     }
 
     public final static <K, V> Store<K, V> filterValues(final Function<V, V> beforeStorage,
             final Function<V, V> afterStorage, final Store<K, V> decorated) {
-        return AsyncMapDecorators.filterValues(beforeStorage, afterStorage, decorated);
+        return StoreDecorators.filterValues(beforeStorage, afterStorage, decorated);
     }
 
     public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter,
             final Store<K, V> decorated) {
-        return AsyncMapDecorators.ignoreKeys(filter, decorated);
+        return StoreDecorators.ignoreKeys(filter, decorated);
     }
 
     /**
@@ -85,7 +85,7 @@ public class Stores {
      * @see LazyStartupMap
      */
     public static <K, V> Store<K, V> lazyStartup(final Store<K, V> decorated) {
-        return AsyncMapDecorators.lazyStartup(decorated);
+        return StoreDecorators.lazyStartup(decorated);
     }
 
     public static <K, V> Store<K, V> hashMap() {
@@ -93,7 +93,7 @@ public class Stores {
     }
 
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
-        return AsyncMapDecorators.trace(messageReceiver, decorated);
+        return StoreDecorators.trace(messageReceiver, decorated);
     }
 
 }
