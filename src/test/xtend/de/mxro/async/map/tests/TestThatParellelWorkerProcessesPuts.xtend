@@ -5,7 +5,6 @@ import de.mxro.async.map.jre.AsyncMapsJre
 import delight.async.AsyncCommon
 import delight.async.jre.Async
 import org.junit.Test
-import delight.async.callbacks.SimpleCallback
 
 class TestThatParellelWorkerProcessesPuts {
 	
