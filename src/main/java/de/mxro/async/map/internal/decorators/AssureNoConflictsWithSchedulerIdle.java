@@ -31,6 +31,24 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
         };
     }
 
+    private final ValueCallback<V> resumeScheduler(final ValueCallback<V> callback) {
+        return new ValueCallback<V>() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                scheduler.resume();
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess(final V value) {
+                scheduler.resume();
+                callback.onSuccess(value);
+
+            }
+        };
+    }
+
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
         if (!scheduler.suspendIfNotRunning()) {
@@ -67,8 +85,19 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        // TODO Auto-generated method stub
+        if (!scheduler.suspendIfNotRunning()) {
+            scheduler.schedule(new Operation<Object>() {
 
+                @Override
+                public void apply(final ValueCallback<Object> callback) {
+                    decorated.get(key, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
+                }
+
+            }, AsyncCommon.asValueCallback(callback));
+            return;
+        }
+
+        decorated.get(key, resumeScheduler(callback));
     }
 
     @Override
