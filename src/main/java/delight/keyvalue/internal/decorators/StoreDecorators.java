@@ -91,7 +91,7 @@ public class StoreDecorators {
     }
 
     public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter, final Store<K, V> decorated) {
-        return new IgnoreKeysMap<K, V>(filter, decorated);
+        return new IgnoreKeysStore<K, V>(filter, decorated);
     }
 
     /**

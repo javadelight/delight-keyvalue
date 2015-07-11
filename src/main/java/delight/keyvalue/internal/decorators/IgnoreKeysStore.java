@@ -14,7 +14,7 @@ import delight.keyvalue.operations.StoreOperation;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-class IgnoreKeysMap<K, V> implements Store<K, V> {
+class IgnoreKeysStore<K, V> implements Store<K, V> {
 
     private final Function<K, Boolean> filter;
     private final Store<K, V> decorated;
@@ -92,7 +92,7 @@ class IgnoreKeysMap<K, V> implements Store<K, V> {
         this.decorated.performOperation(operation, callback);
     }
 
-    public IgnoreKeysMap(final Function<K, Boolean> filter, final Store<K, V> decorated) {
+    public IgnoreKeysStore(final Function<K, Boolean> filter, final Store<K, V> decorated) {
         super();
         this.filter = filter;
         this.decorated = decorated;
