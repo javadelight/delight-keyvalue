@@ -12,7 +12,7 @@ import de.mxro.async.map.StoreImplementation;
  * @param <V>
  * @see PureAsyncMap
  */
-public class GetOperation<K, V> implements StoreOperation<K, V, V> {
+public class GetOperation<K, V> implements StoreOperation<K, V> {
 
     private final K key;
 
