@@ -30,10 +30,6 @@ public interface Store<K, V> extends Service {
 
     public void removeSync(K key);
 
-    public void removeAll(K commonKeyElement, SimpleCallback callback);
-
-    public void getAll(K commonKeyElement, ValueCallback<StoreEntry<K, V>> entry, SimpleCallback onCompleted);
-
     /**
      * Assures that a connection to the persistence medium is established and
      * the map is operational.
