@@ -1,9 +1,10 @@
-package de.mxro.async.map.operations;
+package de.mxro.async.map.internal.operations;
 
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Success;
 
 import de.mxro.async.map.StoreImplementation;
+import de.mxro.async.map.operations.StoreOperation;
 
 /**
  * If the persistence implementation supports a local cache, calling this method

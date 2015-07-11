@@ -1,10 +1,11 @@
-package de.mxro.async.map.operations;
+package de.mxro.async.map.internal.operations;
 
 import delight.async.AsyncCommon;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 
 import de.mxro.async.map.StoreImplementation;
+import de.mxro.async.map.operations.StoreOperation;
 
 /**
  * An object representation of a Get operation on an asynchronous map.

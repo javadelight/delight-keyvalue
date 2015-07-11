@@ -1,10 +1,11 @@
-package de.mxro.async.map.operations;
+package de.mxro.async.map.internal.operations;
 
 import delight.async.AsyncCommon;
 import delight.async.callbacks.ValueCallback;
 
 import de.mxro.async.map.Store;
 import de.mxro.async.map.StoreImplementation;
+import de.mxro.async.map.operations.StoreOperation;
 
 /**
  * An object representation of a remove operation on an {@link Store}.
