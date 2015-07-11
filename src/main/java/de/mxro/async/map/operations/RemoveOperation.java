@@ -1,5 +1,6 @@
 package de.mxro.async.map.operations;
 
+import delight.async.AsyncCommon;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Success;
 
@@ -28,7 +29,7 @@ public class RemoveOperation<K, V> implements StoreOperation<K, V, Success> {
 
     @Override
     public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<Success> callback) {
-        store.remove(key, callback);
+        store.remove(key, AsyncCommon.asSimpleCallback(callback));
     }
 
 }
