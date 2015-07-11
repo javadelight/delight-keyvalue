@@ -1,6 +1,7 @@
 package de.mxro.async.map.internal.decorators;
 
 import delight.concurrency.Concurrency;
+import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
 
@@ -25,6 +26,11 @@ public class StoreDecorators {
     public static <K, V> Store<K, V> enforceAsynchronousPut(final int delay, final Concurrency concurrency,
             final Store<K, V> decorated) {
         return new EnforceAsynchronousPutMap<K, V>(delay, concurrency, decorated);
+    }
+
+    public static <K, V> Store<K, V> assureNoConflictsWithScheduler(final SequentialOperationScheduler scheduler,
+            final Store<K, V> decorated) {
+        return new AssureNoConflictsWithSchedulerIdle<K, V>(scheduler, decorated);
     }
 
     /**
@@ -63,8 +69,7 @@ public class StoreDecorators {
      * @param secondaryCache
      * @return
      */
-    public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache,
-            final Store<K, V> secondaryCache) {
+    public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache, final Store<K, V> secondaryCache) {
         return new TieredCachesMap<K, V>(primaryCache, secondaryCache);
     }
 
@@ -77,8 +82,7 @@ public class StoreDecorators {
         return new ValueFilterMap<K, V>(beforeStorage, afterStorage, decorated);
     }
 
-    public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter,
-            final Store<K, V> decorated) {
+    public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter, final Store<K, V> decorated) {
         return new IgnoreKeysMap<K, V>(filter, decorated);
     }
 
