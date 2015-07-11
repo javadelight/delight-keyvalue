@@ -115,8 +115,8 @@ class PurgeInvalidValuesMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
-        decorated.performOperation(operation);
+    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        this.decorated.performOperation(operation, callback);
     }
 
     public PurgeInvalidValuesMap(final Store<K, V> decorated) {
