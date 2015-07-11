@@ -3,7 +3,6 @@ package delight.keyvalue;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.keyvalue.internal.operations.ClearCacheOperation;
-import delight.keyvalue.internal.operations.GetOperation;
 import delight.keyvalue.operations.StoreOperation;
 
 import de.mxro.service.Service;
@@ -62,7 +61,7 @@ public interface Store<K, V> extends Service {
      * <p>
      * Perform a generic operation on this map.
      * <p>
-     * For example, {@link ClearCacheOperation}, {@link GetOperation}
+     * For example, {@link ClearCacheOperation}
      */
     public void performOperation(StoreOperation<K, V> operation, ValueCallback<Object> callback);
 
