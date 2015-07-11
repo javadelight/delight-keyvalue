@@ -95,6 +95,15 @@ public class Stores {
         return StoreDecorators.trace(messageReceiver, decorated);
     }
 
+    /**
+     * <p>
+     * Attempts to only perform operations on the map when the scheduler is
+     * idle.
+     * 
+     * @param scheduler
+     * @param decorated
+     * @return
+     */
     public static <K, V> Store<K, V> assureNoConflictsWithSchedule(final SequentialOperationScheduler scheduler,
             final Store<K, V> decorated) {
         return StoreDecorators.assureNoConflictsWithScheduler(scheduler, decorated);
