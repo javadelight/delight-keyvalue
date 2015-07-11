@@ -185,9 +185,9 @@ class TieredCachesMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
-        this.secondaryCache.performOperation(operation);
-        this.primaryCache.performOperation(operation);
+    public void performOperation(final StoreOperation<Object, Object> operation, final ValueCallback<Object> callback) {
+        this.secondaryCache.performOperation(operation, callback);
+        this.primaryCache.performOperation(operation, callback);
     }
 
     public TieredCachesMap(final Store<K, V> cache, final Store<K, V> decorated) {

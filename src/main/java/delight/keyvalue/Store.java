@@ -64,6 +64,6 @@ public interface Store<K, V> extends Service {
      * <p>
      * For example, {@link ClearCacheOperation}, {@link GetOperation}
      */
-    public void performOperation(StoreOperation<Object, Object> operation);
+    public void performOperation(StoreOperation<Object, Object> operation, ValueCallback<Object> callback);
 
 }

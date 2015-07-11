@@ -77,8 +77,8 @@ class ValueFilterMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
-        this.decorated.performOperation(operation);
+    public void performOperation(final StoreOperation<Object, Object> operation, final ValueCallback<Object> callback) {
+        this.decorated.performOperation(operation, callback);
     }
 
     public ValueFilterMap(final Function<V, V> beforeStorage, final Function<V, V> afterStorage,

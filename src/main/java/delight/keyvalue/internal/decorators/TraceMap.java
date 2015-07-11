@@ -87,8 +87,8 @@ final class TraceMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
-        decorated.performOperation(operation);
+    public void performOperation(final StoreOperation<Object, Object> operation, final ValueCallback<Object> callback) {
+        this.decorated.performOperation(operation, callback);
     }
 
     public TraceMap(final Closure<String> messageReceiver, final Store<K, V> decorated) {
