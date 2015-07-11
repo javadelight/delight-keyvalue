@@ -27,13 +27,17 @@ class TestMultiSelect {
 			store.put("node/child2", "two", AsyncCommon.asSimpleCallback(callback));
 		]
 		
+		Async.waitFor [ callback |
+			store.put("node/child3", "three", AsyncCommon.asSimpleCallback(callback));
+		]
+		
 		
 		Async.waitFor [ callback |
 			
 			val count = new Value(0)
 			store.performOperation(StoreOperations.getAll("node/", [ e |
 				count.set(count.get()+1)
-				if (count.get() == 2) {
+				if (count.get() == 3) {
 					callback.onSuccess(Success.INSTANCE)
 				}
 			]), AsyncCommon.embed(callback, [

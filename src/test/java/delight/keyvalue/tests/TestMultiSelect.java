@@ -47,6 +47,14 @@ public class TestMultiSelect {
     final Operation<Success> _function_3 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
+        SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
+        store.put("node/child3", "three", _asSimpleCallback);
+      }
+    };
+    Async.<Success>waitFor(_function_3);
+    final Operation<Success> _function_4 = new Operation<Success>() {
+      @Override
+      public void apply(final ValueCallback<Success> callback) {
         final Value<Integer> count = new Value<Integer>(Integer.valueOf(0));
         final Closure<StoreEntry<String, String>> _function = new Closure<StoreEntry<String, String>>() {
           @Override
@@ -55,7 +63,7 @@ public class TestMultiSelect {
             int _plus = ((_get).intValue() + 1);
             count.set(Integer.valueOf(_plus));
             Integer _get_1 = count.get();
-            boolean _equals = ((_get_1).intValue() == 2);
+            boolean _equals = ((_get_1).intValue() == 3);
             if (_equals) {
               callback.onSuccess(Success.INSTANCE);
             }
@@ -71,14 +79,14 @@ public class TestMultiSelect {
         store.performOperation(_all, _embed);
       }
     };
-    Async.<Success>waitFor(_function_3);
-    final Operation<Success> _function_4 = new Operation<Success>() {
+    Async.<Success>waitFor(_function_4);
+    final Operation<Success> _function_5 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
         store.stop(_asSimpleCallback);
       }
     };
-    Async.<Success>waitFor(_function_4);
+    Async.<Success>waitFor(_function_5);
   }
 }
