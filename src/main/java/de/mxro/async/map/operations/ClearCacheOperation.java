@@ -12,11 +12,12 @@ import de.mxro.async.map.StoreImplementation;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public class ClearCacheOperation<K, V> implements StoreOperation<K, V, Success> {
+public class ClearCacheOperation<K, V> implements StoreOperation<K, V> {
 
     @Override
-    public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<Success> callback) {
+    public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<Object> callback) {
         store.clearCache();
+        callback.onSuccess(Success.INSTANCE);
     }
 
 }
