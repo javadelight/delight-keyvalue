@@ -8,6 +8,8 @@ import de.mxro.async.map.Store;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public interface StoreOperation {
+public interface StoreOperation<K, V> {
+
+    public void applyOn(Store<K, V> store);
 
 }
