@@ -88,8 +88,8 @@ class IgnoreKeysMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
-        this.decorated.performOperation(operation);
+    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        this.decorated.performOperation(operation, callback);
     }
 
     public IgnoreKeysMap(final Function<K, Boolean> filter, final Store<K, V> decorated) {
