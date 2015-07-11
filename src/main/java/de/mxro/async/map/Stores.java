@@ -1,6 +1,7 @@
 package de.mxro.async.map;
 
 import delight.concurrency.Concurrency;
+import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
 
@@ -56,8 +57,7 @@ public class Stores {
         return StoreDecorators.cache(cache, decorated);
     }
 
-    public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache,
-            final Store<K, V> secondaryCache) {
+    public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache, final Store<K, V> secondaryCache) {
         return StoreDecorators.tierCaches(primaryCache, secondaryCache);
     }
 
@@ -70,8 +70,7 @@ public class Stores {
         return StoreDecorators.filterValues(beforeStorage, afterStorage, decorated);
     }
 
-    public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter,
-            final Store<K, V> decorated) {
+    public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter, final Store<K, V> decorated) {
         return StoreDecorators.ignoreKeys(filter, decorated);
     }
 
@@ -94,6 +93,11 @@ public class Stores {
 
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
         return StoreDecorators.trace(messageReceiver, decorated);
+    }
+
+    public static <K, V> Store<K, V> assureNoConflictsWithSchedule(final SequentialOperationScheduler scheduler,
+            final Store<K, V> decorated) {
+        return StoreDecorators.assureNoConflictsWithScheduler(scheduler, decorated);
     }
 
 }
