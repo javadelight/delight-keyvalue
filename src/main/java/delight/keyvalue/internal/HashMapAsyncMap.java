@@ -80,7 +80,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     public void removeAll(final Function<K, Boolean> elementTest, final SimpleCallback callback) {
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             if (elementTest.apply(e.getKey())) {
-
+                this.map.remove(e.getKey());
             }
         }
 
