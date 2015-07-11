@@ -28,6 +28,15 @@ public class StoreDecorators {
         return new EnforceAsynchronousPutMap<K, V>(delay, concurrency, decorated);
     }
 
+    /**
+     * <p>
+     * Attempts to only perform operations on the map when the scheduler is
+     * idle.
+     * 
+     * @param scheduler
+     * @param decorated
+     * @return
+     */
     public static <K, V> Store<K, V> assureNoConflictsWithScheduler(final SequentialOperationScheduler scheduler,
             final Store<K, V> decorated) {
         return new AssureNoConflictsWithSchedulerIdle<K, V>(scheduler, decorated);

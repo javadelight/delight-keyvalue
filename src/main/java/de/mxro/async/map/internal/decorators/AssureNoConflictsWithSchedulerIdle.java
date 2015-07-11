@@ -9,10 +9,10 @@ import delight.concurrency.schedule.SequentialOperationScheduler;
 import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.MapOperation;
 
-public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
+public final class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
-    SequentialOperationScheduler scheduler;
-    Store<K, V> decorated;
+    private final SequentialOperationScheduler scheduler;
+    private final Store<K, V> decorated;
 
     private final SimpleCallback resumeScheduler(final SimpleCallback callback) {
         return new SimpleCallback() {
@@ -172,6 +172,13 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
         }
 
         decorated.performOperation(operation);
+    }
+
+    public AssureNoConflictsWithSchedulerIdle(final SequentialOperationScheduler scheduler,
+            final Store<K, V> decorated) {
+        super();
+        this.scheduler = scheduler;
+        this.decorated = decorated;
     }
 
 }
