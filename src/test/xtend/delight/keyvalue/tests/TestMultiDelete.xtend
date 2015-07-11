@@ -8,7 +8,7 @@ import delight.keyvalue.operations.StoreOperations
 import delight.functional.Success
 import delight.async.Value
 
-class TestMultiSelect {
+class TestMultiDelete {
 	
 	@Test
 	def void test() {
@@ -34,14 +34,9 @@ class TestMultiSelect {
 		
 		Async.waitFor [ callback |
 			
-			val count = new Value(0)
-			store.performOperation(StoreOperations.getAll("node/", [ e |
-				count.set(count.get()+1)
-				if (count.get() == 3) {
-					callback.onSuccess(Success.INSTANCE)
-				}
-			]), AsyncCommon.embed(callback, [
-				
+			
+			store.performOperation(StoreOperations.removeAll("node/"), AsyncCommon.embed(callback, [
+				callback.onSuccess(Success.INSTANCE)
 			]));
 
 		]
