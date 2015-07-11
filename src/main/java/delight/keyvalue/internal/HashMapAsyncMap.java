@@ -78,7 +78,13 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     @Override
     public void removeAll(final Function<K, Boolean> elementTest, final SimpleCallback callback) {
-        getAll(elementTest, , onCompleted);
+        for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
+            if (elementTest.apply(e.getKey())) {
+
+            }
+        }
+
+        callback.onSuccess();
     }
 
     @Override
