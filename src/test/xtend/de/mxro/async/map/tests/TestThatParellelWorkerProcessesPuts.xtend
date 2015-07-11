@@ -1,7 +1,7 @@
 package de.mxro.async.map.tests
 
-import de.mxro.async.map.Stores
-import de.mxro.async.map.jre.AsyncMapsJre
+import delight.keyvalue.Stores
+import delight.keyvalue.jre.AsyncMapsJre
 import delight.async.AsyncCommon
 import delight.async.jre.Async
 import org.junit.Test

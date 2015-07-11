@@ -1,6 +1,6 @@
 package de.mxro.async.map.tests
 
-import de.mxro.async.map.Stores
+import delight.keyvalue.Stores
 import delight.async.AsyncCommon
 import delight.async.callbacks.ValueCallback
 import delight.async.jre.Async

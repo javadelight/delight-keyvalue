@@ -1,7 +1,5 @@
 package de.mxro.async.map.tests;
 
-import de.mxro.async.map.Store;
-import de.mxro.async.map.Stores;
 import delight.async.AsyncCommon;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
@@ -9,6 +7,8 @@ import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
 import delight.concurrency.jre.JreConcurrency;
 import delight.functional.Success;
+import delight.keyvalue.Store;
+import delight.keyvalue.Stores;
 import org.junit.Test;
 
 @SuppressWarnings("all")
