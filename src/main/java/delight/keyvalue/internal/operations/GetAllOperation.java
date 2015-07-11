@@ -7,6 +7,7 @@ import delight.functional.Function;
 import delight.functional.Success;
 import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
+import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.LinkedList;
@@ -53,7 +54,12 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
             @Override
             public void apply(final StoreEntry<String, V> o) {
-                // TODO Auto-generated method stub
+                V value = o.value();
+                for (final Function<V, V> f : afterGet) {
+                    value = f.apply(value);
+                }
+
+                onEntry.apply(new StoreEntryData<String, V>(o.key(), value));
 
             }
         }, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
