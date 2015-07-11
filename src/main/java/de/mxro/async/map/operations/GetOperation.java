@@ -1,6 +1,8 @@
 package de.mxro.async.map.operations;
 
+import delight.async.AsyncCommon;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Closure;
 
 import de.mxro.async.map.StoreImplementation;
 
@@ -28,7 +30,14 @@ public class GetOperation<K, V> implements StoreOperation<K, V> {
 
     @Override
     public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<Object> callback) {
-        store.get(key, (ValueCallback<V>) callback);
+        store.get(key, AsyncCommon.embed(callback, new Closure<V>() {
+
+            @Override
+            public void apply(final V o) {
+                callback.onSuccess(o);
+            }
+
+        }));
     }
 
 }
