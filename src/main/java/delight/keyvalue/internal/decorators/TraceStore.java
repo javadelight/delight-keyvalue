@@ -6,7 +6,7 @@ import delight.functional.Closure;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
-final class TraceMap<K, V> implements Store<K, V> {
+final class TraceStore<K, V> implements Store<K, V> {
 
     private final Closure<String> messageReceiver;
     private final Store<K, V> decorated;
@@ -91,7 +91,7 @@ final class TraceMap<K, V> implements Store<K, V> {
         this.decorated.performOperation(operation, callback);
     }
 
-    public TraceMap(final Closure<String> messageReceiver, final Store<K, V> decorated) {
+    public TraceStore(final Closure<String> messageReceiver, final Store<K, V> decorated) {
         super();
         this.messageReceiver = messageReceiver;
         this.decorated = decorated;

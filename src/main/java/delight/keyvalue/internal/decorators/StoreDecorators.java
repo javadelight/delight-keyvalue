@@ -38,7 +38,7 @@ public class StoreDecorators {
      */
     public static <K, V> Store<K, V> assureNoConflictsWithScheduler(final SequentialOperationScheduler scheduler,
             final Store<K, V> decorated) {
-        return new AssureNoConflictsWithSchedulerIdle<K, V>(scheduler, decorated);
+        return new AssureNoConflictsWithSchedulerStore<K, V>(scheduler, decorated);
     }
 
     /**
@@ -87,7 +87,7 @@ public class StoreDecorators {
 
     public final static <K, V> Store<K, V> filterValues(final Function<V, V> beforeStorage,
             final Function<V, V> afterStorage, final Store<K, V> decorated) {
-        return new ValueFilterMap<K, V>(beforeStorage, afterStorage, decorated);
+        return new ValueFilterStore<K, V>(beforeStorage, afterStorage, decorated);
     }
 
     public final static <K, V> Store<K, V> ignoreKeys(final Function<K, Boolean> filter, final Store<K, V> decorated) {
@@ -109,6 +109,6 @@ public class StoreDecorators {
     }
 
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
-        return new TraceMap<K, V>(messageReceiver, decorated);
+        return new TraceStore<K, V>(messageReceiver, decorated);
     }
 }

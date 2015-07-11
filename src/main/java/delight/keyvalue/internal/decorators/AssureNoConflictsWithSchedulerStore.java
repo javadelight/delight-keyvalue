@@ -8,7 +8,7 @@ import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
-public final class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
+public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K, V> {
 
     private final SequentialOperationScheduler scheduler;
     private final Store<K, V> decorated;
@@ -178,7 +178,7 @@ public final class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, 
         decorated.performOperation(operation, callback);
     }
 
-    public AssureNoConflictsWithSchedulerIdle(final SequentialOperationScheduler scheduler,
+    public AssureNoConflictsWithSchedulerStore(final SequentialOperationScheduler scheduler,
             final Store<K, V> decorated) {
         super();
         this.scheduler = scheduler;
