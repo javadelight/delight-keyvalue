@@ -8,7 +8,7 @@ import delight.keyvalue.operations.StoreOperation;
 
 import java.util.Map;
 
-class SimpleCachedMap<K, V> implements Store<K, V> {
+class SimpleCachedStore<K, V> implements Store<K, V> {
 
     private final Store<K, V> decorated;
     private final Map<K, Object> cache;
@@ -102,7 +102,7 @@ class SimpleCachedMap<K, V> implements Store<K, V> {
         this.decorated.performOperation(operation, callback);
     }
 
-    public SimpleCachedMap(final Map<K, Object> cache, final Store<K, V> decorated) {
+    public SimpleCachedStore(final Map<K, Object> cache, final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
         this.cache = cache;

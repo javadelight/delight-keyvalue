@@ -12,7 +12,7 @@ import delight.keyvalue.operations.StoreOperation;
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
-class PurgeInvalidValuesMap<K, V> implements Store<K, V> {
+class PurgeInvalidValuesStore<K, V> implements Store<K, V> {
 
     private final Store<K, V> decorated;
 
@@ -119,7 +119,7 @@ class PurgeInvalidValuesMap<K, V> implements Store<K, V> {
         this.decorated.performOperation(operation, callback);
     }
 
-    public PurgeInvalidValuesMap(final Store<K, V> decorated) {
+    public PurgeInvalidValuesStore(final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
     }

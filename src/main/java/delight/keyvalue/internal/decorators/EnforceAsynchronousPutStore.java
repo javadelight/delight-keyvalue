@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 
-class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
+class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
 
     private final boolean ENABLE_LOG = false;
 
@@ -342,7 +342,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
                 isShutdown.set(true);
 
                 if (ENABLE_LOG) {
-                    System.out.println(EnforceAsynchronousPutMap.this + ": Stopped");
+                    System.out.println(EnforceAsynchronousPutStore.this + ": Stopped");
                 }
                 decorated.stop(callback);
             }
@@ -372,7 +372,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
         this.decorated.performOperation(operation, callback);
     }
 
-    public EnforceAsynchronousPutMap(final int delay, final Concurrency con, final Store<K, V> decorated) {
+    public EnforceAsynchronousPutStore(final int delay, final Concurrency con, final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
         this.delay = delay;

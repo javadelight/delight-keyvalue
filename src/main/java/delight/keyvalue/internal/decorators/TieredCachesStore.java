@@ -7,7 +7,7 @@ import delight.functional.Closure;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
-class TieredCachesMap<K, V> implements Store<K, V> {
+class TieredCachesStore<K, V> implements Store<K, V> {
 
     private final Store<K, V> secondaryCache;
     private final Store<K, V> primaryCache;
@@ -198,7 +198,7 @@ class TieredCachesMap<K, V> implements Store<K, V> {
 
     }
 
-    public TieredCachesMap(final Store<K, V> cache, final Store<K, V> decorated) {
+    public TieredCachesStore(final Store<K, V> cache, final Store<K, V> decorated) {
         super();
         this.secondaryCache = decorated;
         this.primaryCache = cache;

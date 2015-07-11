@@ -24,7 +24,7 @@ public class StoreDecorators {
      */
     public static <K, V> Store<K, V> enforceAsynchronousPut(final int delay, final Concurrency concurrency,
             final Store<K, V> decorated) {
-        return new EnforceAsynchronousPutMap<K, V>(delay, concurrency, decorated);
+        return new EnforceAsynchronousPutStore<K, V>(delay, concurrency, decorated);
     }
 
     /**
@@ -53,7 +53,7 @@ public class StoreDecorators {
      * @return
      */
     public final static <K, V> Store<K, V> purgeInvalidValues(final Store<K, V> forMap) {
-        return new PurgeInvalidValuesMap<K, V>(forMap);
+        return new PurgeInvalidValuesStore<K, V>(forMap);
     }
 
     /**
@@ -66,7 +66,7 @@ public class StoreDecorators {
      * @return
      */
     public static <K, V> Store<K, V> cache(final Map<K, Object> cache, final Store<K, V> decorated) {
-        return new SimpleCachedMap<K, V>(cache, decorated);
+        return new SimpleCachedStore<K, V>(cache, decorated);
     }
 
     /**
@@ -78,11 +78,11 @@ public class StoreDecorators {
      * @return
      */
     public static <K, V> Store<K, V> tierCaches(final Store<K, V> primaryCache, final Store<K, V> secondaryCache) {
-        return new TieredCachesMap<K, V>(primaryCache, secondaryCache);
+        return new TieredCachesStore<K, V>(primaryCache, secondaryCache);
     }
 
     public final static <K, V> Store<K, V> filterKeys(final Function<K, K> filter, final Store<K, V> decorated) {
-        return new KeyFilterMap<K, V>(filter, decorated);
+        return new KeyFilterStore<K, V>(filter, decorated);
     }
 
     public final static <K, V> Store<K, V> filterValues(final Function<V, V> beforeStorage,
@@ -102,10 +102,10 @@ public class StoreDecorators {
      * 
      * @param decorated
      * @return
-     * @see LazyStartupMap
+     * @see LazyStartupStore
      */
     public static <K, V> Store<K, V> lazyStartup(final Store<K, V> decorated) {
-        return new LazyStartupMap<K, V>(decorated);
+        return new LazyStartupStore<K, V>(decorated);
     }
 
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {

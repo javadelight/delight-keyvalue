@@ -14,7 +14,7 @@ import delight.keyvalue.operations.StoreOperation;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-class KeyFilterMap<K, V> implements Store<K, V> {
+class KeyFilterStore<K, V> implements Store<K, V> {
 
     private final Function<K, K> filter;
     private final Store<K, V> decorated;
@@ -69,7 +69,7 @@ class KeyFilterMap<K, V> implements Store<K, V> {
         this.decorated.performOperation(operation, callback);
     }
 
-    public KeyFilterMap(final Function<K, K> filter, final Store<K, V> decorated) {
+    public KeyFilterStore(final Function<K, K> filter, final Store<K, V> decorated) {
         super();
         this.filter = filter;
         this.decorated = decorated;

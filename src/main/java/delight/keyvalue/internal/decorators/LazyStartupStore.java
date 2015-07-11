@@ -21,7 +21,7 @@ import java.util.List;
  * @param <K>
  * @param <V>
  */
-class LazyStartupMap<K, V> implements Store<K, V> {
+class LazyStartupStore<K, V> implements Store<K, V> {
 
     private static final String ERROR_MESSAGE = "Lazy start map is not started up. Needs to be started using a call to start or a call to one of its asynchronous operations.";
     final Value<Boolean> started;
@@ -281,7 +281,7 @@ class LazyStartupMap<K, V> implements Store<K, V> {
         throw new RuntimeException(ERROR_MESSAGE);
     }
 
-    public LazyStartupMap(final Store<K, V> decorated) {
+    public LazyStartupStore(final Store<K, V> decorated) {
         super();
         this.started_fast_access = false;
         this.started = new Value<Boolean>(false);
