@@ -1,4 +1,4 @@
-package de.mxro.async.map.tests
+package delight.keyvalue.tests
 
 import delight.keyvalue.Stores
 import delight.keyvalue.jre.AsyncMapsJre
