@@ -265,21 +265,20 @@ class LazyStartupMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
+    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         if (started_fast_access) {
-            decorated.performOperation(operation);
+            decorated.performOperation(operation, callback);
             return;
         }
 
         synchronized (started) {
             if (started.get()) {
-                decorated.performOperation(operation);
+                decorated.performOperation(operation, callback);
                 return;
             }
         }
 
         throw new RuntimeException(ERROR_MESSAGE);
-
     }
 
     public LazyStartupMap(final Store<K, V> decorated) {

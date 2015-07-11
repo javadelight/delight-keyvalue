@@ -65,8 +65,8 @@ class KeyFilterMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
-        this.decorated.performOperation(operation);
+    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        this.decorated.performOperation(operation, callback);
     }
 
     public KeyFilterMap(final Function<K, K> filter, final Store<K, V> decorated) {
