@@ -108,26 +108,35 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
-        // TODO Auto-generated method stub
+        if (!scheduler.suspendIfNotRunning()) {
+            scheduler.schedule(new Operation<Object>() {
+
+                @Override
+                public void apply(final ValueCallback<Object> callback) {
+                    decorated.remove(key, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
+                }
+
+            }, AsyncCommon.asValueCallback(callback));
+            return;
+        }
+
+        decorated.remove(key, callback);
 
     }
 
     @Override
     public void removeSync(final K key) {
-        // TODO Auto-generated method stub
-
+        decorated.removeSync(key);
     }
 
     @Override
     public void start(final SimpleCallback callback) {
-        // TODO Auto-generated method stub
-
+        decorated.start(callback);
     }
 
     @Override
     public void stop(final SimpleCallback callback) {
-        // TODO Auto-generated method stub
-
+        decorated.stop(callback);
     }
 
     @Override
