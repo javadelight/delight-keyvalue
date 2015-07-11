@@ -10,23 +10,23 @@ import delight.async.callbacks.ValueCallback;
  * @param <V>
  * @see PureAsyncMap
  */
-public class GetOperation<K, V> implements StoreOperation {
+public class GetOperation<K, V> implements StoreOperation<K, V, V> {
 
-	private final K key;
-	private final ValueCallback<V> callback;
+    private final K key;
+    private final ValueCallback<V> callback;
 
-	public ValueCallback<V> getCallback() {
-		return callback;
-	}
+    public ValueCallback<V> getCallback() {
+        return callback;
+    }
 
-	public K getKey() {
-		return key;
-	}
+    public K getKey() {
+        return key;
+    }
 
-	public GetOperation(K key, ValueCallback<V> callback) {
-		super();
-		this.key = key;
-		this.callback = callback;
-	}
+    public GetOperation(final K key, final ValueCallback<V> callback) {
+        super();
+        this.key = key;
+        this.callback = callback;
+    }
 
 }

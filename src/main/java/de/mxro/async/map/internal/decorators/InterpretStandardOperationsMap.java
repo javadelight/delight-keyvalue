@@ -6,7 +6,7 @@ import delight.async.callbacks.ValueCallback;
 import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.GetOperation;
 import de.mxro.async.map.operations.StoreOperation;
-import de.mxro.async.map.operations.PutOperation;
+import de.mxro.async.map.operations.FullPutOperation;
 import de.mxro.async.map.operations.RemoveOperation;
 
 /**
@@ -77,9 +77,9 @@ class InterpretStandardOperationsMap<K, V> implements Store<K, V> {
 			return;
 		}
 
-		if (operation instanceof PutOperation) {
+		if (operation instanceof FullPutOperation) {
 			@SuppressWarnings("unchecked")
-			PutOperation<K, V> putOperation = (PutOperation<K, V>) operation;
+			FullPutOperation<K, V> putOperation = (FullPutOperation<K, V>) operation;
 
 			this.put(putOperation.getKey(), putOperation.getValue(),
 					putOperation.getCallback());
