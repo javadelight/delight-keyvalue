@@ -1,24 +1,13 @@
 package delight.keyvalue.internal.operations;
 
-import delight.async.AsyncCommon;
 import delight.async.callbacks.ValueCallback;
-import delight.functional.Closure;
 import delight.functional.Function;
-import delight.functional.Success;
-import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
-import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class CountOperation<V> implements StoreOperation<String, V> {
 
     private String keyStartsWith;
-    private final Closure<StoreEntry<String, V>> onEntry;
-
-    private final List<Function<V, V>> afterGet;
 
     boolean skip = false;
 
@@ -41,7 +30,7 @@ public class CountOperation<V> implements StoreOperation<String, V> {
 
     @Override
     public void modifyValuesAfterGet(final Function<V, V> func) {
-        this.afterGet.add(func);
+
     }
 
     @Override
@@ -50,7 +39,18 @@ public class CountOperation<V> implements StoreOperation<String, V> {
             callback.onSuccess(0);
             return;
         }
-        store.
+        store.count(keyStartsWith, new ValueCallback<Integer>() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess(final Integer value) {
+                callback.onSuccess(value);
+            }
+        });
     }
 
     public CountOperation(final String keyStartsWith) {
