@@ -37,13 +37,13 @@ public class RemoveAllOperation<V> implements StoreOperation<String, V> {
     }
 
     @Override
-    public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<Object> callback) {
+    public void applyOn(final StoreImplementation<String, V> store, final ValueCallback<Object> callback) {
         if (skip) {
             callback.onSuccess(Success.INSTANCE);
             return;
         }
 
-        store.removeAll(commonKey, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
+        store.removeAll(keyStartsWith, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
     }
 
 }
