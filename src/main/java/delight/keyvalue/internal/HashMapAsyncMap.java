@@ -1,5 +1,6 @@
 package delight.keyvalue.internal;
 
+import delight.async.Value;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
@@ -99,6 +100,29 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
         onCompleted.onSuccess();
 
+    }
+
+    @Override
+    public void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
+        final Value<Integer> count = new Value<Integer>(0);
+        getAll(keyStartsWith, new Closure<StoreEntry<K,V>>() {
+
+            @Override
+            public void apply(final StoreEntry<K, V> o) {
+                count.set(count.get()+1);
+            }
+        }, new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                c
+            }
+        });
     }
 
     public HashMapAsyncMap() {
