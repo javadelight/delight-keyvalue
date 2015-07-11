@@ -89,6 +89,7 @@ class IgnoreKeysStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        operation.ignoreKeys(filter);
         this.decorated.performOperation(operation, callback);
     }
 
