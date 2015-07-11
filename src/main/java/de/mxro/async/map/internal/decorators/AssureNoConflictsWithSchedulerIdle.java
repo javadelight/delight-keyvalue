@@ -146,12 +146,14 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
                 @Override
                 public void apply(final ValueCallback<Object> callback) {
-                    decorated.commit(callback);
+                    decorated.commit(AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
                 }
 
-            }, AsyncCommon.asValueCallback(AsyncCommon.doNothing()));
+            }, AsyncCommon.asValueCallback(callback));
             return;
         }
+
+        decorated.commit(callback);
 
     }
 
