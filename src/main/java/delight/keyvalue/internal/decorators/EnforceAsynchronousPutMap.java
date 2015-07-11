@@ -8,7 +8,7 @@ import delight.concurrency.Concurrency;
 import delight.concurrency.wrappers.SimpleTimer;
 import delight.functional.Closure;
 import delight.keyvalue.Store;
-import delight.keyvalue.operations.FullPutOperation;
+import delight.keyvalue.operations.PutOperation;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
     private final Store<K, V> decorated;
     private final int delay;
     private final Concurrency concurrency;
-    private final Map<K, List<FullPutOperation<K, V>>> pendingPuts;
+    private final Map<K, List<PutOperation<K, V>>> pendingPuts;
 
     private final Value<Boolean> timerActive = new Value<Boolean>(false);
     private SimpleTimer timer = null;
@@ -63,10 +63,10 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
         synchronized (pendingPuts) {
 
             if (!pendingPuts.containsKey(key)) {
-                pendingPuts.put(key, new LinkedList<FullPutOperation<K, V>>());
+                pendingPuts.put(key, new LinkedList<PutOperation<K, V>>());
             }
 
-            final FullPutOperation<K, V> putOperation = new FullPutOperation<K, V>(key, value, callback);
+            final PutOperation<K, V> putOperation = new PutOperation<K, V>(key, value, callback);
 
             pendingPuts.get(key).add(putOperation);
 
@@ -111,7 +111,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
             processing.set(true);
         }
 
-        final Map<K, List<FullPutOperation<K, V>>> puts;
+        final Map<K, List<PutOperation<K, V>>> puts;
         boolean putsEmpty = false;
         synchronized (pendingPuts) {
             if (pendingPuts.size() == 0) {
@@ -119,7 +119,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
                 puts = null;
             } else {
 
-                puts = new HashMap<K, List<FullPutOperation<K, V>>>(pendingPuts);
+                puts = new HashMap<K, List<PutOperation<K, V>>>(pendingPuts);
 
                 pendingPuts.clear();
 
@@ -167,7 +167,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
             System.out.println(this + ": Puts to process " + puts.entrySet());
         }
 
-        for (final Entry<K, List<FullPutOperation<K, V>>> put : puts.entrySet()) {
+        for (final Entry<K, List<PutOperation<K, V>>> put : puts.entrySet()) {
 
             try {
                 decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
@@ -175,7 +175,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
 
                             @Override
                             public void onFailure(final Throwable arg0) {
-                                for (final FullPutOperation<K, V> operation : put.getValue()) {
+                                for (final PutOperation<K, V> operation : put.getValue()) {
                                     operation.getCallback().onFailure(arg0);
                                 }
                                 latch.registerSuccess();
@@ -183,14 +183,14 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
 
                             @Override
                             public void onSuccess() {
-                                for (final FullPutOperation<K, V> operation : put.getValue()) {
+                                for (final PutOperation<K, V> operation : put.getValue()) {
                                     operation.getCallback().onSuccess();
                                 }
                                 latch.registerSuccess();
                             }
                         });
             } catch (final Throwable t) {
-                for (final FullPutOperation<K, V> operation : put.getValue()) {
+                for (final PutOperation<K, V> operation : put.getValue()) {
                     operation.getCallback().onFailure(new Exception("Cannot perform put for " + put.getKey(), t));
                 }
                 latch.registerSuccess();
@@ -377,7 +377,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
         this.decorated = decorated;
         this.delay = delay;
         this.concurrency = con;
-        this.pendingPuts = new HashMap<K, List<FullPutOperation<K, V>>>();
+        this.pendingPuts = new HashMap<K, List<PutOperation<K, V>>>();
     }
 
 }

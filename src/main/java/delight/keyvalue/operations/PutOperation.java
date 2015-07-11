@@ -10,7 +10,7 @@ import delight.async.callbacks.SimpleCallback;
  * @param <V>
  * @see PureAsyncMap
  */
-public class FullPutOperation<K, V> {
+public class PutOperation<K, V> {
 
     private final K key;
     private final V value;
@@ -28,7 +28,7 @@ public class FullPutOperation<K, V> {
         return callback;
     }
 
-    public FullPutOperation(final K key, final V value, final SimpleCallback callback) {
+    public PutOperation(final K key, final V value, final SimpleCallback callback) {
         super();
         this.key = key;
         this.value = value;
