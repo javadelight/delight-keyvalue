@@ -2,6 +2,7 @@ package delight.keyvalue.internal;
 
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Closure;
 import delight.functional.Function;
 import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
@@ -76,11 +77,16 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public void getAll(final Function<K, Boolean> elementTest, final ValueCallback<StoreEntry<K, V>> onEntry,
+    public void removeAll(final Function<K, Boolean> elementTest, final SimpleCallback callback) {
+        getAll(elementTest, , onCompleted);
+    }
+
+    @Override
+    public void getAll(final Function<K, Boolean> elementTest, final Closure<StoreEntry<K, V>> onEntry,
             final SimpleCallback onCompleted) {
         for (final Entry<K, V> e : this.map.entrySet()) {
             if (elementTest.apply(e.getKey())) {
-                onEntry.onSuccess(new StoreEntryData<K, V>(e.getKey(), e.getValue()));
+                onEntry.apply(new StoreEntryData<K, V>(e.getKey(), e.getValue()));
             }
         }
 
