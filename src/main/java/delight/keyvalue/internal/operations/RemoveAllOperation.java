@@ -5,6 +5,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.functional.Function;
 import delight.functional.Success;
 import delight.keyvalue.StoreImplementation;
+import delight.keyvalue.operations.StartsWithTest;
 import delight.keyvalue.operations.StoreOperation;
 
 public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
@@ -15,6 +16,10 @@ public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
 
     @Override
     public void modifyKeys(final Function<K, K> func) {
+        if (keyTest instanceof StartsWithTest) {
+
+        }
+
         final Function<K, Boolean> oldKeyTest = keyTest;
         keyTest = new Function<K, Boolean>() {
 
