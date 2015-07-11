@@ -17,6 +17,10 @@ public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
     @Override
     public void modifyKeys(final Function<K, K> func) {
         if (keyTest instanceof StartsWithTest) {
+            final StartsWithTest startsWithTest = (StartsWithTest) keyTest;
+
+            keyTest = (Function<K, Boolean>) new StartsWithTest(func.apply(startsWithTest.startsWith()));
+            return;
 
         }
 
