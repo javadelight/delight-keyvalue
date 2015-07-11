@@ -162,20 +162,20 @@ public final class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, 
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
+    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         if (!scheduler.suspendIfNotRunning()) {
             scheduler.schedule(new Operation<Object>() {
 
                 @Override
                 public void apply(final ValueCallback<Object> callback) {
-                    decorated.performOperation(operation);
+                    decorated.performOperation(operation, callback);
                 }
 
-            }, AsyncCommon.asValueCallback(AsyncCommon.doNothing()));
+            }, callback);
             return;
         }
 
-        decorated.performOperation(operation);
+        decorated.performOperation(operation, callback);
     }
 
     public AssureNoConflictsWithSchedulerIdle(final SequentialOperationScheduler scheduler,
