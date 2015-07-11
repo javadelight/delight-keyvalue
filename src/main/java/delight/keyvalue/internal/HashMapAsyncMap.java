@@ -4,6 +4,7 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
+import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.HashMap;
@@ -75,15 +76,17 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     @Override
     public void removeAll(final K commonKeyElement, final SimpleCallback callback) {
-        for (final Entry<K, V> e : this.map.entrySet()) {
 
-        }
     }
 
     @Override
-    public void getAll(final K commonKeyElement, final ValueCallback<StoreEntry<K, V>> entry,
+    public void getAll(final K commonKeyElement, final ValueCallback<StoreEntry<K, V>> onEntry,
             final SimpleCallback onCompleted) {
-        // TODO Auto-generated method stub
+        for (final Entry<K, V> e : this.map.entrySet()) {
+            onEntry.onSuccess(new StoreEntryData<K, V>(e.getKey(), e.getValue()));
+        }
+
+        onCompleted.onSuccess();
 
     }
 
