@@ -5,6 +5,7 @@ import delight.async.jre.Async
 import delight.keyvalue.Stores
 import org.junit.Test
 import delight.keyvalue.operations.StoreOperations
+import delight.functional.Success
 
 class TestMultiSelect {
 	
@@ -30,10 +31,10 @@ class TestMultiSelect {
 			
 			store.performOperation(StoreOperations.getAll("node/", [ e |
 				
-				
-			]), [ cb | 
-				
-			]);
+				println(e.key())
+			]), AsyncCommon.embed(callback, [
+				callback.onSuccess(Success.INSTANCE)
+			]));
 
 		]
 	
