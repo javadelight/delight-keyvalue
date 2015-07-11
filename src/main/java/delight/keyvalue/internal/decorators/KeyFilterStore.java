@@ -66,6 +66,7 @@ class KeyFilterStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        operation.modifyKeys(filter);
         this.decorated.performOperation(operation, callback);
     }
 
