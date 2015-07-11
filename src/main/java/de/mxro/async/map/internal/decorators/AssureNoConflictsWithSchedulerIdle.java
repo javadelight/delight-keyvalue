@@ -141,14 +141,35 @@ public class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
     @Override
     public void commit(final SimpleCallback callback) {
-        // TODO Auto-generated method stub
+        if (!scheduler.suspendIfNotRunning()) {
+            scheduler.schedule(new Operation<Object>() {
+
+                @Override
+                public void apply(final ValueCallback<Object> callback) {
+                    decorated.commit(callback);
+                }
+
+            }, AsyncCommon.asValueCallback(AsyncCommon.doNothing()));
+            return;
+        }
 
     }
 
     @Override
     public void performOperation(final MapOperation operation) {
-        // TODO Auto-generated method stub
+        if (!scheduler.suspendIfNotRunning()) {
+            scheduler.schedule(new Operation<Object>() {
 
+                @Override
+                public void apply(final ValueCallback<Object> callback) {
+                    decorated.performOperation(operation);
+                }
+
+            }, AsyncCommon.asValueCallback(AsyncCommon.doNothing()));
+            return;
+        }
+
+        decorated.performOperation(operation);
     }
 
 }
