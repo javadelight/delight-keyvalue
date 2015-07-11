@@ -30,6 +30,7 @@ class TestMultiSelect {
 			
 			store.performOperation(StoreOperations.getAll("node/", [ e |
 				
+				
 			]))
 
 		]

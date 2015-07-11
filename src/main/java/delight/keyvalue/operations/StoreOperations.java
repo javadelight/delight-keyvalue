@@ -12,13 +12,13 @@ public class StoreOperations {
         return new ClearCacheOperation<K, V>();
     }
 
-    public static <V> StoreOperation<String, V> removeAll(final String keyStartsWith) {
-        return new RemoveAllOperation<V>(keyStartsWith);
+    public static <K, V> StoreOperation<K, V> removeAll(final String keyStartsWith) {
+        return (StoreOperation<K, V>) new RemoveAllOperation<V>(keyStartsWith);
     }
 
-    public static <V> StoreOperation<String, V> getAll(final String keyStartsWith,
+    public static <K, V> StoreOperation<K, V> getAll(final String keyStartsWith,
             final Closure<StoreEntry<String, V>> onEntry) {
-        return new GetAllOperation<V>(keyStartsWith, onEntry);
+        return (StoreOperation<K, V>) new GetAllOperation<V>(keyStartsWith, onEntry);
     }
 
 }
