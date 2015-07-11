@@ -46,4 +46,9 @@ public class RemoveAllOperation<V> implements StoreOperation<String, V> {
         store.removeAll(keyStartsWith, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
     }
 
+    public RemoveAllOperation(final String keyStartsWith) {
+        super();
+        this.keyStartsWith = keyStartsWith;
+    }
+
 }
