@@ -11,8 +11,8 @@ import de.mxro.async.map.StoreImplementation;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public interface StoreOperation<K, V, R> {
+public interface StoreOperation<K, V> {
 
-    public void applyOn(StoreImplementation<K, V> store, ValueCallback<R> callback);
+    public void applyOn(StoreImplementation<K, V> store, ValueCallback<Object> callback);
 
 }
