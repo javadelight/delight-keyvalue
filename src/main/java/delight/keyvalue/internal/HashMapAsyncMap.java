@@ -2,12 +2,12 @@ package delight.keyvalue.internal;
 
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
-import delight.keyvalue.Store;
+import delight.keyvalue.StoreImplementation;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.HashMap;
 
-public class HashMapAsyncMap<K, V> implements Store<K, V> {
+public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     private final HashMap<K, V> map;
 
@@ -61,7 +61,13 @@ public class HashMapAsyncMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final StoreOperation operation) {
+    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        operation.applyOn(this, callback);
+    }
+
+    @Override
+    public void clearCache() {
+        // do nothing
 
     }
 
