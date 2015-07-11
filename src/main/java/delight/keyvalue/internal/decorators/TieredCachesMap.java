@@ -1,7 +1,9 @@
 package delight.keyvalue.internal.decorators;
 
+import delight.async.AsyncCommon;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Closure;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
@@ -186,8 +188,14 @@ class TieredCachesMap<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
-        this.secondaryCache.performOperation(operation, callback);
-        this.primaryCache.performOperation(operation, callback);
+        this.secondaryCache.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
+
+            @Override
+            public void apply(final Object o) {
+                primaryCache.performOperation(operation, callback);
+            }
+        }));
+
     }
 
     public TieredCachesMap(final Store<K, V> cache, final Store<K, V> decorated) {
