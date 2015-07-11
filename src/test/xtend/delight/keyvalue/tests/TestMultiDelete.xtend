@@ -33,10 +33,17 @@ class TestMultiDelete {
 		
 		
 		Async.waitFor [ callback |
-			
-			
+
 			store.performOperation(StoreOperations.removeAll("node/"), AsyncCommon.embed(callback, [
 				callback.onSuccess(Success.INSTANCE)
+			]));
+
+		]
+		
+		Async.waitFor [ callback |
+
+			store.performOperation(StoreOperations.count(""), AsyncCommon.embed(callback, [
+				
 			]));
 
 		]

@@ -1,9 +1,9 @@
 package delight.keyvalue.operations;
 
-import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 import delight.keyvalue.StoreEntry;
 import delight.keyvalue.internal.operations.ClearCacheOperation;
+import delight.keyvalue.internal.operations.CountOperation;
 import delight.keyvalue.internal.operations.GetAllOperation;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
 
@@ -22,8 +22,8 @@ public class StoreOperations {
         return (StoreOperation<K, V>) new GetAllOperation<V>(keyStartsWith, onEntry);
     }
 
-    public static <K, V> StoreOperation<K, V> count(final String keyStartsWith, final ValueCallback<Integer> callback) {
-        return (StoreOperation<K, V>) new GetAllOperation<V>(keyStartsWith, onEntry);
+    public static <K, V> StoreOperation<K, V> count(final String keyStartsWith) {
+        return (StoreOperation<K, V>) new CountOperation<V>(keyStartsWith);
     }
 
 }

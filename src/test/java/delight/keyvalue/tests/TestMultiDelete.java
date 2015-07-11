@@ -65,13 +65,27 @@ public class TestMultiDelete {
       }
     };
     Async.<Object>waitFor(_function_4);
-    final Operation<Success> _function_5 = new Operation<Success>() {
+    final Operation<Object> _function_5 = new Operation<Object>() {
+      @Override
+      public void apply(final ValueCallback<Object> callback) {
+        StoreOperation<String, String> _count = StoreOperations.<String, String>count("");
+        final Closure<Object> _function = new Closure<Object>() {
+          @Override
+          public void apply(final Object it) {
+          }
+        };
+        ValueCallback<Object> _embed = AsyncCommon.<Object>embed(callback, _function);
+        store.performOperation(_count, _embed);
+      }
+    };
+    Async.<Object>waitFor(_function_5);
+    final Operation<Success> _function_6 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _asSimpleCallback = AsyncCommon.asSimpleCallback(callback);
         store.stop(_asSimpleCallback);
       }
     };
-    Async.<Success>waitFor(_function_5);
+    Async.<Success>waitFor(_function_6);
   }
 }
