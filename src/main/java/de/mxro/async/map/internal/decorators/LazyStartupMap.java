@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 /**
  * <P>
@@ -266,7 +266,7 @@ class LazyStartupMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         if (started_fast_access) {
             decorated.performOperation(operation);
             return;

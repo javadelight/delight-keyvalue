@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.mxro.async.map.Store;
 import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> {
 
@@ -274,7 +274,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> 
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         decorated.performOperation(operation);
     }
 

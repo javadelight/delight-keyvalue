@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 import java.util.Vector;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 import de.mxro.async.map.operations.PutOperation;
 
 class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
@@ -369,7 +369,7 @@ class EnforceAsynchronousPutMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         decorated.performOperation(operation);
     }
 

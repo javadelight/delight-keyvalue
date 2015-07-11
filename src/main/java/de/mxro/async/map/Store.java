@@ -5,7 +5,7 @@ import delight.async.callbacks.ValueCallback;
 
 import de.mxro.async.map.operations.ClearCacheOperation;
 import de.mxro.async.map.operations.GetOperation;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 import de.mxro.service.Service;
 
 /**
@@ -64,6 +64,6 @@ public interface Store<K, V> extends Service {
      * <p>
      * For example, {@link ClearCacheOperation}, {@link GetOperation}
      */
-    public void performOperation(MapOperation operation);
+    public void performOperation(StoreOperation operation);
 
 }

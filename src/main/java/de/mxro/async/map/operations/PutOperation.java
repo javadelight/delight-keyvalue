@@ -10,7 +10,7 @@ import delight.async.callbacks.SimpleCallback;
  * @param <V>
  * @see PureAsyncMap
  */
-public class PutOperation<K, V> implements MapOperation {
+public class PutOperation<K, V> implements StoreOperation {
 
 	private final K key;
 	private final V value;

@@ -7,7 +7,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.concurrency.schedule.SequentialOperationScheduler;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 public final class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, V> {
 
@@ -163,7 +163,7 @@ public final class AssureNoConflictsWithSchedulerIdle<K, V> implements Store<K, 
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         if (!scheduler.suspendIfNotRunning()) {
             scheduler.schedule(new Operation<Object>() {
 

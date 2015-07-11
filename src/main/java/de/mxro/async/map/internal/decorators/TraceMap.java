@@ -5,7 +5,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 final class TraceMap<K, V> implements Store<K, V> {
 
@@ -88,7 +88,7 @@ final class TraceMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         decorated.performOperation(operation);
     }
 

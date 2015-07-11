@@ -10,7 +10,7 @@ import delight.async.callbacks.ValueCallback;
  * @param <V>
  * @see PureAsyncMap
  */
-public class GetOperation<K, V> implements MapOperation {
+public class GetOperation<K, V> implements StoreOperation {
 
 	private final K key;
 	private final ValueCallback<V> callback;

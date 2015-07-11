@@ -5,7 +5,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.functional.Function;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 /**
  * <P>
@@ -89,7 +89,7 @@ class IgnoreKeysMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         this.decorated.performOperation(operation);
     }
 

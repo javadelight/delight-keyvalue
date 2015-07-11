@@ -7,7 +7,7 @@ import delight.functional.Fn;
 import java.util.Map;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 class SimpleCachedMap<K, V> implements Store<K, V> {
 
@@ -100,7 +100,7 @@ class SimpleCachedMap<K, V> implements Store<K, V> {
 	}
 
 	@Override
-	public void performOperation(MapOperation operation) {
+	public void performOperation(StoreOperation operation) {
 		this.decorated.performOperation(operation);
 	}
 

@@ -4,7 +4,7 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 class TieredCachesMap<K, V> implements Store<K, V> {
 
@@ -186,7 +186,7 @@ class TieredCachesMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
         this.secondaryCache.performOperation(operation);
         this.primaryCache.performOperation(operation);
     }

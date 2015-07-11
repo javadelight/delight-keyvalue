@@ -5,7 +5,7 @@ import delight.async.callbacks.ValueCallback;
 
 import de.mxro.async.map.Store;
 import de.mxro.async.map.operations.GetOperation;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.async.map.operations.RemoveOperation;
 
@@ -68,7 +68,7 @@ class InterpretStandardOperationsMap<K, V> implements Store<K, V> {
 	}
 
 	@Override
-	public void performOperation(MapOperation operation) {
+	public void performOperation(StoreOperation operation) {
 		if (operation instanceof GetOperation) {
 
 			@SuppressWarnings("unchecked")

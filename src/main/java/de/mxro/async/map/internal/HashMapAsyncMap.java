@@ -6,7 +6,7 @@ import delight.async.callbacks.ValueCallback;
 import java.util.HashMap;
 
 import de.mxro.async.map.Store;
-import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.map.operations.StoreOperation;
 
 public class HashMapAsyncMap<K, V> implements Store<K, V> {
 
@@ -62,7 +62,7 @@ public class HashMapAsyncMap<K, V> implements Store<K, V> {
     }
 
     @Override
-    public void performOperation(final MapOperation operation) {
+    public void performOperation(final StoreOperation operation) {
 
     }
 

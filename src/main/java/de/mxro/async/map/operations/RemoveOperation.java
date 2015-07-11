@@ -10,7 +10,7 @@ import de.mxro.async.map.Store;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public class RemoveOperation<K> implements MapOperation {
+public class RemoveOperation<K> implements StoreOperation {
 
 	private final K key;
 	private final SimpleCallback callback;
