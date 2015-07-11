@@ -19,7 +19,7 @@ public interface StoreOperation<K, V> {
 
     public void modifyValuesBeforePut(Function<V, V> func);
 
-    public void modifyValuesBeforeGet(Function<V, V> func);
+    public void modifyValuesAfterGet(Function<V, V> func);
 
     public void applyOn(StoreImplementation<K, V> store, ValueCallback<Object> callback);
 
