@@ -1,6 +1,7 @@
 package delight.keyvalue.operations;
 
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Function;
 import delight.keyvalue.Store;
 import delight.keyvalue.StoreImplementation;
 
@@ -11,6 +12,14 @@ import delight.keyvalue.StoreImplementation;
  *
  */
 public interface StoreOperation<K, V> {
+
+    public void modifyKeys(Function<K, K> func);
+
+    public void ignoreKeys(Function<K, Boolean> test);
+
+    public void modifyValuesBeforePut(Function<V, V> func);
+
+    public void modifyValuesBeforeGet(Function<V, V> func);
 
     public void applyOn(StoreImplementation<K, V> store, ValueCallback<Object> callback);
 
