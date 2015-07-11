@@ -3,6 +3,7 @@ package de.mxro.async.map.operations;
 import delight.async.callbacks.ValueCallback;
 
 import de.mxro.async.map.Store;
+import de.mxro.async.map.StoreImplementation;
 
 /**
  * A generic operation to be performed on a {@link Store}.
@@ -12,6 +13,6 @@ import de.mxro.async.map.Store;
  */
 public interface StoreOperation<K, V, R> {
 
-    public void applyOn(Store<K, V> store, ValueCallback<R> callback);
+    public void applyOn(StoreImplementation<K, V> store, ValueCallback<R> callback);
 
 }

@@ -2,7 +2,7 @@ package de.mxro.async.map.operations;
 
 import delight.async.callbacks.ValueCallback;
 
-import de.mxro.async.map.Store;
+import de.mxro.async.map.StoreImplementation;
 
 /**
  * An object representation of a Get operation on an asynchronous map.
@@ -27,7 +27,7 @@ public class GetOperation<K, V> implements StoreOperation<K, V, V> {
     }
 
     @Override
-    public void applyOn(final Store<K, V> store, final ValueCallback<V> callback) {
+    public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<V> callback) {
         store.get(key, callback);
     }
 
