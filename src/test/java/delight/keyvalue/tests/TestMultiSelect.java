@@ -2,6 +2,7 @@ package delight.keyvalue.tests;
 
 import delight.async.AsyncCommon;
 import delight.async.Operation;
+import delight.async.Value;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
@@ -12,7 +13,6 @@ import delight.keyvalue.StoreEntry;
 import delight.keyvalue.Stores;
 import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.junit.Test;
 
 @SuppressWarnings("all")
@@ -44,28 +44,34 @@ public class TestMultiSelect {
       }
     };
     Async.<Success>waitFor(_function_2);
-    final Operation<Object> _function_3 = new Operation<Object>() {
+    final Operation<Success> _function_3 = new Operation<Success>() {
       @Override
-      public void apply(final ValueCallback<Object> callback) {
+      public void apply(final ValueCallback<Success> callback) {
+        final Value<Integer> count = new Value<Integer>(Integer.valueOf(0));
         final Closure<StoreEntry<String, String>> _function = new Closure<StoreEntry<String, String>>() {
           @Override
           public void apply(final StoreEntry<String, String> e) {
-            String _key = e.key();
-            InputOutput.<String>println(_key);
+            Integer _get = count.get();
+            int _plus = ((_get).intValue() + 1);
+            count.set(Integer.valueOf(_plus));
+            Integer _get_1 = count.get();
+            boolean _equals = ((_get_1).intValue() == 2);
+            if (_equals) {
+              callback.onSuccess(Success.INSTANCE);
+            }
           }
         };
         StoreOperation<String, String> _all = StoreOperations.<String, String>getAll("node/", _function);
         final Closure<Object> _function_1 = new Closure<Object>() {
           @Override
           public void apply(final Object it) {
-            callback.onSuccess(Success.INSTANCE);
           }
         };
         ValueCallback<Object> _embed = AsyncCommon.<Object>embed(callback, _function_1);
         store.performOperation(_all, _embed);
       }
     };
-    Async.<Object>waitFor(_function_3);
+    Async.<Success>waitFor(_function_3);
     final Operation<Success> _function_4 = new Operation<Success>() {
       @Override
       public void apply(final ValueCallback<Success> callback) {

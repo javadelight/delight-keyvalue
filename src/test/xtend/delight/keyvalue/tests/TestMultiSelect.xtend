@@ -6,6 +6,7 @@ import delight.keyvalue.Stores
 import org.junit.Test
 import delight.keyvalue.operations.StoreOperations
 import delight.functional.Success
+import delight.async.Value
 
 class TestMultiSelect {
 	
@@ -29,11 +30,14 @@ class TestMultiSelect {
 		
 		Async.waitFor [ callback |
 			
+			val count = new Value(0)
 			store.performOperation(StoreOperations.getAll("node/", [ e |
-				
-				println(e.key())
+				count.set(count.get()+1)
+				if (count.get() == 2) {
+					callback.onSuccess(Success.INSTANCE)
+				}
 			]), AsyncCommon.embed(callback, [
-				callback.onSuccess(Success.INSTANCE)
+				
 			]));
 
 		]
