@@ -8,9 +8,9 @@ public interface StoreImplementation<K, V> extends Store<K, V> {
 
     public void clearCache();
 
-    public void removeAll(K commonKeyElement, SimpleCallback callback);
+    public void removeAll(Function<K, Boolean> elementTest, SimpleCallback callback);
 
-    public void getAll(final Function<K, V> elementTest, final ValueCallback<StoreEntry<K, V>> onEntry,
+    public void getAll(final Function<K, Boolean> elementTest, final ValueCallback<StoreEntry<K, V>> onEntry,
             final SimpleCallback onCompleted);
 
 }

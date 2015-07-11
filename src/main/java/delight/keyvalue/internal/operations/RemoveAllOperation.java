@@ -27,13 +27,11 @@ public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
 
     @Override
     public void modifyValuesBeforePut(final Function<V, V> func) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void modifyValuesAfterGet(final Function<V, V> func) {
-        // TODO Auto-generated method stub
 
     }
 
