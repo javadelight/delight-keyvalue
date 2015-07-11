@@ -9,13 +9,22 @@ import delight.keyvalue.operations.StoreOperation;
 
 public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
 
-    K commonKey;
+    Function<K, Boolean> keyTest;
 
     boolean skip = false;
 
     @Override
     public void modifyKeys(final Function<K, K> func) {
-        commonKey = func.apply(commonKey);
+        final Function<K, Boolean> oldKeyTest = keyTest;
+        keyTest = new Function<K, Boolean>() {
+
+            @Override
+            public Boolean apply(final K input) {
+                return oldKeyTest.apply(func.apply(input));
+            }
+
+        };
+
     }
 
     @Override
