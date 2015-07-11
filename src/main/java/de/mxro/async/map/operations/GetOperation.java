@@ -27,8 +27,8 @@ public class GetOperation<K, V> implements StoreOperation<K, V> {
     }
 
     @Override
-    public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<V> callback) {
-        store.get(key, callback);
+    public void applyOn(final StoreImplementation<K, V> store, final ValueCallback<Object> callback) {
+        store.get(key, (ValueCallback<V>) callback);
     }
 
 }
