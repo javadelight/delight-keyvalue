@@ -5,12 +5,11 @@ import delight.async.callbacks.ValueCallback;
 import delight.functional.Function;
 import delight.functional.Success;
 import delight.keyvalue.StoreImplementation;
-import delight.keyvalue.operations.StartsWithTest;
 import delight.keyvalue.operations.StoreOperation;
 
 public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
 
-    Function<K, Boolean> keyTest;
+    String keyStartsWith;
 
     boolean skip = false;
 
@@ -19,7 +18,7 @@ public class RemoveAllOperation<K, V> implements StoreOperation<K, V> {
         if (keyTest instanceof StartsWithTest) {
             final StartsWithTest startsWithTest = (StartsWithTest) keyTest;
 
-            keyTest = (Function<K, Boolean>) new StartsWithTest(func.apply(startsWithTest.startsWith()));
+            keyTest = (Function<K, Boolean>) new StartsWithTest((String) func.apply((K) startsWithTest.startsWith()));
             return;
 
         }
