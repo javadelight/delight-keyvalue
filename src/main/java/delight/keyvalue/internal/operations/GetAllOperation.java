@@ -9,10 +9,15 @@ import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
 import delight.keyvalue.operations.StoreOperation;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GetAllOperation<V> implements StoreOperation<String, V> {
 
     private String keyStartsWith;
-    private Closure<StoreEntry<String, V>> onEntry;
+    private final Closure<StoreEntry<String, V>> onEntry;
+
+    private final List<Function<V, V>> afterGet;
 
     boolean skip = false;
 
@@ -30,14 +35,12 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
     @Override
     public void modifyValuesBeforePut(final Function<V, V> func) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void modifyValuesAfterGet(final Function<V, V> func) {
-        // TODO Auto-generated method stub
-
+        this.afterGet.add(func);
     }
 
     @Override
@@ -46,7 +49,21 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
             callback.onSuccess(Success.INSTANCE);
             return;
         }
-        store.getAll(keyStartsWith, onEntry, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
+        store.getAll(keyStartsWith, new Closure<StoreEntry<String, V>>() {
+
+            @Override
+            public void apply(final StoreEntry<String, V> o) {
+                // TODO Auto-generated method stub
+
+            }
+        }, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
+    }
+
+    public GetAllOperation(final String keyStartsWith, final Closure<StoreEntry<String, V>> onEntry) {
+        super();
+        this.keyStartsWith = keyStartsWith;
+        this.onEntry = onEntry;
+        this.afterGet = new LinkedList<Function<V, V>>();
     }
 
 }
