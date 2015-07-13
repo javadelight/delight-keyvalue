@@ -7,6 +7,7 @@ import delight.functional.Function;
 import delight.keyvalue.internal.HashMapAsyncMap;
 import delight.keyvalue.internal.decorators.StoreDecorators;
 
+import java.util.List;
 import java.util.Map;
 
 public class Stores {
@@ -88,6 +89,10 @@ public class Stores {
 
     public static <K, V> Store<K, V> hashMap() {
         return new HashMapAsyncMap<K, V>();
+    }
+
+    public static <K, V> void inject(final List<StoreEntry<K, V>> data, final Store<K, V> intoStore) {
+
     }
 
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
