@@ -33,4 +33,9 @@ public class StoreEntryData<K, V> implements StoreEntry<K, V>, Serializable {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return "StoreEntryData [key=" + key + ", value=" + value + "]";
+    }
+
 }
