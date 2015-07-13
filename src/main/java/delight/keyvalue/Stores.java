@@ -92,7 +92,9 @@ public class Stores {
     }
 
     public static <K, V> void inject(final List<StoreEntry<K, V>> data, final Store<K, V> intoStore) {
-
+        for (final StoreEntry<K, V> entry : data) {
+            intoStore.putSync(entry.key(), entry.value());
+        }
     }
 
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
