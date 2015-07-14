@@ -65,8 +65,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
-        // TODO Auto-generated method stub
-
+        decorated.performOperation(operation, callback);
     }
 
 }
