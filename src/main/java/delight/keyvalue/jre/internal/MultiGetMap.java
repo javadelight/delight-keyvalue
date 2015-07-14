@@ -6,6 +6,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
+import delight.keyvalue.operations.StoreOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +44,15 @@ public class MultiGetMap<K, V> implements Store<K, V> {
             throw new RuntimeException(e);
         }
 
-        final List<Entry<K, ValueCallback<V>>> toProcess = new ArrayList<Entry<K, ValueCallback<V>>>();
+        final List<K> toProcessKeys = new ArrayList<K>(queue.size() + 5);
+        final List<ValueCallback<V>> toProcessCbs = new ArrayList<ValueCallback<V>>(toProcessKeys.size());
 
         Entry<K, ValueCallback<V>> e;
         while ((e = queue.poll()) != null) {
             toProcess.add(e);
         }
+
+        decorated.performOperation(StoreOperations.getAll(toProcess), callback);
 
     }
 
