@@ -78,7 +78,10 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                         assert results.size() == toProcessCbs.size();
 
                         for (int i = 0; i < results.size(); i++) {
-                            toProcessCbs.get(i).onSuccess(results.get(i));
+                            for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
+                                cb.onSuccess(results.get(i));
+                            }
+
                         }
 
                         callback.onSuccess(Success.INSTANCE);
