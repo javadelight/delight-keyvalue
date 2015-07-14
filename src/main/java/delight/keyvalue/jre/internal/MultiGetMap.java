@@ -1,9 +1,12 @@
 package delight.keyvalue.jre.internal;
 
+import delight.async.AsyncCommon;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
+import delight.functional.Closure;
+import delight.functional.Success;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
@@ -53,7 +56,28 @@ public class MultiGetMap<K, V> implements Store<K, V> {
             toProcessCbs.add(e.getValue());
         }
 
-        decorated.performOperation(StoreOperations.getAll(toProcess), callback);
+        Async.waitFor(5000, new Operation<Success>() {
+
+            @Override
+            public void apply(final ValueCallback<Success> callback) {
+                decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys),
+                        AsyncCommon.embed(callback, new Closure<Object>() {
+
+                    @Override
+                    public void apply(final Object o) {
+                        final List<V> results = (List<V>) o;
+
+                        assert results.size() == toProcessCbs.size();
+
+                        for (final V result : results) {
+
+                        }
+
+                    }
+                }));
+
+            }
+        });
 
     }
 
