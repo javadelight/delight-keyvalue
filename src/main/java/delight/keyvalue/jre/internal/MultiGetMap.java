@@ -17,10 +17,36 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class MultiGetMap<K, V> implements Store<K, V> {
 
+    public static class EntryData<K, V> implements Entry<K, ValueCallback<V>> {
+        private final K key;
+        private final ValueCallback<V> callback;
+
+        public EntryData(K key, ValueCallback<V> callback) {
+            this.key = key;
+            this.callback = callback;
+        }
+
+        @Override
+        public K getKey() {
+
+            return key;
+        }
+
+        @Override
+        public ValueCallback<V> getValue() {
+            return callback;
+        }
+
+        @Override
+        public ValueCallback<V> setValue(final ValueCallback<V> value) {
+            return null;
+        }
+    }
+
     private final Store<K, V> decorated;
     private final int delayInMs;
 
-    private final ConcurrentLinkedQueue<Entry<String, ValueCallback<V>>> queue;
+    private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> queue;
 
     private final void waitTillEmpty() {
         while (!queue.isEmpty()) {
@@ -34,17 +60,19 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
-
+        waitTillEmpty();
         decorated.put(key, value, callback);
     }
 
     @Override
     public void putSync(final K key, final V value) {
+        waitTillEmpty();
         decorated.putSync(key, value);
     }
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
+        queue.offer(new EntryData<K, V>(key, callback));
         decorated.get(key, callback);
     }
 
