@@ -9,7 +9,9 @@ import delight.keyvalue.StoreImplementation;
 import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
@@ -123,6 +125,18 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
                 callback.onSuccess(count.get());
             }
         });
+    }
+
+    @Override
+    public void get(final List<K> keys, final ValueCallback<List<V>> callback) {
+        final List<V> results = new ArrayList<V>(keys.size());
+
+        for (final K key : keys) {
+            results.add(getSync(key));
+        }
+
+        callback.onSuccess(results);
+
     }
 
     public HashMapAsyncMap() {
