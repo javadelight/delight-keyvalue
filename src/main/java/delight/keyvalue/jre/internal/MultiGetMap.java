@@ -1,7 +1,9 @@
 package delight.keyvalue.jre.internal;
 
+import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.async.jre.Async;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
@@ -32,6 +34,14 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         }
     }
 
+    private final void executeGetsAfterDelay() {
+        try {
+            Thread.sleep(delayInMs);
+        } catch (final InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
         waitTillEmpty();
@@ -52,8 +62,13 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public V getSync(final K key) {
+        return Async.waitFor(new Operation<V>() {
 
-        return decorated.getSync(key);
+            @Override
+            public void apply(final ValueCallback<V> callback) {
+                queue.offer(new EntryData<K, V>(key, callback));
+            }
+        });
     }
 
     @Override
