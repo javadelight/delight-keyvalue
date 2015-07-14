@@ -44,6 +44,12 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         }
 
         final List<Entry<K, ValueCallback<V>>> toProcess = new ArrayList<Entry<K, ValueCallback<V>>>();
+
+        Entry<K, ValueCallback<V>> e;
+        while ((e = queue.poll()) != null) {
+            toProcess.add(e);
+        }
+
     }
 
     @Override
