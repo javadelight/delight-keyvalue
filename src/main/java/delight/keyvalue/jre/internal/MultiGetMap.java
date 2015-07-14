@@ -57,7 +57,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
         queue.offer(new EntryData<K, V>(key, callback));
-        decorated.get(key, callback);
+        executeGetsAfterDelay();
     }
 
     @Override
@@ -67,6 +67,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
             @Override
             public void apply(final ValueCallback<V> callback) {
                 queue.offer(new EntryData<K, V>(key, callback));
+                executeGetsAfterDelay();
             }
         });
     }
