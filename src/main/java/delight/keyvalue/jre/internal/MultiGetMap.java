@@ -73,6 +73,8 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                             toProcessCbs.get(i).onSuccess(results.get(i));
                         }
 
+                        callback.onSuccess(Success.INSTANCE);
+
                     }
                 }));
 

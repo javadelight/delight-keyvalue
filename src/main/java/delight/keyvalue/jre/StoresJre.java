@@ -7,7 +7,7 @@ import delight.keyvalue.jre.internal.SplitWorkerThreadsMapConnection;
 import java.util.Collections;
 import java.util.WeakHashMap;
 
-public class AsyncMapsJre {
+public class StoresJre {
 
 	public static final <K, V> Store<K, V> cacheWithWeakReferences(
 			Store<K, V> decorated) {
