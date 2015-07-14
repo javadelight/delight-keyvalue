@@ -58,11 +58,13 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
+        waitTillEmpty();
         decorated.remove(key, callback);
     }
 
     @Override
     public void removeSync(final K key) {
+        waitTillEmpty();
         decorated.removeSync(key);
     }
 
@@ -73,16 +75,19 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public void stop(final SimpleCallback callback) {
+        waitTillEmpty();
         decorated.stop(callback);
     }
 
     @Override
     public void commit(final SimpleCallback callback) {
+        waitTillEmpty();
         decorated.commit(callback);
     }
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        waitTillEmpty();
         decorated.performOperation(operation, callback);
     }
 
