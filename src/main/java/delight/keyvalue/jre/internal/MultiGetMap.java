@@ -22,8 +22,19 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final ConcurrentLinkedQueue<Entry<String, ValueCallback<V>>> queue;
 
+    private final void waitTillEmpty() {
+        while (!queue.isEmpty()) {
+            try {
+                Thread.sleep(delayInMs);
+            } catch (final InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
+
         decorated.put(key, value, callback);
     }
 
