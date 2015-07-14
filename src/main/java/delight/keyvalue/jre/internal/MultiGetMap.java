@@ -68,4 +68,10 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         decorated.performOperation(operation, callback);
     }
 
+    public MultiGetMap(final int delayInMs, final Store<K, V> decorated) {
+        super();
+        this.decorated = decorated;
+        this.delayInMs = delayInMs;
+    }
+
 }
