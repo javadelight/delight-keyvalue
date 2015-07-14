@@ -12,7 +12,9 @@ import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -48,12 +50,18 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         }
 
         final List<K> toProcessKeys = new ArrayList<K>();
-        final List<ValueCallback<V>> toProcessCbs = new ArrayList<ValueCallback<V>>(toProcessKeys.size());
+        final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
+                toProcessKeys.size());
 
         Entry<K, ValueCallback<V>> e;
         while ((e = queue.poll()) != null) {
+
             toProcessKeys.add(e.getKey());
-            toProcessCbs.add(e.getValue());
+            if (toProcessCbs.get(e.getKey()) == null) {
+                toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
+            }
+
+            toProcessCbs.get(e.getKey()).add(e.getValue());
         }
 
         Async.waitFor(5000, new Operation<Success>() {
