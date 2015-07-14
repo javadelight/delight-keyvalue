@@ -44,12 +44,13 @@ public class MultiGetMap<K, V> implements Store<K, V> {
             throw new RuntimeException(e);
         }
 
-        final List<K> toProcessKeys = new ArrayList<K>(queue.size() + 5);
+        final List<K> toProcessKeys = new ArrayList<K>();
         final List<ValueCallback<V>> toProcessCbs = new ArrayList<ValueCallback<V>>(toProcessKeys.size());
 
         Entry<K, ValueCallback<V>> e;
         while ((e = queue.poll()) != null) {
-            toProcess.add(e);
+            toProcessKeys.add(e.getKey());
+            toProcessCbs.add(e.getValue());
         }
 
         decorated.performOperation(StoreOperations.getAll(toProcess), callback);
