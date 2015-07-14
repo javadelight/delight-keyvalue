@@ -5,6 +5,9 @@ import delight.async.callbacks.ValueCallback;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
  * <p>
  * Bundles gets, even getSync ones.
@@ -16,6 +19,8 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final Store<K, V> decorated;
     private final int delayInMs;
+
+    private final ConcurrentLinkedQueue<Entry<String, ValueCallback<V>>> queue;
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
