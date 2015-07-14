@@ -7,6 +7,8 @@ import delight.async.jre.Async;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -40,6 +42,8 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         } catch (final InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        final List<Entry<K, ValueCallback<V>>> toProcess = new ArrayList<Entry<K, ValueCallback<V>>>();
     }
 
     @Override
