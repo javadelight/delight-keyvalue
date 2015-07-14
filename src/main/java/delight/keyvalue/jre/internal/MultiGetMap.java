@@ -17,32 +17,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class MultiGetMap<K, V> implements Store<K, V> {
 
-    public static class EntryData<K, V> implements Entry<K, ValueCallback<V>> {
-        private final K key;
-        private final ValueCallback<V> callback;
-
-        public EntryData(K key, ValueCallback<V> callback) {
-            this.key = key;
-            this.callback = callback;
-        }
-
-        @Override
-        public K getKey() {
-
-            return key;
-        }
-
-        @Override
-        public ValueCallback<V> getValue() {
-            return callback;
-        }
-
-        @Override
-        public ValueCallback<V> setValue(final ValueCallback<V> value) {
-            return null;
-        }
-    }
-
     private final Store<K, V> decorated;
     private final int delayInMs;
 
@@ -116,6 +90,33 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         super();
         this.decorated = decorated;
         this.delayInMs = delayInMs;
+        this.queue = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
+    }
+
+    public static class EntryData<K, V> implements Entry<K, ValueCallback<V>> {
+        private final K key;
+        private final ValueCallback<V> callback;
+
+        public EntryData(final K key, final ValueCallback<V> callback) {
+            this.key = key;
+            this.callback = callback;
+        }
+
+        @Override
+        public K getKey() {
+
+            return key;
+        }
+
+        @Override
+        public ValueCallback<V> getValue() {
+            return callback;
+        }
+
+        @Override
+        public ValueCallback<V> setValue(final ValueCallback<V> value) {
+            throw new RuntimeException("not supported");
+        }
     }
 
 }
