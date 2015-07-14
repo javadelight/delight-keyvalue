@@ -56,8 +56,8 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         Entry<K, ValueCallback<V>> e;
         while ((e = queue.poll()) != null) {
 
-            toProcessKeys.add(e.getKey());
             if (toProcessCbs.get(e.getKey()) == null) {
+                toProcessKeys.add(e.getKey());
                 toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
             }
 
