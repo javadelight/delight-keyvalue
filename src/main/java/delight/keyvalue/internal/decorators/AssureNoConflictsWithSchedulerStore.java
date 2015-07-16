@@ -102,6 +102,7 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
     @Override
     public V getSync(final K key) {
         if (scheduler.isRunning()) {
+            // FIXIT check if need to reeenable
             // throw new IllegalStateException("Illegal call for map while
             // scheduler is running: ");
         }
