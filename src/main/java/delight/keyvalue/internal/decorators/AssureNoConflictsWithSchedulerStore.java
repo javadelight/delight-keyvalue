@@ -102,7 +102,8 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
     @Override
     public V getSync(final K key) {
         if (scheduler.isRunning()) {
-            throw new IllegalStateException("Illegal call for map while scheduler is running: ");
+            // throw new IllegalStateException("Illegal call for map while
+            // scheduler is running: ");
         }
         return decorated.getSync(key);
     }
