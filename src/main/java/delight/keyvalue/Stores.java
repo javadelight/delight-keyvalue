@@ -101,6 +101,18 @@ public class Stores {
         return StoreDecorators.trace(messageReceiver, decorated);
     }
 
+    public static <K, V> Store<K, V> trace(final Store<K, V> decorated) {
+
+        final Closure<String> messageReceiver = new Closure<String>() {
+
+            @Override
+            public void apply(final String o) {
+                System.out.println("Stores.trace: " + o);
+            }
+        };
+        return StoreDecorators.trace(messageReceiver, decorated);
+    }
+
     /**
      * <p>
      * Attempts to only perform operations on the map when the scheduler is
