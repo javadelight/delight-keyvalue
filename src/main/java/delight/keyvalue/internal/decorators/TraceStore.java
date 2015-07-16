@@ -59,7 +59,7 @@ final class TraceStore<K, V> implements Store<K, V> {
     public V getSync(final K key) {
         messageReceiver.apply("BEFORE: getSync " + key);
         final V res = decorated.getSync(key);
-        messageReceiver.apply("AFTER: getSync got:" + key);
+        messageReceiver.apply("AFTER: getSync got:" + res);
         return res;
     }
 
