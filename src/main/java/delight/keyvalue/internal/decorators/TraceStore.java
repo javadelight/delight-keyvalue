@@ -51,13 +51,16 @@ final class TraceStore<K, V> implements Store<K, V> {
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
+        messageReceiver.apply("BEFORE: remove " + key);
         decorated.remove(key, callback);
     }
 
     @Override
     public V getSync(final K key) {
         messageReceiver.apply("BEFORE: getSync " + key);
-        return decorated.getSync(key);
+        final V res = decorated.getSync(key);
+        messageReceiver.apply("AFTER: getSync got:" + key);
+        return res;
     }
 
     @Override
