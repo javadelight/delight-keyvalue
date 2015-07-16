@@ -56,18 +56,19 @@ final class TraceStore<K, V> implements Store<K, V> {
 
     @Override
     public V getSync(final K key) {
-
+        messageReceiver.apply("BEFORE: getSync " + key);
         return decorated.getSync(key);
     }
 
     @Override
     public void putSync(final K key, final V value) {
-
+        messageReceiver.apply("BEFORE: putSync " + key);
         decorated.putSync(key, value);
     }
 
     @Override
     public void removeSync(final K key) {
+        messageReceiver.apply("BEFORE: removeSync " + key);
         decorated.removeSync(key);
     }
 
