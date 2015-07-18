@@ -50,7 +50,7 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
-        if (!scheduler.suspendIfNotRunning()) {
+        if (!scheduler.suspendIfPossible()) {
             scheduler.schedule(new Operation<Object>() {
 
                 @Override
@@ -84,7 +84,7 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        if (!scheduler.suspendIfNotRunning()) {
+        if (!scheduler.suspendIfPossible()) {
             scheduler.schedule(new Operation<V>() {
 
                 @Override
@@ -112,7 +112,7 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
-        if (!scheduler.suspendIfNotRunning()) {
+        if (!scheduler.suspendIfPossible()) {
             scheduler.schedule(new Operation<Object>() {
 
                 @Override
@@ -148,7 +148,7 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
 
     @Override
     public void commit(final SimpleCallback callback) {
-        if (!scheduler.suspendIfNotRunning()) {
+        if (!scheduler.suspendIfPossible()) {
             scheduler.schedule(new Operation<Object>() {
 
                 @Override
@@ -166,7 +166,7 @@ public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K,
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
-        if (!scheduler.suspendIfNotRunning()) {
+        if (!scheduler.suspendIfPossible()) {
             scheduler.schedule(new Operation<Object>() {
 
                 @Override
