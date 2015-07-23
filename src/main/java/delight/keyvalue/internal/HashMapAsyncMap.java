@@ -59,6 +59,8 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     @Override
     public void stop(final SimpleCallback callback) {
+        System.out.println("Stopping map. has values");
+        System.out.println(map);
         callback.onSuccess();
     }
 
