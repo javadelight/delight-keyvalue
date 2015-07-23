@@ -7,6 +7,8 @@ import delight.keyvalue.Store;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
 import delight.keyvalue.operations.StoreOperation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 class SimpleCachedStore<K, V> implements Store<K, V> {
@@ -105,10 +107,22 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
             final String keyStartsWith = removeAllOperation.getKeyStartsWith();
 
+            final List<String> keysToDelete = new ArrayList<String>();
+
             for (final K k : this.cache.keySet()) {
                 final String key = (String) k;
+
+                if (key.startsWith(keyStartsWith)) {
+                    keysToDelete.add(key);
+                }
+
             }
 
+            for (final String key : keysToDelete) {
+                final Object oldValue = this.cache.remove(key);
+
+                assert oldValue != null;
+            }
         }
         this.decorated.performOperation(operation, callback);
     }
