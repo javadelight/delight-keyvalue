@@ -92,6 +92,7 @@ final class TraceStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        messageReceiver.apply("BEFORE: Operation [" + operation + "]");
         this.decorated.performOperation(operation, callback);
     }
 
