@@ -13,6 +13,10 @@ public class RemoveAllOperation<V> implements StoreOperation<String, V> {
 
     boolean skip = false;
 
+    public String getKeyStartsWith() {
+        return keyStartsWith;
+    }
+
     @Override
     public void modifyKeys(final Function<String, String> func) {
         keyStartsWith = func.apply(keyStartsWith);
