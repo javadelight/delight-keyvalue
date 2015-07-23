@@ -107,9 +107,11 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
         // System.out.println("perform " + operation);
         this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
 
+            @SuppressWarnings("rawtypes")
             @Override
             public void apply(final Object o) {
                 if (operation instanceof RemoveAllOperation) {
+
                     final RemoveAllOperation removeAllOperation = (RemoveAllOperation) operation;
 
                     final String keyStartsWith = removeAllOperation.getKeyStartsWith();
