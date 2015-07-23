@@ -88,7 +88,7 @@ public class Stores {
     }
 
     public static <K, V> Store<K, V> hashMap() {
-        return trace(new HashMapAsyncMap<K, V>());
+        return new HashMapAsyncMap<K, V>();
     }
 
     public static <K, V> void inject(final List<StoreEntry<K, V>> data, final Store<K, V> intoStore) {
