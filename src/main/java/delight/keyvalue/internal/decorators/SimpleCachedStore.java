@@ -83,7 +83,7 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void removeSync(final K key) {
-        System.out.println("remove " + key);
+
         this.cache.remove(key);
         this.decorated.removeSync(key);
     }
