@@ -51,4 +51,9 @@ public class RemoveAllOperation<V> implements StoreOperation<String, V> {
         this.keyStartsWith = keyStartsWith;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ": keyStartsWith=" + keyStartsWith + "";
+    }
+
 }
