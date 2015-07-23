@@ -104,7 +104,7 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
-
+        System.out.println("perform " + operation);
         this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
 
             @Override
@@ -124,7 +124,7 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
                         }
 
                     }
-
+                    System.out.println("remove from cache: " + keysToDelete);
                     for (final String key : keysToDelete) {
                         final Object oldValue = cache.remove(key);
 
