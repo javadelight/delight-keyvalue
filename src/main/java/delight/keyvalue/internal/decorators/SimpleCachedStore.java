@@ -1,7 +1,9 @@
 package delight.keyvalue.internal.decorators;
 
+import delight.async.AsyncCommon;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Closure;
 import delight.functional.Fn;
 import delight.keyvalue.Store;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
@@ -102,29 +104,37 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
-        if (operation instanceof RemoveAllOperation) {
-            final RemoveAllOperation removeAllOperation = (RemoveAllOperation) operation;
 
-            final String keyStartsWith = removeAllOperation.getKeyStartsWith();
+        this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
 
-            final List<String> keysToDelete = new ArrayList<String>();
+            @Override
+            public void apply(final Object o) {
+                if (operation instanceof RemoveAllOperation) {
+                    final RemoveAllOperation removeAllOperation = (RemoveAllOperation) operation;
 
-            for (final K k : this.cache.keySet()) {
-                final String key = (String) k;
+                    final String keyStartsWith = removeAllOperation.getKeyStartsWith();
 
-                if (key.startsWith(keyStartsWith)) {
-                    keysToDelete.add(key);
+                    final List<String> keysToDelete = new ArrayList<String>();
+
+                    for (final K k : cache.keySet()) {
+                        final String key = (String) k;
+
+                        if (key.startsWith(keyStartsWith)) {
+                            keysToDelete.add(key);
+                        }
+
+                    }
+
+                    for (final String key : keysToDelete) {
+                        final Object oldValue = cache.remove(key);
+
+                        assert oldValue != null;
+                    }
                 }
+                callback.onSuccess(o);
 
             }
-
-            for (final String key : keysToDelete) {
-                final Object oldValue = this.cache.remove(key);
-
-                assert oldValue != null;
-            }
-        }
-        this.decorated.performOperation(operation, callback);
+        }));
     }
 
     public SimpleCachedStore(final Map<K, Object> cache, final Store<K, V> decorated) {
