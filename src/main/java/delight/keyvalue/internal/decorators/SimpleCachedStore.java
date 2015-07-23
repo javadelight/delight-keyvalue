@@ -4,6 +4,7 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Fn;
 import delight.keyvalue.Store;
+import delight.keyvalue.internal.operations.RemoveAllOperation;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.Map;
@@ -99,6 +100,16 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        if (operation instanceof RemoveAllOperation) {
+            final RemoveAllOperation removeAllOperation = (RemoveAllOperation) operation;
+
+            final String keyStartsWith = removeAllOperation.getKeyStartsWith();
+
+            for (final K k : this.cache.keySet()) {
+                final String key = (String) k;
+            }
+
+        }
         this.decorated.performOperation(operation, callback);
     }
 
