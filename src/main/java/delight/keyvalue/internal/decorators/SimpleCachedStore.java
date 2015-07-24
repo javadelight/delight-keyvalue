@@ -127,7 +127,7 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
                         }
 
                     }
-                    System.out.println("remove from cache: " + keysToDelete);
+
                     for (final String key : keysToDelete) {
                         final Object oldValue = cache.remove(key);
 
