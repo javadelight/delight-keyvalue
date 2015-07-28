@@ -87,6 +87,12 @@ public class Stores {
         return StoreDecorators.lazyStartup(decorated);
     }
 
+    /**
+     * <p>
+     * A store backed by a simple Java HashMap.
+     * 
+     * @return
+     */
     public static <K, V> Store<K, V> hashMap() {
         return new HashMapAsyncMap<K, V>();
     }
