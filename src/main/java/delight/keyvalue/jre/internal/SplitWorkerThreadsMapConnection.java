@@ -21,8 +21,8 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> 
     private final boolean ENABLE_LOG = false;
 
     private final Store<K, V> decorated;
-    private ExecutorService executor;
-    private ConcurrentHashMap<K, Object> pendingPuts;
+    private final ExecutorService executor;
+    private final ConcurrentHashMap<K, Object> pendingPuts;
     private final int workerThreads;
 
     private final static Object NULL = Fn.object();
@@ -281,6 +281,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> 
         super();
         this.decorated = connection;
         this.workerThreads = workerThreads;
+        this.pendingPuts = new ConcurrentHashMap<K, Object>();
 
     }
 
