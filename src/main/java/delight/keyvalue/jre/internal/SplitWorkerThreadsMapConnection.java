@@ -237,14 +237,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> 
 
     @Override
     public void start(final SimpleCallback callback) {
-        this.executor = Executors.newFixedThreadPool(this.workerThreads, new ThreadFactory() {
 
-            @Override
-            public Thread newThread(final Runnable r) {
-                return new Thread(r, this.getClass() + "->worker");
-            }
-        });
-        this.pendingPuts = new ConcurrentHashMap<K, Object>();
         callback.onSuccess();
     }
 
@@ -281,6 +274,13 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> 
         super();
         this.decorated = connection;
         this.workerThreads = workerThreads;
+        this.executor = Executors.newFixedThreadPool(this.workerThreads, new ThreadFactory() {
+
+            @Override
+            public Thread newThread(final Runnable r) {
+                return new Thread(r, this.getClass() + "->worker");
+            }
+        });
         this.pendingPuts = new ConcurrentHashMap<K, Object>();
 
     }
