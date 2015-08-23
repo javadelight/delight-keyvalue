@@ -84,7 +84,21 @@ final class TraceStore<K, V> implements Store<K, V> {
 
     @Override
     public void stop(final SimpleCallback callback) {
-        decorated.stop(callback);
+        messageReceiver.apply("BEFORE: stop");
+        decorated.stop(new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                messageReceiver.apply("AFTER: stop FAILED " + t);
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                messageReceiver.apply("AFTER: stop");
+                callback.onSuccess();
+            }
+        });
     }
 
     @Override
