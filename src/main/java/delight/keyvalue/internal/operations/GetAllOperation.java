@@ -5,11 +5,10 @@ import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 import delight.functional.Function;
 import delight.functional.Success;
-import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
-import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,29 +56,26 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
             @Override
             public void apply(final List<V> res) {
-               
-                for (final o : res) {
-                V value = o.value();
-                for (final Function<V, V> f : afterGet) {
-                    value = f.apply(value);
+                if (afterGet.size() == 0) {
+                    callback.onSuccess(res);
+                    return;
                 }
+
+                final ArrayList<V> alteredResults = new ArrayList<V>(res.size());
+
+                for (final V o : res) {
+                    V value = o;
+                    for (final Function<V, V> f : afterGet) {
+                        value = f.apply(value);
+                        alteredResults.add(value);
+                    }
                 }
-                
-                
+
+                callback.onSuccess(alteredResults);
+
             }
         }));
-                
-                
-                new Closure<StoreEntry<String, V>>() {
 
-            @Override
-            public void apply(final StoreEntry<String, V> o) {
-                
-
-                onEntry.apply(new StoreEntryData<String, V>(o.key(), value));
-
-            }
-        }, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
     }
 
     public GetAllOperation(final String keyStartsWith, final int fromIdx, final int toIdx) {
