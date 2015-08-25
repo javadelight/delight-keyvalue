@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
@@ -94,34 +93,27 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public void getAll(final String keyStartsWith, final Closure<StoreEntry<K, V>> onEntry,
-            final SimpleCallback onCompleted) {
-        for (final Entry<K, V> e : this.map.entrySet()) {
-            assert e.getKey() instanceof String;
-            if (e.getKey().toString().startsWith(keyStartsWith)) {
-                onEntry.apply(new StoreEntryData<K, V>(e.getKey(), e.getValue()));
-            }
-        }
-
-        onCompleted.onSuccess();
-
-    }
-
-    @Override
     public void getAll(final String keyStartsWith, final int fromIdx, final int toIdx,
             final ValueCallback<List<StoreEntry<K, V>>> callback) {
 
-        final int found = 0;
+        int found = 0;
         final int toFind = toIdx - fromIdx + 1;
-        final int idx = fromIdx;
-        final List<Entry<K, V>> entrySet = new ArrayList<Entry<K,V>>(this.map.entrySet());
+        int idx = fromIdx;
+        final List<Entry<K, V>> entrySet = new ArrayList<Entry<K, V>>(this.map.entrySet());
 
         final List<StoreEntry<K, V>> res = new ArrayList<StoreEntry<K, V>>(toFind);
 
         while (idx <= entrySet.size() && (found <= toFind || toIdx == -1)) {
-            
-            res.add(new StoreEntryData<K, V>(e.getKey(), e.getValue()))
+            final Entry<K, V> e = entrySet.get(idx);
+
+            if (e.getKey().toString().startsWith(keyStartsWith)) {
+                res.add(new StoreEntryData<K, V>(e.getKey(), e.getValue()));
+                found++;
+            }
+            idx++;
         }
+
+        callback.onSuccess(res);
 
     }
 
