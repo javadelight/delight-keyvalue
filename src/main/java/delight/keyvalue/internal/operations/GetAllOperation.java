@@ -16,11 +16,14 @@ import java.util.List;
 public class GetAllOperation<V> implements StoreOperation<String, V> {
 
     private String keyStartsWith;
-    private final Closure<StoreEntry<String, V>> onEntry;
 
     private final List<Function<V, V>> afterGet;
 
     boolean skip = false;
+
+    private final int fromIdx;
+
+    private final int toIdx;
 
     @Override
     public void modifyKeys(final Function<String, String> func) {
@@ -65,11 +68,12 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
         }, AsyncCommon.asSimpleCallbackAndReturnSuccess(callback));
     }
 
-    public GetAllOperation(final String keyStartsWith, final Closure<StoreEntry<String, V>> onEntry) {
+    public GetAllOperation(final String keyStartsWith, final int fromIdx, final int toIdx) {
         super();
         this.keyStartsWith = keyStartsWith;
-        this.onEntry = onEntry;
         this.afterGet = new LinkedList<Function<V, V>>();
+        this.fromIdx = fromIdx;
+        this.toIdx = toIdx;
     }
 
 }
