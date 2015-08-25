@@ -53,7 +53,17 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
             callback.onSuccess(Success.INSTANCE);
             return;
         }
-        store.getAll(keyStartsWith, new Closure<StoreEntry<String, V>>() {
+        store.getAll(keyStartsWith, fromIdx, toIdx, AsyncCommon.embed(callback, new Closure<List<V>>() {
+
+            @Override
+            public void apply(final List<V> res) {
+                // TODO Auto-generated method stub
+                
+            }
+        }));
+                
+                
+                new Closure<StoreEntry<String, V>>() {
 
             @Override
             public void apply(final StoreEntry<String, V> o) {
