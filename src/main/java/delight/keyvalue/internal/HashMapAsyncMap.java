@@ -114,12 +114,13 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
         final int found = 0;
         final int toFind = toIdx - fromIdx + 1;
         final int idx = fromIdx;
-        final Set<Entry<K, V>> entrySet = this.map.entrySet();
+        final List<Entry<K, V>> entrySet = new ArrayList<Entry<K,V>>(this.map.entrySet());
 
         final List<StoreEntry<K, V>> res = new ArrayList<StoreEntry<K, V>>(toFind);
 
         while (idx <= entrySet.size() && (found <= toFind || toIdx == -1)) {
-
+            
+            res.add(new StoreEntryData<K, V>(e.getKey(), e.getValue()))
         }
 
     }
