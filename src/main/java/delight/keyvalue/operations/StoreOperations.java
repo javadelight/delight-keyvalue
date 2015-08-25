@@ -1,7 +1,5 @@
 package delight.keyvalue.operations;
 
-import delight.functional.Closure;
-import delight.keyvalue.StoreEntry;
 import delight.keyvalue.internal.operations.ClearCacheOperation;
 import delight.keyvalue.internal.operations.CountOperation;
 import delight.keyvalue.internal.operations.GetAllOperation;
@@ -20,9 +18,8 @@ public class StoreOperations {
         return (StoreOperation<K, V>) new RemoveAllOperation<V>(keyStartsWith);
     }
 
-    public static <K, V> StoreOperation<K, V> getAll(final String keyStartsWith,
-            final Closure<StoreEntry<String, V>> onEntry) {
-        return (StoreOperation<K, V>) new GetAllOperation<V>(keyStartsWith, onEntry);
+    public static <K, V> StoreOperation<K, V> getAll(final String keyStartsWith, final int fromIdx, final int toIdx) {
+        return (StoreOperation<K, V>) new GetAllOperation<V>(keyStartsWith, fromIdx, toIdx);
     }
 
     public static <K, V> StoreOperation<K, V> count(final String keyStartsWith) {
