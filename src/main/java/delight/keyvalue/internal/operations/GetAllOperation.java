@@ -57,7 +57,14 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
             @Override
             public void apply(final List<V> res) {
-                // TODO Auto-generated method stub
+               
+                for (final o : res) {
+                V value = o.value();
+                for (final Function<V, V> f : afterGet) {
+                    value = f.apply(value);
+                }
+                }
+                
                 
             }
         }));
@@ -67,10 +74,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
             @Override
             public void apply(final StoreEntry<String, V> o) {
-                V value = o.value();
-                for (final Function<V, V> f : afterGet) {
-                    value = f.apply(value);
-                }
+                
 
                 onEntry.apply(new StoreEntryData<String, V>(o.key(), value));
 
