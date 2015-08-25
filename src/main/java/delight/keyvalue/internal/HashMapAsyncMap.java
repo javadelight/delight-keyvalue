@@ -120,7 +120,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     @Override
     public void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
         final Value<Integer> count = new Value<Integer>(0);
-        getAll(keyStartsWith, new Closure<StoreEntry<K, V>>() {
+        getAll(keyStartsWith, 0, -1, new Closure<StoreEntry<K, V>>() {
 
             @Override
             public void apply(final StoreEntry<K, V> o) {
