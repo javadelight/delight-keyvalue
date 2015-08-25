@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
@@ -103,6 +104,20 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
         }
 
         onCompleted.onSuccess();
+
+    }
+
+    @Override
+    public void getAll(final String keyStartsWith, final int fromIdx, final int toIdx,
+            final ValueCallback<List<V>> callback) {
+
+        final int found = 0;
+        final int toFind = toIdx - fromIdx + 1;
+        final int idx = 0;
+        final Set<Entry<K, V>> entrySet = this.map.entrySet();
+        while (idx <= entrySet.size() && found <= toFind) {
+
+        }
 
     }
 
