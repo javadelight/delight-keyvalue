@@ -11,7 +11,8 @@ public interface StoreImplementation<K, V> extends Store<K, V> {
 
     public void removeAll(String keyStartsWith, SimpleCallback callback);
 
-    public void getAll(String keyStartsWith, final int fromIdx, final int toIdx, final ValueCallback<List<V>> callback);
+    public void getAll(String keyStartsWith, final int fromIdx, final int toIdx,
+            final ValueCallback<List<StoreEntry<K, V>>> callback);
 
     public void count(String keyStartsWith, final ValueCallback<Integer> callback);
 

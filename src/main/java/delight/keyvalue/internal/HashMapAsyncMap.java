@@ -109,12 +109,15 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     @Override
     public void getAll(final String keyStartsWith, final int fromIdx, final int toIdx,
-            final ValueCallback<List<V>> callback) {
+            final ValueCallback<List<StoreEntry<K, V>>> callback) {
 
         final int found = 0;
         final int toFind = toIdx - fromIdx + 1;
         final int idx = 0;
         final Set<Entry<K, V>> entrySet = this.map.entrySet();
+
+        final List<StoreEntry<K, V>> res = new ArrayList<StoreEntry<K, V>>(toFind);
+
         while (idx <= entrySet.size() && found <= toFind) {
 
         }
