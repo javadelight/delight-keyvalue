@@ -5,6 +5,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 import delight.functional.Function;
 import delight.functional.Success;
+import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
 import delight.keyvalue.operations.StoreOperation;
 
@@ -53,29 +54,30 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
             return;
         }
 
-        store.getAll(keyStartsWith, fromIdx, toIdx, AsyncCommon.embed(callback, new Closure<List<V>>() {
+        store.getAll(keyStartsWith, fromIdx, toIdx,
+                AsyncCommon.embed(callback, new Closure<List<StoreEntry<String, V>>>() {
 
-            @Override
-            public void apply(final List<V> res) {
-                if (afterGet.size() == 0) {
-                    callback.onSuccess(res);
-                    return;
-                }
+                    @Override
+                    public void apply(final List<StoreEntry<String, V>> res) {
+                        if (afterGet.size() == 0) {
+                            callback.onSuccess(res);
+                            return;
+                        }
 
-                final ArrayList<V> alteredResults = new ArrayList<V>(res.size());
+                        final ArrayList<V> alteredResults = new ArrayList<V>(res.size());
 
-                for (final V o : res) {
-                    V value = o;
-                    for (final Function<V, V> f : afterGet) {
-                        value = f.apply(value);
-                        alteredResults.add(value);
+                        for (final V o : res) {
+                            V value = o;
+                            for (final Function<V, V> f : afterGet) {
+                                value = f.apply(value);
+                                alteredResults.add(value);
+                            }
+                        }
+
+                        callback.onSuccess(alteredResults);
+
                     }
-                }
-
-                callback.onSuccess(alteredResults);
-
-            }
-        }));
+                }));
 
     }
 
