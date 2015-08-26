@@ -133,4 +133,19 @@ public class Stores {
         return StoreDecorators.assureNoConflictsWithScheduler(scheduler, decorated);
     }
 
+    /**
+     * <p>
+     * Reports an exception with the specified message if start or stop is
+     * called on the store.
+     * 
+     * @param message
+     * @param decorated
+     * @return
+     */
+    public static Store<String, Object> exceptionOnStopAndStart(final String message,
+            final Store<String, Object> decorated) {
+
+        return StoreDecorators.exceptionOnStopAndStart(message, decorated);
+    }
+
 }
