@@ -103,7 +103,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
         final List<StoreEntry<K, V>> res = new ArrayList<StoreEntry<K, V>>(toFind);
 
-        while (idx <= entrySet.size() && (found <= toFind || toIdx == -1)) {
+        while (idx < entrySet.size() && (found <= toFind || toIdx == -1)) {
             final Entry<K, V> e = entrySet.get(idx);
 
             if (e.getKey().toString().startsWith(keyStartsWith)) {
