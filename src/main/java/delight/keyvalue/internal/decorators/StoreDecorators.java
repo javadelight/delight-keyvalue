@@ -114,7 +114,7 @@ public class StoreDecorators {
 
     public static Store<String, Object> exceptionOnStopAndStart(final String message,
             final Store<String, Object> decorated) {
-        // TODO Auto-generated method stub
-        return null;
+
+        return new ExceptionOnStartAndStopStore(message, decorated);
     }
 }
