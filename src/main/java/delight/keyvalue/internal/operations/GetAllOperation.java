@@ -52,6 +52,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
             callback.onSuccess(Success.INSTANCE);
             return;
         }
+
         store.getAll(keyStartsWith, fromIdx, toIdx, AsyncCommon.embed(callback, new Closure<List<V>>() {
 
             @Override
