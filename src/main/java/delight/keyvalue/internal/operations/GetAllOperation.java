@@ -65,14 +65,15 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
                             return;
                         }
 
-                        final ArrayList<V> alteredResults = new ArrayList<V>(res.size());
+                        final ArrayList<StoreEntry<String, V>> alteredResults = new ArrayList<StoreEntry<String, V>>(
+                                res.size());
 
                         for (final StoreEntry<String, V> o : res) {
                             V value = o.value();
                             for (final Function<V, V> f : afterGet) {
                                 value = f.apply(value);
                             }
-                            alteredResults.add(new StoreEntryData<K, V>(o.key(), o.value()));
+                            alteredResults.add(new StoreEntryData<String, V>(o.key(), o.value()));
                         }
 
                         callback.onSuccess(alteredResults);
