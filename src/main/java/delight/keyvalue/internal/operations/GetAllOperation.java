@@ -7,6 +7,7 @@ import delight.functional.Function;
 import delight.functional.Success;
 import delight.keyvalue.StoreEntry;
 import delight.keyvalue.StoreImplementation;
+import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.ArrayList;
@@ -66,12 +67,12 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
                         final ArrayList<V> alteredResults = new ArrayList<V>(res.size());
 
-                        for (final V o : res) {
-                            V value = o;
+                        for (final StoreEntry<String, V> o : res) {
+                            V value = o.value();
                             for (final Function<V, V> f : afterGet) {
                                 value = f.apply(value);
-                                alteredResults.add(value);
                             }
+                            alteredResults.add(new StoreEntryData<K, V>(o.key(), o.value()));
                         }
 
                         callback.onSuccess(alteredResults);
