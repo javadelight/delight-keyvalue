@@ -111,4 +111,10 @@ public class StoreDecorators {
     public static <K, V> Store<K, V> trace(final Closure<String> messageReceiver, final Store<K, V> decorated) {
         return new TraceStore<K, V>(messageReceiver, decorated);
     }
+
+    public static Store<String, Object> exceptionOnStopAndStart(final String message,
+            final Store<String, Object> decorated) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
