@@ -28,50 +28,43 @@ public class ExceptionOnStartAndStopStore implements Store<String, Object> {
 
     @Override
     public void get(final String key, final ValueCallback<Object> callback) {
-        // TODO Auto-generated method stub
-
+        decorated.get(key, callback);
     }
 
     @Override
     public Object getSync(final String key) {
-        // TODO Auto-generated method stub
-        return null;
+
+        return decorated.getSync(key);
     }
 
     @Override
     public void remove(final String key, final SimpleCallback callback) {
-        // TODO Auto-generated method stub
-
+        decorated.remove(key, callback);
     }
 
     @Override
     public void removeSync(final String key) {
-        // TODO Auto-generated method stub
-
+        decorated.removeSync(key);
     }
 
     @Override
     public void start(final SimpleCallback callback) {
-        // TODO Auto-generated method stub
-
+        callback.onFailure(new Exception(message));
     }
 
     @Override
     public void stop(final SimpleCallback callback) {
-        // TODO Auto-generated method stub
-
+        callback.onFailure(new Exception(message));
     }
 
     @Override
     public void commit(final SimpleCallback callback) {
-        // TODO Auto-generated method stub
-
+        decorated.commit(callback);
     }
 
     @Override
     public void performOperation(final StoreOperation<String, Object> operation, final ValueCallback<Object> callback) {
-        // TODO Auto-generated method stub
-
+        decorated.performOperation(operation, callback);
     }
 
 }
