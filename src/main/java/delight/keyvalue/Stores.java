@@ -4,6 +4,7 @@ import delight.concurrency.Concurrency;
 import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
+import delight.keyvalue.internal.EncodeCaseInsensitiveKey;
 import delight.keyvalue.internal.HashMapAsyncMap;
 import delight.keyvalue.internal.decorators.StoreDecorators;
 
@@ -146,6 +147,10 @@ public class Stores {
             final Store<String, Object> decorated) {
 
         return StoreDecorators.exceptionOnStopAndStart(message, decorated);
+    }
+
+    public static final Function<String, String> createFilterForCaseInsensitiveStorage() {
+        return new EncodeCaseInsensitiveKey();
     }
 
 }
