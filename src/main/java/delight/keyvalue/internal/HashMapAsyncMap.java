@@ -19,69 +19,70 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     private final HashMap<K, V> map;
 
     @Override
-    public void put(final K key, final V value, final SimpleCallback callback) {
+    public synchronized void put(final K key, final V value, final SimpleCallback callback) {
         map.put(key, value);
         callback.onSuccess();
     }
 
     @Override
-    public void get(final K key, final ValueCallback<V> callback) {
+    public synchronized void get(final K key, final ValueCallback<V> callback) {
 
         callback.onSuccess(map.get(key));
     }
 
     @Override
-    public void remove(final K key, final SimpleCallback callback) {
+    public synchronized void remove(final K key, final SimpleCallback callback) {
         map.remove(key);
         callback.onSuccess();
     }
 
     @Override
-    public V getSync(final K key) {
+    public synchronized V getSync(final K key) {
 
         return map.get(key);
     }
 
     @Override
-    public void putSync(final K key, final V value) {
+    public synchronized void putSync(final K key, final V value) {
         map.put(key, value);
     }
 
     @Override
-    public void removeSync(final K key) {
+    public synchronized void removeSync(final K key) {
         map.remove(key);
     }
 
     @Override
-    public void start(final SimpleCallback callback) {
+    public synchronized void start(final SimpleCallback callback) {
         callback.onSuccess();
     }
 
     @Override
-    public void stop(final SimpleCallback callback) {
+    public synchronized void stop(final SimpleCallback callback) {
         // System.out.println("Stopping map. has values");
         // System.out.println(map.keySet().toString().replaceAll(",", ",\n"));
         callback.onSuccess();
     }
 
     @Override
-    public void commit(final SimpleCallback callback) {
+    public synchronized void commit(final SimpleCallback callback) {
         callback.onSuccess();
     }
 
     @Override
-    public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+    public synchronized void performOperation(final StoreOperation<K, V> operation,
+            final ValueCallback<Object> callback) {
         operation.applyOn(this, callback);
     }
 
     @Override
-    public void clearCache() {
+    public synchronized void clearCache() {
         // do nothing
 
     }
 
     @Override
-    public void removeAll(final String keyStartsWith, final SimpleCallback callback) {
+    public synchronized void removeAll(final String keyStartsWith, final SimpleCallback callback) {
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             assert e.getKey() instanceof String;
             if (e.getKey().toString().startsWith(keyStartsWith)) {
@@ -93,7 +94,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public void getAll(final String keyStartsWith, final int fromIdx, final int toIdx,
+    public synchronized void getAll(final String keyStartsWith, final int fromIdx, final int toIdx,
             final ValueCallback<List<StoreEntry<K, V>>> callback) {
 
         int found = 0;
@@ -118,7 +119,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
+    public synchronized void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
 
         getAll(keyStartsWith, 0, -1, AsyncCommon.embed(callback, new Closure<List<StoreEntry<K, V>>>() {
 
@@ -130,7 +131,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public void get(final List<K> keys, final ValueCallback<List<V>> callback) {
+    public synchronized void get(final List<K> keys, final ValueCallback<List<V>> callback) {
         final List<V> results = new ArrayList<V>(keys.size());
 
         for (final K key : keys) {
