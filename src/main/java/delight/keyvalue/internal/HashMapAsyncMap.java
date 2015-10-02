@@ -83,6 +83,9 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     @Override
     public synchronized void removeAll(final String keyStartsWith, final SimpleCallback callback) {
+
+        System.out.println("XXXX removeAll " + keyStartsWith);
+
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             assert e.getKey() instanceof String;
             if (e.getKey().toString().startsWith(keyStartsWith)) {
