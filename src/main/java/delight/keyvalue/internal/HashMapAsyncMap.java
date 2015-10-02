@@ -89,6 +89,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             assert e.getKey() instanceof String;
             if (e.getKey().toString().startsWith(keyStartsWith)) {
+                System.out.println("XXXXX remove " + e.getValue());
                 this.map.remove(e.getKey());
             }
         }
