@@ -45,54 +45,51 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         }
     }
 
-    private final void executeGetsAfterDelay() {
-
-        try {
-            Thread.sleep(delayInMs);
-        } catch (final InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        final List<K> toProcessKeys = new ArrayList<K>();
-        final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
-                toProcessKeys.size());
-
-        Entry<K, ValueCallback<V>> e;
-        while ((e = queue.poll()) != null) {
-
-            if (toProcessCbs.get(e.getKey()) == null) {
-                toProcessKeys.add(e.getKey());
-                toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
-            }
-
-            toProcessCbs.get(e.getKey()).add(e.getValue());
-        }
-
-        Async.waitFor(5000, new Operation<Success>() {
-
+    private final void executeGetsAfterDelay(final ValueCallback<Success> callback) {
+        
+        this.conn.newTimer().scheduleOnce(delayInMs, new Runnable() {
+            
             @Override
-            public void apply(final ValueCallback<Success> callback) {
-                decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys),
-                        AsyncCommon.embed(callback, new Closure<Object>() {
+            public void run() {
+                final List<K> toProcessKeys = new ArrayList<K>();
+                final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
+                        toProcessKeys.size());
 
-                    @Override
-                    public void apply(final Object o) {
-                        final List<V> results = (List<V>) o;
+                Entry<K, ValueCallback<V>> e;
+                while ((e = queue.poll()) != null) {
 
-                        assert results.size() == toProcessCbs.size();
-
-                        for (int i = 0; i < results.size(); i++) {
-                            for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
-                                cb.onSuccess(results.get(i));
-                            }
-
-                        }
-
-                        callback.onSuccess(Success.INSTANCE);
-
+                    if (toProcessCbs.get(e.getKey()) == null) {
+                        toProcessKeys.add(e.getKey());
+                        toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
                     }
-                }));
 
+                    toProcessCbs.get(e.getKey()).add(e.getValue());
+                }
+
+              
+                        decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys),
+                                AsyncCommon.embed(callback, new Closure<Object>() {
+
+                            @Override
+                            public void apply(final Object o) {
+                                final List<V> results = (List<V>) o;
+
+                                assert results.size() == toProcessCbs.size();
+
+                                for (int i = 0; i < results.size(); i++) {
+                                    for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
+                                        cb.onSuccess(results.get(i));
+                                    }
+
+                                }
+
+                                callback.onSuccess(Success.INSTANCE);
+
+                            }
+                        }));
+
+                    
+                });
             }
         });
 
