@@ -30,6 +30,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final int delayInMs;
 
     private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> scheduled;
+    private final ConcurrentLinkedQueue<ValueCallback<V>> processing;
     private final Concurrency conn;
 
     private final void waitTillEmpty() {
@@ -61,6 +62,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                     }
 
                     toProcessCbs.get(e.getKey()).add(e.getValue());
+                    processing.add(e.getValue());
                 }
 
                 decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
