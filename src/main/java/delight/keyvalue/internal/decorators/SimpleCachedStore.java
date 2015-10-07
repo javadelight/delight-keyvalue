@@ -22,25 +22,25 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
-        synchronized (cache) {
-            if (value != null) {
-                this.cache.put(key, value);
-            } else {
-                this.cache.put(key, NULL);
-            }
+        // synchronized (cache) {
+        if (value != null) {
+            this.cache.put(key, value);
+        } else {
+            this.cache.put(key, NULL);
         }
+        // }
         decorated.put(key, value, callback);
     }
 
     @Override
     public void putSync(final K key, final V value) {
-        synchronized (cache) {
-            if (value != null) {
-                this.cache.put(key, value);
-            } else {
-                this.cache.put(key, NULL);
-            }
+        // synchronized (cache) {
+        if (value != null) {
+            this.cache.put(key, value);
+        } else {
+            this.cache.put(key, NULL);
         }
+        // }
 
         decorated.putSync(key, value);
     }
@@ -49,9 +49,9 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
         final Object fromCache;
-        synchronized (cache) {
-            fromCache = this.cache.get(key);
-        }
+        // synchronized (cache) {
+        fromCache = this.cache.get(key);
+        // }
         if (fromCache != null) {
             if (fromCache == NULL) {
                 callback.onSuccess(null);
@@ -87,17 +87,17 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
-        synchronized (cache) {
-            this.cache.remove(key);
-        }
+        // synchronized (cache) {
+        this.cache.remove(key);
+        // }
         this.decorated.remove(key, callback);
     }
 
     @Override
     public void removeSync(final K key) {
-        synchronized (cache) {
-            this.cache.remove(key);
-        }
+        // synchronized (cache) {
+        this.cache.remove(key);
+        // }
         this.decorated.removeSync(key);
     }
 
@@ -132,23 +132,23 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
                     final List<String> keysToDelete = new ArrayList<String>();
 
-                    synchronized (cache) {
+                    // synchronized (cache) {
 
-                        for (final K k : cache.keySet()) {
-                            final String key = (String) k;
+                    for (final K k : cache.keySet()) {
+                        final String key = (String) k;
 
-                            if (key.startsWith(keyStartsWith)) {
-                                keysToDelete.add(key);
-                            }
-
+                        if (key.startsWith(keyStartsWith)) {
+                            keysToDelete.add(key);
                         }
 
-                        for (final String key : keysToDelete) {
-                            final Object oldValue = cache.remove(key);
-
-                            assert oldValue != null;
-                        }
                     }
+
+                    for (final String key : keysToDelete) {
+                        final Object oldValue = cache.remove(key);
+
+                        assert oldValue != null;
+                    }
+                    // }
                 }
                 callback.onSuccess(o);
 
