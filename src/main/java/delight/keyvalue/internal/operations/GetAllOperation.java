@@ -95,6 +95,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
         super();
         this.keyStartsWith = keyStartsWith;
         this.afterGetValues = new LinkedList<Function<V, V>>();
+        this.afterGetKeys = new LinkedList<Function<String, String>>();
         this.fromIdx = fromIdx;
         this.toIdx = toIdx;
     }
