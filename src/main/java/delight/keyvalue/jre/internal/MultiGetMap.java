@@ -1,14 +1,11 @@
 package delight.keyvalue.jre.internal;
 
-import delight.async.AsyncCommon;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
 import delight.concurrency.Concurrency;
 import delight.concurrency.jre.ConcurrencyJre;
-import delight.functional.Closure;
-import delight.functional.Success;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
@@ -45,7 +42,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         }
     }
 
-    private final void executeGetsAfterDelay(final ValueCallback<Success> callback) {
+    private final void executeGetsAfterDelay() {
 
         this.conn.newTimer().scheduleOnce(delayInMs, new Runnable() {
 
@@ -66,11 +63,16 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                     toProcessCbs.get(e.getKey()).add(e.getValue());
                 }
 
-                decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys),
-                        AsyncCommon.embed(callback, new Closure<Object>() {
+                decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
 
                     @Override
-                    public void apply(final Object o) {
+                    public void onFailure(final Throwable t) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                    @Override
+                    public void onSuccess(final Object value) {
                         final List<V> results = (List<V>) o;
 
                         assert results.size() == toProcessCbs.size();
@@ -81,11 +83,9 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                             }
 
                         }
-
-                        callback.onSuccess(Success.INSTANCE);
-
                     }
-                }));
+
+                });
 
             }
         });
@@ -112,12 +112,12 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public V getSync(final K key) {
-        return Async.waitFor(new Operation<Success>() {
+        return Async.waitFor(new Operation<V>() {
 
             @Override
-            public void apply(final ValueCallback<Success> callback) {
+            public void apply(final ValueCallback<V> callback) {
                 queue.offer(new EntryData<K, V>(key, callback));
-                executeGetsAfterDelay(callback);
+                executeGetsAfterDelay();
             }
         });
     }
