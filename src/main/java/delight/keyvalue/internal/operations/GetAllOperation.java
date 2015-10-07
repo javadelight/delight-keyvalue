@@ -18,7 +18,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
     private String keyStartsWith;
 
-    private final List<Function<V, V>> afterGet;
+    private final List<Function<V, V>> afterGetValues;
 
     boolean skip = false;
 
@@ -45,7 +45,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
     @Override
     public void modifyValuesAfterGet(final Function<V, V> func) {
-        this.afterGet.add(func);
+        this.afterGetValues.add(func);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
                     @Override
                     public void apply(final List<StoreEntry<String, V>> res) {
-                        if (afterGet.size() == 0) {
+                        if (afterGetValues.size() == 0) {
                             callback.onSuccess(res);
                             return;
                         }
@@ -70,7 +70,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
                         for (final StoreEntry<String, V> o : res) {
                             V value = o.value();
-                            for (final Function<V, V> f : afterGet) {
+                            for (final Function<V, V> f : afterGetValues) {
                                 value = f.apply(value);
                             }
                             alteredResults.add(new StoreEntryData<String, V>(o.key(), o.value()));
@@ -86,7 +86,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
     public GetAllOperation(final String keyStartsWith, final int fromIdx, final int toIdx) {
         super();
         this.keyStartsWith = keyStartsWith;
-        this.afterGet = new LinkedList<Function<V, V>>();
+        this.afterGetValues = new LinkedList<Function<V, V>>();
         this.fromIdx = fromIdx;
         this.toIdx = toIdx;
     }
