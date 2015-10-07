@@ -66,6 +66,10 @@ public class Stores {
         return StoreDecorators.filterKeys(filter, decorated);
     }
 
+    public final static <V> Store<String, V> prefixKeys(final String prefix, final Store<String, V> decorated) {
+        return StoreDecorators.prefixKeys(prefix, decorated);
+    }
+
     public final static <K, V> Store<K, V> filterValues(final Function<V, V> beforeStorage,
             final Function<V, V> afterStorage, final Store<K, V> decorated) {
         return StoreDecorators.filterValues(beforeStorage, afterStorage, decorated);
