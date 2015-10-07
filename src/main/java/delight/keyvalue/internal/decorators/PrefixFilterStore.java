@@ -61,7 +61,14 @@ public class PrefixFilterStore<V> implements Store<String, V> {
 
     @Override
     public void performOperation(final StoreOperation<String, V> operation, final ValueCallback<Object> callback) {
-        // TODO Auto-generated method stub
+        operation.modifyKeysAfterGet(new Function<String, String>() {
+
+            @Override
+            public String apply(final String input) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        });
 
     }
 
