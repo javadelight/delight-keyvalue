@@ -60,13 +60,13 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final void executeGetsAfterDelay() {
 
-        processGetsDelayed.run();
+        // processGetsDelayed.run();
 
         // if (processing.get() == 0) {
         // this.executor.execute(processGets);
         // return;
         // }
-        // this.executor.execute(processGetsDelayed);
+        this.executor.execute(processGetsDelayed);
 
     }
 
@@ -246,7 +246,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         this.delayInMs = delayInMs;
         this.scheduled = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
         this.conn = ConcurrencyJre.create();
-        this.executor = this.conn.newExecutor().newParallelExecutor(3, this);
+        this.executor = this.conn.newExecutor().newParallelExecutor(1, this);
         this.processing = this.conn.newAtomicInteger(0);
         this.processGets = new ProcessGets();
         this.processGetsDelayed = new ProcessGetsDelayed();
