@@ -67,13 +67,15 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onFailure(final Throwable t) {
-                        // TODO Auto-generated method stub
+                        for (final Entry<K, ValueCallback<V>> cb : toProcessCbs.entrySet()) {
+
+                        }
 
                     }
 
                     @Override
                     public void onSuccess(final Object value) {
-                        final List<V> results = (List<V>) o;
+                        final List<V> results = (List<V>) value;
 
                         assert results.size() == toProcessCbs.size();
 
