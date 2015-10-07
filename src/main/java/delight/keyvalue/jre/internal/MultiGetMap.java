@@ -1,5 +1,6 @@
 package delight.keyvalue.jre.internal;
 
+import delight.async.AsyncCommon;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
@@ -65,8 +66,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
             return;
         }
 
-        this.conn.newTimer().scheduleOnce(delayInMs, processGets);
-
+        this.executor.execute(processGetsDelayed);
     }
 
     private final class ProcessGetsDelayed implements Runnable {
@@ -104,7 +104,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
             }
 
-            // System.out.println("bachted "+toProcessKeys);
+            System.out.println("bachted " + toProcessKeys);
 
             decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
 
@@ -191,7 +191,14 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     @Override
     public void stop(final SimpleCallback callback) {
         waitTillEmpty();
-        decorated.stop(callback);
+        executor.shutdown(AsyncCommon.embed(callback, new Runnable() {
+
+            @Override
+            public void run() {
+                decorated.stop(callback);
+            }
+        }));
+
     }
 
     @Override
@@ -238,7 +245,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         this.delayInMs = delayInMs;
         this.scheduled = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
         this.conn = ConcurrencyJre.create();
-        this.executor = this.conn.newExecutor().newSingleThreadExecutor(this);
+        this.executor = this.conn.newExecutor().newParallelExecutor(3, this);
         this.processing = this.conn.newAtomicInteger(0);
         this.processGets = new ProcessGets();
         this.processGetsDelayed = new ProcessGetsDelayed();

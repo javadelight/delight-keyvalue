@@ -51,6 +51,7 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
         final Object fromCache;
         synchronized (cache) {
             fromCache = this.cache.get(key);
+            System.out.println("got from cache " + key);
         }
         if (fromCache != null) {
             if (fromCache == NULL) {
