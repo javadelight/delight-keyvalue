@@ -19,6 +19,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
     private String keyStartsWith;
 
     private final List<Function<V, V>> afterGetValues;
+    private final List<Function<String, String>> afterGetKeys;
 
     boolean skip = false;
 
@@ -29,6 +30,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
     @Override
     public void modifyKeys(final Function<String, String> func) {
         keyStartsWith = func.apply(keyStartsWith);
+        afterGetKeys.add(func);
     }
 
     @Override
@@ -70,10 +72,16 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
 
                         for (final StoreEntry<String, V> o : res) {
                             V value = o.value();
+                            String key = o.key();
                             for (final Function<V, V> f : afterGetValues) {
                                 value = f.apply(value);
                             }
-                            alteredResults.add(new StoreEntryData<String, V>(o.key(), o.value()));
+
+                            for (final Function<String, String> f : afterGetKeys) {
+                                key = f.apply(key);
+                            }
+
+                            alteredResults.add(new StoreEntryData<String, V>(key, value));
                         }
 
                         callback.onSuccess(alteredResults);
