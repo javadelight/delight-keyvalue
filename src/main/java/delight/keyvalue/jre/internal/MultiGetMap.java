@@ -59,13 +59,13 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
             @Override
             public void run() {
+                processing.incrementAndGet();
                 final List<K> toProcessKeys = new ArrayList<K>(scheduled.size() + 5);
                 final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
                         toProcessKeys.size());
 
                 Entry<K, ValueCallback<V>> e;
                 while ((e = scheduled.poll()) != null) {
-                    processing.incrementAndGet();
 
                     if (toProcessCbs.get(e.getKey()) == null) {
                         toProcessKeys.add(e.getKey());
@@ -80,9 +80,10 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onFailure(final Throwable t) {
+                        processing.decrementAndGet();
                         for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
                             for (final ValueCallback<V> cb : entry.getValue()) {
-                                processing.decrementAndGet();
+
                                 cb.onFailure(t);
                             }
                         }
@@ -91,13 +92,14 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onSuccess(final Object value) {
+                        processing.decrementAndGet();
                         final List<V> results = (List<V>) value;
 
                         assert results.size() == toProcessCbs.size();
 
                         for (int i = 0; i < results.size(); i++) {
                             for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
-                                processing.decrementAndGet();
+
                                 cb.onSuccess(results.get(i));
                             }
 
