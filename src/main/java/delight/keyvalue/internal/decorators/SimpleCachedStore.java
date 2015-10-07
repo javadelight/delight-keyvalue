@@ -119,19 +119,22 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
                     final List<String> keysToDelete = new ArrayList<String>();
 
-                    for (final K k : cache.keySet()) {
-                        final String key = (String) k;
+                    synchronized (cache) {
 
-                        if (key.startsWith(keyStartsWith)) {
-                            keysToDelete.add(key);
+                        for (final K k : cache.keySet()) {
+                            final String key = (String) k;
+
+                            if (key.startsWith(keyStartsWith)) {
+                                keysToDelete.add(key);
+                            }
+
                         }
 
-                    }
+                        for (final String key : keysToDelete) {
+                            final Object oldValue = cache.remove(key);
 
-                    for (final String key : keysToDelete) {
-                        final Object oldValue = cache.remove(key);
-
-                        assert oldValue != null;
+                            assert oldValue != null;
+                        }
                     }
                 }
                 callback.onSuccess(o);
