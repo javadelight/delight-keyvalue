@@ -67,8 +67,10 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onFailure(final Throwable t) {
-                        for (final Entry<K, ValueCallback<V>> cb : toProcessCbs.entrySet()) {
-
+                        for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
+                            for (final ValueCallback<V> cb : entry.getValue()) {
+                                cb.onFailure(t);
+                            }
                         }
 
                     }
