@@ -30,6 +30,11 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
     @Override
     public void modifyKeys(final Function<String, String> func) {
         keyStartsWith = func.apply(keyStartsWith);
+
+    }
+
+    @Override
+    public void modifyKeysAfterGet(final Function<String, String> func) {
         afterGetKeys.add(func);
     }
 

@@ -24,6 +24,11 @@ public class RemoveAllOperation<V> implements StoreOperation<String, V> {
     }
 
     @Override
+    public void modifyKeysAfterGet(final Function<String, String> func) {
+
+    }
+
+    @Override
     public void ignoreKeys(final Function<String, Boolean> test) {
         if (test.apply(keyStartsWith)) {
             skip = true;

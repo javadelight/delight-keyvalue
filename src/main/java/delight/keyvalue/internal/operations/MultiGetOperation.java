@@ -25,6 +25,11 @@ public class MultiGetOperation<K, V> implements StoreOperation<K, V> {
     }
 
     @Override
+    public void modifyKeysAfterGet(final Function<K, K> func) {
+
+    }
+
+    @Override
     public void ignoreKeys(final Function<K, Boolean> test) {
         throw new RuntimeException("Not supported!");
     }
