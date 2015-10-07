@@ -76,6 +76,8 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                 }
 
+                System.out.println("bachted " + toProcessKeys);
+
                 decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
 
                     @Override
