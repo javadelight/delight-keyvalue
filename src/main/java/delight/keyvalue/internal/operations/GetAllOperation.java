@@ -71,6 +71,8 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
                             return;
                         }
 
+                        System.out.println(" got " + res);
+
                         final ArrayList<StoreEntry<String, V>> alteredResults = new ArrayList<StoreEntry<String, V>>(
                                 res.size());
 
