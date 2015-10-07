@@ -60,13 +60,14 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final void executeGetsAfterDelay() {
 
-        if (processing.get() == 0) {
-            this.executor.execute(processGets);
-            // processGets.run();
-            return;
-        }
+        processGetsDelayed.run();
 
-        this.executor.execute(processGetsDelayed);
+        // if (processing.get() == 0) {
+        // this.executor.execute(processGets);
+        // return;
+        // }
+        // this.executor.execute(processGetsDelayed);
+
     }
 
     private final class ProcessGetsDelayed implements Runnable {
