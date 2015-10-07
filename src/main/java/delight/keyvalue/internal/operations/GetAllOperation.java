@@ -61,12 +61,14 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
             return;
         }
 
+        System.out.println(this + ": perform getAll " + keyStartsWith);
+
         store.getAll(keyStartsWith, fromIdx, toIdx,
                 AsyncCommon.embed(callback, new Closure<List<StoreEntry<String, V>>>() {
 
                     @Override
                     public void apply(final List<StoreEntry<String, V>> res) {
-                        if (afterGetValues.size() == 0) {
+                        if (afterGetValues.size() == 0 && afterGetKeys.size() == 0) {
                             callback.onSuccess(res);
                             return;
                         }
