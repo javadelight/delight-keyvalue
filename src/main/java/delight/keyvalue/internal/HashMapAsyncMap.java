@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
-    private final static boolean ENABLE_LOG = true;
+    private final static boolean ENABLE_LOG = false;
 
     private final HashMap<K, V> map;
 
@@ -152,7 +152,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
             final Set<K> keys = map.keySet();
 
-            @SuppressWarnings("rawtypes")
+            @SuppressWarnings({ "rawtypes", "unchecked" })
             final List<Comparable<? super Comparable<?>>> list = new ArrayList(keys);
             Collections.sort(list);
             for (final Object key : list) {
