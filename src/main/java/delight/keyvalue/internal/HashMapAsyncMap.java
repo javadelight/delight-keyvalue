@@ -53,18 +53,6 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public synchronized void start(final SimpleCallback callback) {
-        callback.onSuccess();
-    }
-
-    @Override
-    public synchronized void stop(final SimpleCallback callback) {
-        System.out.println("Stopping map. has values");
-        System.out.println(map.keySet().toString().replaceAll(",", ",\n"));
-        callback.onSuccess();
-    }
-
-    @Override
     public synchronized void commit(final SimpleCallback callback) {
         callback.onSuccess();
     }
@@ -146,6 +134,21 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
         callback.onSuccess(results);
 
+    }
+
+    @Override
+    public synchronized void start(final SimpleCallback callback) {
+        callback.onSuccess();
+    }
+
+    @Override
+    public synchronized void stop(final SimpleCallback callback) {
+        System.out.println(this + ": Stopping map. has values");
+        for (final Entry<K, V> entry : map.entrySet()) {
+
+        }
+
+        callback.onSuccess();
     }
 
     public HashMapAsyncMap() {
