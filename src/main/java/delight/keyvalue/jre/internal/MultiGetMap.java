@@ -29,11 +29,11 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final Store<K, V> decorated;
     private final int delayInMs;
 
-    private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> queue;
+    private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> scheduled;
     private final Concurrency conn;
 
     private final void waitTillEmpty() {
-        while (!queue.isEmpty()) {
+        while (!scheduled.isEmpty()) {
             try {
                 Thread.sleep(delayInMs);
             } catch (final InterruptedException e) {
@@ -48,12 +48,12 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
             @Override
             public void run() {
-                final List<K> toProcessKeys = new ArrayList<K>(queue.size() + 5);
+                final List<K> toProcessKeys = new ArrayList<K>(scheduled.size() + 5);
                 final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
                         toProcessKeys.size());
 
                 Entry<K, ValueCallback<V>> e;
-                while ((e = queue.poll()) != null) {
+                while ((e = scheduled.poll()) != null) {
 
                     if (toProcessCbs.get(e.getKey()) == null) {
                         toProcessKeys.add(e.getKey());
@@ -110,7 +110,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        queue.offer(new EntryData<K, V>(key, callback));
+        scheduled.offer(new EntryData<K, V>(key, callback));
         executeGetsAfterDelay();
     }
 
@@ -120,7 +120,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
             @Override
             public void apply(final ValueCallback<V> callback) {
-                queue.offer(new EntryData<K, V>(key, callback));
+                scheduled.offer(new EntryData<K, V>(key, callback));
                 executeGetsAfterDelay();
             }
         });
@@ -191,7 +191,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         super();
         this.decorated = decorated;
         this.delayInMs = delayInMs;
-        this.queue = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
+        this.scheduled = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
         this.conn = ConcurrencyJre.create();
     }
 
