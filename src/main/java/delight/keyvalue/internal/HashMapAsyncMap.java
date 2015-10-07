@@ -152,13 +152,11 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
             final Set<K> keys = map.keySet();
 
+            @SuppressWarnings("rawtypes")
             final List<Comparable<? super Comparable<?>>> list = new ArrayList(keys);
             Collections.sort(list);
-            for (final K key : map.keySet()) {
-
-            }
-            for (final Entry<K, V> entry : map.entrySet()) {
-                System.out.println(entry.getKey() + " -> " + entry.getValue());
+            for (final Object key : list) {
+                System.out.println(key + " -> " + map.get(key));
             }
 
         }
