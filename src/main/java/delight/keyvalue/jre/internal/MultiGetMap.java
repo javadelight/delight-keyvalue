@@ -46,12 +46,12 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     }
 
     private final void executeGetsAfterDelay(final ValueCallback<Success> callback) {
-        
+
         this.conn.newTimer().scheduleOnce(delayInMs, new Runnable() {
-            
+
             @Override
             public void run() {
-                final List<K> toProcessKeys = new ArrayList<K>();
+                final List<K> toProcessKeys = new ArrayList<K>(queue.size() + 3);
                 final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
                         toProcessKeys.size());
 
@@ -66,30 +66,27 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                     toProcessCbs.get(e.getKey()).add(e.getValue());
                 }
 
-              
-                        decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys),
-                                AsyncCommon.embed(callback, new Closure<Object>() {
+                decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys),
+                        AsyncCommon.embed(callback, new Closure<Object>() {
 
-                            @Override
-                            public void apply(final Object o) {
-                                final List<V> results = (List<V>) o;
+                    @Override
+                    public void apply(final Object o) {
+                        final List<V> results = (List<V>) o;
 
-                                assert results.size() == toProcessCbs.size();
+                        assert results.size() == toProcessCbs.size();
 
-                                for (int i = 0; i < results.size(); i++) {
-                                    for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
-                                        cb.onSuccess(results.get(i));
-                                    }
-
-                                }
-
-                                callback.onSuccess(Success.INSTANCE);
-
+                        for (int i = 0; i < results.size(); i++) {
+                            for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
+                                cb.onSuccess(results.get(i));
                             }
-                        }));
 
-                    
-                });
+                        }
+
+                        callback.onSuccess(Success.INSTANCE);
+
+                    }
+                }));
+
             }
         });
 
