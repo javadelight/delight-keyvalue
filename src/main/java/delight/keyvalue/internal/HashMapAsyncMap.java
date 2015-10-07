@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
+    private final static boolean ENABLE_LOG = true;
+
     private final HashMap<K, V> map;
 
     @Override
@@ -143,11 +145,13 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
     @Override
     public synchronized void stop(final SimpleCallback callback) {
-        System.out.println(this + ": Stopping map. has values");
-        for (final Entry<K, V> entry : map.entrySet()) {
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Stopping map. Has values:");
+            for (final Entry<K, V> entry : map.entrySet()) {
+                System.out.println(entry.getKey() + " -> " + entry.getValue());
+            }
 
         }
-
         callback.onSuccess();
     }
 
