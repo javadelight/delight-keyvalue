@@ -55,63 +55,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final void executeGetsAfterDelay() {
 
-        this.conn.newTimer().scheduleOnce(delayInMs, new Runnable() {
-
-            @Override
-            public void run() {
-                processing.incrementAndGet();
-                final List<K> toProcessKeys = new ArrayList<K>(scheduled.size() + 5);
-                final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
-                        toProcessKeys.size());
-
-                Entry<K, ValueCallback<V>> e;
-                while ((e = scheduled.poll()) != null) {
-
-                    if (toProcessCbs.get(e.getKey()) == null) {
-                        toProcessKeys.add(e.getKey());
-                        toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
-                    }
-
-                    toProcessCbs.get(e.getKey()).add(e.getValue());
-
-                }
-
-                System.out.println("bachted " + toProcessKeys);
-
-                decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
-
-                    @Override
-                    public void onFailure(final Throwable t) {
-                        processing.decrementAndGet();
-                        for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
-                            for (final ValueCallback<V> cb : entry.getValue()) {
-
-                                cb.onFailure(t);
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onSuccess(final Object value) {
-                        processing.decrementAndGet();
-                        final List<V> results = (List<V>) value;
-
-                        assert results.size() == toProcessCbs.size();
-
-                        for (int i = 0; i < results.size(); i++) {
-                            for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
-
-                                cb.onSuccess(results.get(i));
-                            }
-
-                        }
-                    }
-
-                });
-
-            }
-        });
+        this.conn.newTimer().scheduleOnce(delayInMs, new ProcessGets<K, V>());
 
     }
 
@@ -178,6 +122,63 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         waitTillEmpty();
         decorated.performOperation(operation, callback);
+    }
+
+    private static final class ProcessGets<K, V> implements Runnable {
+        @Override
+        public void run() {
+            processing.incrementAndGet();
+            final List<K> toProcessKeys = new ArrayList<K>(scheduled.size() + 5);
+            final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
+                    toProcessKeys.size());
+
+            Entry<K, ValueCallback<V>> e;
+            while ((e = scheduled.poll()) != null) {
+
+                if (toProcessCbs.get(e.getKey()) == null) {
+                    toProcessKeys.add(e.getKey());
+                    toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
+                }
+
+                toProcessCbs.get(e.getKey()).add(e.getValue());
+
+            }
+
+            System.out.println("bachted " + toProcessKeys);
+
+            decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
+
+                @Override
+                public void onFailure(final Throwable t) {
+                    processing.decrementAndGet();
+                    for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
+                        for (final ValueCallback<V> cb : entry.getValue()) {
+
+                            cb.onFailure(t);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onSuccess(final Object value) {
+                    processing.decrementAndGet();
+                    final List<V> results = (List<V>) value;
+
+                    assert results.size() == toProcessCbs.size();
+
+                    for (int i = 0; i < results.size(); i++) {
+                        for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
+
+                            cb.onSuccess(results.get(i));
+                        }
+
+                    }
+                }
+
+            });
+
+        }
     }
 
     public static class EntryData<K, V> implements Entry<K, ValueCallback<V>> {
