@@ -85,6 +85,10 @@ public class StoreDecorators {
         return new KeyFilterStore<K, V>(filter, decorated);
     }
 
+    public final static <V> Store<String, V> prefixKeys(final String prefix, final Store<String, V> decorated) {
+        return new PrefixFilterStore<V>(prefix, decorated);
+    }
+
     public final static <K, V> Store<K, V> filterValues(final Function<V, V> beforeStorage,
             final Function<V, V> afterStorage, final Store<K, V> decorated) {
         return new ValueFilterStore<K, V>(beforeStorage, afterStorage, decorated);
