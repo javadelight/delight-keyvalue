@@ -61,8 +61,6 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
             return;
         }
 
-        System.out.println(this + ": perform getAll " + keyStartsWith);
-
         store.getAll(keyStartsWith, fromIdx, toIdx,
                 AsyncCommon.embed(callback, new Closure<List<StoreEntry<String, V>>>() {
 
@@ -72,8 +70,6 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
                             callback.onSuccess(res);
                             return;
                         }
-
-                        System.out.println(" got " + res);
 
                         final ArrayList<StoreEntry<String, V>> alteredResults = new ArrayList<StoreEntry<String, V>>(
                                 res.size());
@@ -86,9 +82,7 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
                             }
 
                             for (final Function<String, String> f : afterGetKeys) {
-                                System.out.println(this + "modify key " + key);
                                 key = f.apply(key);
-                                System.out.println(this + "modified key " + key);
                             }
 
                             alteredResults.add(new StoreEntryData<String, V>(key, value));
