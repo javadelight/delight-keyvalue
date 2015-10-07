@@ -51,7 +51,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
             @Override
             public void run() {
-                final List<K> toProcessKeys = new ArrayList<K>(queue.size() + 3);
+                final List<K> toProcessKeys = new ArrayList<K>(queue.size() + 5);
                 final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
                         toProcessKeys.size());
 
@@ -112,12 +112,12 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public V getSync(final K key) {
-        return Async.waitFor(new Operation<V>() {
+        return Async.waitFor(new Operation<Success>() {
 
             @Override
-            public void apply(final ValueCallback<V> callback) {
+            public void apply(final ValueCallback<Success> callback) {
                 queue.offer(new EntryData<K, V>(key, callback));
-                executeGetsAfterDelay();
+                executeGetsAfterDelay(callback);
             }
         });
     }
