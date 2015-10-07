@@ -30,7 +30,6 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
     @Override
     public void modifyKeys(final Function<String, String> func) {
         keyStartsWith = func.apply(keyStartsWith);
-
     }
 
     @Override
@@ -83,7 +82,9 @@ public class GetAllOperation<V> implements StoreOperation<String, V> {
                             }
 
                             for (final Function<String, String> f : afterGetKeys) {
+                                System.out.println(this + "modify key " + key);
                                 key = f.apply(key);
+                                System.out.println(this + "modified key " + key);
                             }
 
                             alteredResults.add(new StoreEntryData<String, V>(key, value));
