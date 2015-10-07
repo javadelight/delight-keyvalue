@@ -12,6 +12,7 @@ import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +36,20 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final Concurrency conn;
 
     private final void waitTillEmpty() {
-        while (!scheduled.isEmpty()) {
+        final long startedAt = new Date().getTime();
+
+        while (!scheduled.isEmpty() && processing.get() > 0 && new Date().getTime() - startedAt < 5000) {
             try {
                 Thread.sleep(delayInMs);
             } catch (final InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
+
+        if (!scheduled.isEmpty() || processing.get() > 0) {
+            throw new RuntimeException("Multi get map could not be shut down correctly.");
+        }
+
     }
 
     private final void executeGetsAfterDelay() {
