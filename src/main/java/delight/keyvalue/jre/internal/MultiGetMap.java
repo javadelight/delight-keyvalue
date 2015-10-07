@@ -5,6 +5,7 @@ import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
+import delight.concurrency.jre.ConcurrencyJre;
 import delight.functional.Closure;
 import delight.functional.Success;
 import delight.keyvalue.Store;
@@ -159,13 +160,6 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         decorated.performOperation(operation, callback);
     }
 
-    public MultiGetMap(final int delayInMs, final Store<K, V> decorated) {
-        super();
-        this.decorated = decorated;
-        this.delayInMs = delayInMs;
-        this.queue = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
-    }
-
     public static class EntryData<K, V> implements Entry<K, ValueCallback<V>> {
         private final K key;
         private final ValueCallback<V> callback;
@@ -190,6 +184,14 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         public ValueCallback<V> setValue(final ValueCallback<V> value) {
             throw new RuntimeException("not supported");
         }
+    }
+
+    public MultiGetMap(final int delayInMs, final Store<K, V> decorated) {
+        super();
+        this.decorated = decorated;
+        this.delayInMs = delayInMs;
+        this.queue = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
+        this.exectuor = ConcurrencyJre.create().newExecutor().newSingleThreadExecutor(this)
     }
 
 }
