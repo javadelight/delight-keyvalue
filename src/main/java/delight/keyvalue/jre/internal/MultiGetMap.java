@@ -5,6 +5,7 @@ import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
+import delight.concurrency.Concurrency;
 import delight.concurrency.jre.ConcurrencyJre;
 import delight.functional.Closure;
 import delight.functional.Success;
@@ -32,6 +33,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final int delayInMs;
 
     private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> queue;
+    private final Concurrency conn;
 
     private final void waitTillEmpty() {
         while (!queue.isEmpty()) {
@@ -44,6 +46,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     }
 
     private final void executeGetsAfterDelay() {
+
         try {
             Thread.sleep(delayInMs);
         } catch (final InterruptedException e) {
@@ -191,7 +194,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         this.decorated = decorated;
         this.delayInMs = delayInMs;
         this.queue = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
-        this.exectuor = ConcurrencyJre.create().newExecutor().newSingleThreadExecutor(this)
+        this.conn = ConcurrencyJre.create();
     }
 
 }
