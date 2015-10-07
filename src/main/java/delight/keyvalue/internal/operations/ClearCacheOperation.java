@@ -41,4 +41,9 @@ public class ClearCacheOperation<K, V> implements StoreOperation<K, V> {
 
     }
 
+    @Override
+    public void modifyKeysAfterGet(final Function<K, K> func) {
+
+    }
+
 }

@@ -24,6 +24,11 @@ public class CountOperation<V> implements StoreOperation<String, V> {
     }
 
     @Override
+    public void modifyKeysAfterGet(final Function<String, String> func) {
+
+    }
+
+    @Override
     public void modifyValuesBeforePut(final Function<V, V> func) {
 
     }
