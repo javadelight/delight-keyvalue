@@ -38,7 +38,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final void waitTillEmpty() {
         final long startedAt = new Date().getTime();
 
-        while (!scheduled.isEmpty() && processing.get() > 0 && new Date().getTime() - startedAt < 5000) {
+        while ((!scheduled.isEmpty() || processing.get() > 0) && new Date().getTime() - startedAt < 5000) {
             try {
                 Thread.sleep(delayInMs);
             } catch (final InterruptedException e) {
