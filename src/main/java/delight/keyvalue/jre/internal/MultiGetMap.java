@@ -6,6 +6,7 @@ import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
 import delight.concurrency.Concurrency;
 import delight.concurrency.jre.ConcurrencyJre;
+import delight.concurrency.wrappers.SimpleAtomicInteger;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
@@ -30,7 +31,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final int delayInMs;
 
     private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> scheduled;
-    private final ConcurrentLinkedQueue<ValueCallback<V>> processing;
+    private final SimpleAtomicInteger processing;
     private final Concurrency conn;
 
     private final void waitTillEmpty() {
@@ -55,6 +56,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                 Entry<K, ValueCallback<V>> e;
                 while ((e = scheduled.poll()) != null) {
+                    processing.incrementAndGet();
 
                     if (toProcessCbs.get(e.getKey()) == null) {
                         toProcessKeys.add(e.getKey());
@@ -62,7 +64,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                     }
 
                     toProcessCbs.get(e.getKey()).add(e.getValue());
-                    processing.add(e.getValue());
+
                 }
 
                 decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
@@ -71,6 +73,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
                     public void onFailure(final Throwable t) {
                         for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
                             for (final ValueCallback<V> cb : entry.getValue()) {
+                                processing.decrementAndGet();
                                 cb.onFailure(t);
                             }
                         }
@@ -85,6 +88,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
                         for (int i = 0; i < results.size(); i++) {
                             for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
+                                processing.decrementAndGet();
                                 cb.onSuccess(results.get(i));
                             }
 
@@ -195,6 +199,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         this.delayInMs = delayInMs;
         this.scheduled = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
         this.conn = ConcurrencyJre.create();
+        this.processing = this.conn.newAtomicInteger(0);
     }
 
 }
