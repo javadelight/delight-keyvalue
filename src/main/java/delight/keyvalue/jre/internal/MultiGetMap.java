@@ -55,7 +55,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final void executeGetsAfterDelay() {
 
-        this.conn.newTimer().scheduleOnce(delayInMs, new ProcessGets<K, V>());
+        this.conn.newTimer().scheduleOnce(delayInMs, new ProcessGets());
 
     }
 
@@ -124,7 +124,7 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         decorated.performOperation(operation, callback);
     }
 
-    private static final class ProcessGets<K, V> implements Runnable {
+    private final class ProcessGets implements Runnable {
         @Override
         public void run() {
             processing.incrementAndGet();
@@ -144,8 +144,8 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
             }
 
-            System.out.println("bachted " + toProcessKeys);
-
+            System.out.println("bachted "+toProcessKeys);
+            
             decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
 
                 @Override
