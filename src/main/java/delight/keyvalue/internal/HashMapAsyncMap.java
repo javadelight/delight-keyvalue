@@ -10,6 +10,7 @@ import delight.keyvalue.internal.v01.StoreEntryData;
 import delight.keyvalue.operations.StoreOperation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -147,6 +148,12 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     public synchronized void stop(final SimpleCallback callback) {
         if (ENABLE_LOG) {
             System.out.println(this + ": Stopping map. Has values:");
+
+            for (final K key : map.keySet()) {
+
+            }
+
+            Collections.sort(new ArrayList<K>(map.keySet()));
             for (final Entry<K, V> entry : map.entrySet()) {
                 System.out.println(entry.getKey() + " -> " + entry.getValue());
             }
