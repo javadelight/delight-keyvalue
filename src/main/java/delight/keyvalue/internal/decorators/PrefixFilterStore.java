@@ -12,7 +12,7 @@ public class PrefixFilterStore<V> implements Store<String, V> {
     private final Store<String, V> decorated;
 
     private final KeyFilterStore<String, V> filterStore;
-    private Function<String, String> inverseFilter;
+    private final Function<String, String> inverseFilter;
 
     @Override
     public void put(final String key, final V value, final SimpleCallback callback) {
@@ -62,7 +62,8 @@ public class PrefixFilterStore<V> implements Store<String, V> {
 
     @Override
     public void performOperation(final StoreOperation<String, V> operation, final ValueCallback<Object> callback) {
-        operation.modifyKeysAfterGet();
+        operation.modifyKeysAfterGet(this.inverseFilter);
+        this.filterStore.performOperation(operation, callback);
 
     }
 
@@ -75,19 +76,22 @@ public class PrefixFilterStore<V> implements Store<String, V> {
 
         this.filterStore = new KeyFilterStore<String, V>(filter, decorated);
 
-        this.inverseFilter = new InverseFilter(prefix);
+        final int prefixLenght = prefix.length();
+
+        this.inverseFilter = new InverseFilter(prefixLenght);
     }
 
     private static final class InverseFilter implements Function<String, String> {
-        private final String prefix;
+        private final int prefixLenght;
 
-        private InverseFilter(String prefix) {
-            this.prefix = prefix;
+        private InverseFilter(final int prefixLenght) {
+            this.prefixLenght = prefixLenght;
         }
 
         @Override
         public String apply(final String input) {
-            return input.substring(prefix.length());
+
+            return input.substring(prefixLenght);
         }
     }
 
