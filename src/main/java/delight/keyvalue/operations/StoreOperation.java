@@ -15,6 +15,16 @@ public interface StoreOperation<K, V> {
 
     public void modifyKeys(Function<K, K> func);
 
+    /**
+     * <p>
+     * To convert raw keys into filtered keys.
+     * <p>
+     * Require for getAll operation.
+     * 
+     * @param func
+     */
+    public void modifyKeysAfterGet(Function<K, K> func);
+
     public void ignoreKeys(Function<K, Boolean> test);
 
     public void modifyValuesBeforePut(Function<V, V> func);
