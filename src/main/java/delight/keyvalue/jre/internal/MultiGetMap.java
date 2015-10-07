@@ -7,6 +7,7 @@ import delight.async.jre.Async;
 import delight.concurrency.Concurrency;
 import delight.concurrency.jre.ConcurrencyJre;
 import delight.concurrency.wrappers.SimpleAtomicInteger;
+import delight.concurrency.wrappers.SimpleExecutor;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
 import delight.keyvalue.operations.StoreOperations;
@@ -34,6 +35,9 @@ public class MultiGetMap<K, V> implements Store<K, V> {
     private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> scheduled;
     private final SimpleAtomicInteger processing;
     private final Concurrency conn;
+    private final MultiGetMap<K, V>.ProcessGets processGets;
+    private final SimpleExecutor executor;
+    private final MultiGetMap<K, V>.ProcessGetsDelayed processGetsDelayed;
 
     private final void waitTillEmpty() {
         final long startedAt = new Date().getTime();
@@ -55,8 +59,86 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
     private final void executeGetsAfterDelay() {
 
-        this.conn.newTimer().scheduleOnce(delayInMs, new ProcessGets());
+        if (processing.get() == 0) {
+            this.executor.execute(processGets);
+            // processGets.run();
+            return;
+        }
 
+        this.conn.newTimer().scheduleOnce(delayInMs, processGets);
+
+    }
+
+    private final class ProcessGetsDelayed implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(delayInMs);
+            } catch (final InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            processGets.run();
+        }
+
+    }
+
+    private final class ProcessGets implements Runnable {
+        @Override
+        public void run() {
+            processing.incrementAndGet();
+            final List<K> toProcessKeys = new ArrayList<K>(scheduled.size() + 5);
+            final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
+                    toProcessKeys.size());
+
+            Entry<K, ValueCallback<V>> e;
+            while ((e = scheduled.poll()) != null) {
+
+                if (toProcessCbs.get(e.getKey()) == null) {
+                    toProcessKeys.add(e.getKey());
+                    toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
+                }
+
+                toProcessCbs.get(e.getKey()).add(e.getValue());
+
+            }
+
+            // System.out.println("bachted "+toProcessKeys);
+
+            decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
+
+                @Override
+                public void onFailure(final Throwable t) {
+                    processing.decrementAndGet();
+                    for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
+                        for (final ValueCallback<V> cb : entry.getValue()) {
+
+                            cb.onFailure(t);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onSuccess(final Object value) {
+                    processing.decrementAndGet();
+                    final List<V> results = (List<V>) value;
+
+                    assert results.size() == toProcessCbs.size();
+
+                    for (int i = 0; i < results.size(); i++) {
+                        for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
+
+                            cb.onSuccess(results.get(i));
+                        }
+
+                    }
+                }
+
+            });
+
+        }
     }
 
     @Override
@@ -124,63 +206,6 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         decorated.performOperation(operation, callback);
     }
 
-    private final class ProcessGets implements Runnable {
-        @Override
-        public void run() {
-            processing.incrementAndGet();
-            final List<K> toProcessKeys = new ArrayList<K>(scheduled.size() + 5);
-            final Map<K, List<ValueCallback<V>>> toProcessCbs = new HashMap<K, List<ValueCallback<V>>>(
-                    toProcessKeys.size());
-
-            Entry<K, ValueCallback<V>> e;
-            while ((e = scheduled.poll()) != null) {
-
-                if (toProcessCbs.get(e.getKey()) == null) {
-                    toProcessKeys.add(e.getKey());
-                    toProcessCbs.put(e.getKey(), new ArrayList<ValueCallback<V>>(1));
-                }
-
-                toProcessCbs.get(e.getKey()).add(e.getValue());
-
-            }
-
-            System.out.println("bachted "+toProcessKeys);
-            
-            decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
-
-                @Override
-                public void onFailure(final Throwable t) {
-                    processing.decrementAndGet();
-                    for (final Entry<K, List<ValueCallback<V>>> entry : toProcessCbs.entrySet()) {
-                        for (final ValueCallback<V> cb : entry.getValue()) {
-
-                            cb.onFailure(t);
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onSuccess(final Object value) {
-                    processing.decrementAndGet();
-                    final List<V> results = (List<V>) value;
-
-                    assert results.size() == toProcessCbs.size();
-
-                    for (int i = 0; i < results.size(); i++) {
-                        for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
-
-                            cb.onSuccess(results.get(i));
-                        }
-
-                    }
-                }
-
-            });
-
-        }
-    }
-
     public static class EntryData<K, V> implements Entry<K, ValueCallback<V>> {
         private final K key;
         private final ValueCallback<V> callback;
@@ -213,7 +238,10 @@ public class MultiGetMap<K, V> implements Store<K, V> {
         this.delayInMs = delayInMs;
         this.scheduled = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
         this.conn = ConcurrencyJre.create();
+        this.executor = this.conn.newExecutor().newSingleThreadExecutor(this);
         this.processing = this.conn.newAtomicInteger(0);
+        this.processGets = new ProcessGets();
+        this.processGetsDelayed = new ProcessGetsDelayed();
     }
 
 }
