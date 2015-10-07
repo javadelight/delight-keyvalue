@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public class MultiGetMap<K, V> implements Store<K, V> {
+public final class MultiGetMap<K, V> implements Store<K, V> {
 
     private final Store<K, V> decorated;
     private final int delayInMs;
@@ -62,10 +62,10 @@ public class MultiGetMap<K, V> implements Store<K, V> {
 
         // processGetsDelayed.run();
 
-        if (processing.get() == 0) {
-            this.executor.execute(processGets);
-            return;
-        }
+        // if (processing.get() == 0) {
+        // this.executor.execute(processGets);
+        // return;
+        // }
         this.executor.execute(processGetsDelayed);
 
     }
