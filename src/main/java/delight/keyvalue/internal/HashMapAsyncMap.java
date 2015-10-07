@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
@@ -149,11 +150,13 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
         if (ENABLE_LOG) {
             System.out.println(this + ": Stopping map. Has values:");
 
+            final Set<K> keys = map.keySet();
+
+            final List<Comparable<? super Comparable<?>>> list = new ArrayList(keys);
+            Collections.sort(list);
             for (final K key : map.keySet()) {
 
             }
-
-            Collections.sort(new ArrayList<K>(map.keySet()));
             for (final Entry<K, V> entry : map.entrySet()) {
                 System.out.println(entry.getKey() + " -> " + entry.getValue());
             }
