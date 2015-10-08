@@ -123,6 +123,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
             @Override
             public void apply(final List<StoreEntry<K, V>> matches) {
+                System.out.println(matches);
                 callback.onSuccess(matches.size());
             }
         }));
