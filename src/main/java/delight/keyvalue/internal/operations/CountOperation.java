@@ -64,4 +64,9 @@ public class CountOperation<V> implements StoreOperation<String, V> {
 
     }
 
+    @Override
+    public String toString() {
+        return "CountOperation [keyStartsWith=" + keyStartsWith + "]";
+    }
+
 }
