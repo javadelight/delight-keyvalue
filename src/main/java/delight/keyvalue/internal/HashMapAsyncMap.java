@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
-    private final static boolean ENABLE_LOG = false;
+    private final static boolean ENABLE_LOG = true;
 
     private final HashMap<K, V> map;
 
