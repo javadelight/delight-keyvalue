@@ -120,14 +120,16 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     public synchronized void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
 
         if (ENABLE_LOG) {
-            System.out.println(this + ": Count " + keyStartsWith);
+            System.out.println(this + ": Count for  " + keyStartsWith);
         }
 
         getAll(keyStartsWith, 0, -1, AsyncCommon.embed(callback, new Closure<List<StoreEntry<K, V>>>() {
 
             @Override
             public void apply(final List<StoreEntry<K, V>> matches) {
-                // System.out.println(matches);
+                if (ENABLE_LOG) {
+                    System.out.println(HashMapAsyncMap.this + ": Found matches for count " + matches);
+                }
                 callback.onSuccess(matches.size());
             }
         }));
