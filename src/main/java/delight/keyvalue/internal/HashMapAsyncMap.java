@@ -76,14 +76,14 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     @Override
     public synchronized void removeAll(final String keyStartsWith, final SimpleCallback callback) {
 
-        System.out.println("XXXX removeAll " + keyStartsWith);
+        // System.out.println("XXXX removeAll " + keyStartsWith);
 
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             assert e.getKey() instanceof String;
             // System.out.println("compare: " + keyStartsWith + " with " +
             // e.getKey());
             if (e.getKey().toString().startsWith(keyStartsWith)) {
-                System.out.println("XXXXX remove " + e.getKey());
+                // System.out.println("XXXXX remove " + e.getKey());
                 this.map.remove(e.getKey());
             }
         }
@@ -119,7 +119,9 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     @Override
     public synchronized void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
 
-        // System.out.println("count " + keyStartsWith);
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Count " + keyStartsWith);
+        }
 
         getAll(keyStartsWith, 0, -1, AsyncCommon.embed(callback, new Closure<List<StoreEntry<K, V>>>() {
 
