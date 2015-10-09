@@ -114,6 +114,7 @@ final class TraceStore<K, V> implements Store<K, V> {
             @Override
             public void apply(final Object o) {
                 messageReceiver.apply("After: Operation [" + operation + "] got " + o);
+                callback.onSuccess(o);
             }
         }));
     }
