@@ -83,7 +83,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
             // System.out.println("compare: " + keyStartsWith + " with " +
             // e.getKey());
             if (e.getKey().toString().startsWith(keyStartsWith)) {
-                // System.out.println("XXXXX remove " + e.getKey());
+                System.out.println("XXXXX remove " + e.getKey());
                 this.map.remove(e.getKey());
             }
         }
