@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
-    private final static boolean ENABLE_LOG = true;
+    private final static boolean ENABLE_LOG = false;
 
     private final HashMap<K, V> map;
 
@@ -76,7 +76,7 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     @Override
     public synchronized void removeAll(final String keyStartsWith, final SimpleCallback callback) {
 
-        // System.out.println("XXXX removeAll " + keyStartsWith);
+        System.out.println("XXXX removeAll " + keyStartsWith);
 
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             assert e.getKey() instanceof String;
