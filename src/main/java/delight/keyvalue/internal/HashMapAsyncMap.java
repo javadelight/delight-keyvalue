@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
-    private final static boolean ENABLE_LOG = false;
+    private final static boolean ENABLE_LOG = true;
 
     private final HashMap<K, V> map;
 
@@ -76,14 +76,14 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     @Override
     public synchronized void removeAll(final String keyStartsWith, final SimpleCallback callback) {
 
-        // System.out.println("XXXX removeAll " + keyStartsWith);
+        System.out.println("XXXX removeAll " + keyStartsWith);
 
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
             assert e.getKey() instanceof String;
             // System.out.println("compare: " + keyStartsWith + " with " +
             // e.getKey());
             if (e.getKey().toString().startsWith(keyStartsWith)) {
-                // System.out.println("XXXXX remove " + e.getKey());
+                System.out.println("XXXXX remove " + e.getKey());
                 this.map.remove(e.getKey());
             }
         }
