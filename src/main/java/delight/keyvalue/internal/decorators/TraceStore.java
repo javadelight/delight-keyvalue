@@ -1,5 +1,6 @@
 package delight.keyvalue.internal.decorators;
 
+import delight.async.AsyncCommon;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
@@ -109,7 +110,12 @@ final class TraceStore<K, V> implements Store<K, V> {
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         messageReceiver.apply("BEFORE: Operation [" + operation + "]");
-        this.decorated.performOperation(operation, callback);
+        this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
+            @Override
+            public void apply(final Object o) {
+                messageReceiver.apply("After: Operation [" + operation + "] got " + o);
+            }
+        }));
     }
 
     public TraceStore(final Closure<String> messageReceiver, final Store<K, V> decorated) {
