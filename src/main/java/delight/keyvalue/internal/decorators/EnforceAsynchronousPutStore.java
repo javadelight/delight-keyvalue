@@ -1,6 +1,5 @@
 package delight.keyvalue.internal.decorators;
 
-import delight.async.AsyncCommon;
 import delight.async.Value;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
@@ -370,15 +369,18 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
-        processAllPuts(AsyncCommon.embed(callback, new Runnable() {
+        processAllPuts(new SimpleCallbackWrapper() {
 
             @Override
-            public void run() {
-                decorated.performOperation(operation, callback);
-
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
             }
 
-        }));
+            @Override
+            public void onSuccess() {
+                decorated.performOperation(operation, callback);
+            }
+        });
 
     }
 
