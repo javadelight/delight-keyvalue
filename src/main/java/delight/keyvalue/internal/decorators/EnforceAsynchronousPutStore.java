@@ -369,6 +369,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+        // important to put this here, eg for removeAll
         processAllPuts(new SimpleCallbackWrapper() {
 
             @Override
