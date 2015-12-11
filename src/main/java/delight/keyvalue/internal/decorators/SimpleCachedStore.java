@@ -5,6 +5,7 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
 import delight.functional.Fn;
+import delight.functional.Success;
 import delight.keyvalue.Store;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
 import delight.keyvalue.operations.StoreOperation;
@@ -125,28 +126,30 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
             @Override
             public void apply(final Object o) {
                 if (operation instanceof RemoveAllOperation) {
+                    if (o instanceof Success) {
 
-                    final RemoveAllOperation removeAllOperation = (RemoveAllOperation) operation;
+                        final RemoveAllOperation removeAllOperation = (RemoveAllOperation) operation;
 
-                    final String keyStartsWith = removeAllOperation.getKeyStartsWith();
+                        final String keyStartsWith = removeAllOperation.getKeyStartsWith();
 
-                    final List<String> keysToDelete = new ArrayList<String>();
+                        final List<String> keysToDelete = new ArrayList<String>();
 
-                    synchronized (cache) {
+                        synchronized (cache) {
 
-                        for (final K k : cache.keySet()) {
-                            final String key = (String) k;
+                            for (final K k : cache.keySet()) {
+                                final String key = (String) k;
 
-                            if (key.startsWith(keyStartsWith)) {
-                                keysToDelete.add(key);
+                                if (key.startsWith(keyStartsWith)) {
+                                    keysToDelete.add(key);
+                                }
+
                             }
 
-                        }
+                            for (final String key : keysToDelete) {
+                                final Object oldValue = cache.remove(key);
 
-                        for (final String key : keysToDelete) {
-                            final Object oldValue = cache.remove(key);
-
-                            assert oldValue != null;
+                                assert oldValue != null;
+                            }
                         }
                     }
                 }
