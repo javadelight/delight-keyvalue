@@ -371,9 +371,15 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         processAllPuts(AsyncCommon.embed(callback, new Runnable() {
-            this.decorated.performOperation(operation, callback);
+
+            @Override
+            public void run() {
+                decorated.performOperation(operation, callback);
+
+            }
+
         }));
-        
+
     }
 
     public EnforceAsynchronousPutStore(final int delay, final Concurrency con, final Store<K, V> decorated) {
