@@ -162,9 +162,6 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
                 triggerPendingProcessOperations();
             }
         };
-        if (ENABLE_LOG) {
-            System.out.println(this + ": Puts to process " + puts.entrySet());
-        }
 
         for (final Entry<K, List<PutOperation<K, V>>> put : puts.entrySet()) {
 
@@ -182,6 +179,9 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
 
                             @Override
                             public void onSuccess() {
+                                if (ENABLE_LOG) {
+                                    System.out.println(this + ": Puts Performed " + puts.entrySet());
+                                }
                                 for (final PutOperation<K, V> operation : put.getValue()) {
                                     operation.getCallback().onSuccess();
                                 }
