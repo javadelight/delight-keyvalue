@@ -21,7 +21,7 @@ import java.util.Vector;
 
 class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
 
-    private final boolean ENABLE_LOG = false;
+    private final boolean ENABLE_LOG = true;
 
     private final Store<K, V> decorated;
     private final int delay;
@@ -166,6 +166,9 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
         for (final Entry<K, List<PutOperation<K, V>>> put : puts.entrySet()) {
 
             try {
+                if (ENABLE_LOG) {
+                    System.out.println(this + ": Schedule put " + put.getKey());
+                }
                 decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
                         new SimpleCallbackWrapper() {
 
@@ -180,7 +183,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
                             @Override
                             public void onSuccess() {
                                 if (ENABLE_LOG) {
-                                    System.out.println(this + ": Puts Performed " + puts.entrySet());
+                                    System.out.println(this + ": Put Performed " + put.getKey());
                                 }
                                 for (final PutOperation<K, V> operation : put.getValue()) {
                                     operation.getCallback().onSuccess();
