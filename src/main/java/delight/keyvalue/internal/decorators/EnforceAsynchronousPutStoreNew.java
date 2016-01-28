@@ -258,7 +258,7 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
     }
 
-    public EnforceAsynchronousPutStoreNew(final Store<K, V> decorated, final int delay, final Concurrency concurrency) {
+    public EnforceAsynchronousPutStoreNew(final int delay, final Concurrency concurrency, final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
         this.delay = delay;

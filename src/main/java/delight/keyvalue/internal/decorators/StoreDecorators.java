@@ -24,7 +24,7 @@ public class StoreDecorators {
      */
     public static <K, V> Store<K, V> enforceAsynchronousPut(final int delay, final Concurrency concurrency,
             final Store<K, V> decorated) {
-        return new EnforceAsynchronousPutStore<K, V>(delay, concurrency, decorated);
+        return new EnforceAsynchronousPutStoreNew<K, V>(delay, concurrency, decorated);
     }
 
     /**
