@@ -198,7 +198,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
                     new Thread() {
                         @Override
                         public void run() {
-
+                            throw new RuntimeException("Cannot perform put for " + put.getKey(), t);
                         }
                     }.start();
                 }
