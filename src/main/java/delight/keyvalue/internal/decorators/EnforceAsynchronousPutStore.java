@@ -21,7 +21,7 @@ import java.util.Vector;
 
 class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final Store<K, V> decorated;
     private final int delay;
@@ -50,8 +50,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
         if (ENABLE_LOG) {
-            System.out.println(this + ": Put " + key + " " + value);
-
+            System.out.println(this + ": Put request " + key + " " + value);
         }
 
         if (isShutdown.get()) {
