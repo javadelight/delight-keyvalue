@@ -68,7 +68,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
             final PutOperation<K, V> putOperation = new PutOperation<K, V>(key, value, callback);
 
             pendingPuts.get(key).add(putOperation);
-
+            callback.onSuccess();
         }
 
         synchronized (timerActive) {
@@ -175,7 +175,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
                             @Override
                             public void onFailure(final Throwable arg0) {
                                 for (final PutOperation<K, V> operation : put.getValue()) {
-                                    operation.getCallback().onFailure(arg0);
+                                    // operation.getCallback().onFailure(arg0);
                                 }
                                 latch.registerSuccess();
                             }
@@ -186,7 +186,7 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
                                     System.out.println(this + ": Put Performed " + put.getKey());
                                 }
                                 for (final PutOperation<K, V> operation : put.getValue()) {
-                                    operation.getCallback().onSuccess();
+                                    // operation.getCallback().onSuccess();
                                 }
                                 latch.registerSuccess();
                             }
