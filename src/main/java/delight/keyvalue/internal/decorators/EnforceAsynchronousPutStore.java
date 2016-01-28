@@ -193,7 +193,14 @@ class EnforceAsynchronousPutStore<K, V> implements Store<K, V> {
                         });
             } catch (final Throwable t) {
                 for (final PutOperation<K, V> operation : put.getValue()) {
-                    operation.getCallback().onFailure(new Exception("Cannot perform put for " + put.getKey(), t));
+                    // operation.getCallback().onFailure(new Exception("Cannot
+                    // perform put for " + put.getKey(), t));
+                    new Thread() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }.start();
                 }
                 latch.registerSuccess();
             }
