@@ -114,6 +114,11 @@ public class Stores {
 
     public static <K, V> Store<K, V> trace(final Store<K, V> decorated) {
 
+        return StoreDecorators.trace("", decorated);
+    }
+
+    public static <K, V> Store<K, V> trace(final String prefix, final Store<K, V> decorated) {
+
         final Closure<String> messageReceiver = new Closure<String>() {
 
             @Override
