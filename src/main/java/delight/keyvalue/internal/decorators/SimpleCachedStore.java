@@ -196,12 +196,14 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
                     assert mget.getKeys().size() == results.size();
 
                     for (int i = 0; i < results.size(); i++) {
-
+                        synchronized (cache) {
+                            cache.put((K) mget.getKeys().get(i), (Object) results.get(i));
+                        }
                     }
 
                 }
 
-                System.out.println(operation.getClass());
+                // System.out.println(operation.getClass());
 
                 callback.onSuccess(o);
 
