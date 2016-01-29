@@ -45,12 +45,20 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
     private final void waitTillEmpty() {
         final long startedAt = new Date().getTime();
 
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Awaiting to empty ...");
+        }
+
         while ((!scheduled.isEmpty() || processing.get() > 0) && new Date().getTime() - startedAt < 5000) {
             try {
                 Thread.sleep(delayInMs);
             } catch (final InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Has been emptied.");
         }
 
         if (!scheduled.isEmpty() || processing.get() > 0) {
