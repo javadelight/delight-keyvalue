@@ -68,7 +68,16 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
         }
 
-        decorated.get(key, callback);
+        decorated.get(key, AsyncCommon.embed(callback, new Closure<V>() {
+
+            @Override
+            public void apply(final V o) {
+                synchronized (cache) {
+                    cache.put(key, o);
+                }
+                callback.onSuccess(o);
+            }
+        }));
     }
 
     @SuppressWarnings("unchecked")
