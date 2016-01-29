@@ -251,6 +251,10 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
         if (operation instanceof MultiGetOperation) {
             final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
 
+            for (final K key : multiGetOperation.getKeys()) {
+
+            }
+
         }
 
         // TODO can getAll be added here?
