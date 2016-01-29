@@ -54,13 +54,13 @@ public class MultiGetOperation<K, V> implements StoreOperation<K, V> {
 
             @Override
             public void apply(final List<V> o) {
-                pushOnCallback(o);
+                pushOnCallback(o, callback);
 
             }
         }));
     }
 
-    public void pushOnCallback(final List<V> o) {
+    public void pushOnCallback(final List<V> o, final ValueCallback<Object> callback) {
         if (valuesTrans.size() == 0) {
             callback.onSuccess(o);
             return;

@@ -251,7 +251,6 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
         if (operation instanceof MultiGetOperation) {
             final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
 
-            final int found = 0;
             final List<V> results = new ArrayList<V>(multiGetOperation.getKeys().size());
             for (final K key : multiGetOperation.getKeys()) {
                 synchronized (pendingValues) {
@@ -259,6 +258,18 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
                         results.add(safeGet(pendingValues.get(key)));
                     }
                 }
+
+                synchronized (valuesWriting) {
+                    if (valuesWriting.containsKey(key)) {
+                        results.add(safeGet(valuesWriting.get(key)));
+                    }
+                }
+
+                if (results.size() == multiGetOperation.getKeys().size()) {
+                    multiGetOperation.pushOnCallback(results, callback);
+                    return;
+                }
+
             }
 
         }
