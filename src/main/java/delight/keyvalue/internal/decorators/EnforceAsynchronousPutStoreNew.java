@@ -1,11 +1,11 @@
 package delight.keyvalue.internal.decorators;
 
 import delight.async.AsyncCommon;
+import delight.async.AsyncFunction;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.concurrency.Concurrency;
-import delight.concurrency.Concurrent;
 import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Success;
@@ -115,19 +115,23 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
                 @Override
                 public void apply(final ValueCallback<Success> callback) {
 
-                    if (e.getValue() == REMOVE) {
-                        decorated.remove(e.getKey(), AsyncCommon.asSimpleCallback(callback));
-                    } else {
-
-                        decorated.put(e.getKey(), (V) e.getValue(), AsyncCommon.asSimpleCallback(callback));
-                    }
-
                 }
 
             });
         }
 
-        Concurrent.parallel(ops, AsyncCommon.asListCallback(AsyncCommon.embed(callback, new Closure<Success>() {
+        AsyncCommon.map(valuesWriting.entrySet(), new AsyncFunction<Entry<K, Object>, Success>() {
+
+            @Override
+            public void apply(final Entry<K, Object> e, final ValueCallback<Success> callback) {
+                if (e.getValue() == REMOVE) {
+                    decorated.remove(e.getKey(), AsyncCommon.asSimpleCallback(callback));
+                } else {
+
+                    decorated.put(e.getKey(), (V) e.getValue(), AsyncCommon.asSimpleCallback(callback));
+                }
+            }
+        }, AsyncCommon.asListCallback(AsyncCommon.embed(callback, new Closure<Success>() {
 
             @Override
             public void apply(final Success o) {
