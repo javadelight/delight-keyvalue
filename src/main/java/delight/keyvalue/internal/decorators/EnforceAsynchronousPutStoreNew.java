@@ -96,9 +96,11 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
         assert valuesWriting.size() == 0;
 
-        synchronized (pendingValues) {
-            valuesWriting.putAll(pendingValues);
-            pendingValues.clear();
+        synchronized (valuesWriting) {
+            synchronized (pendingValues) {
+                valuesWriting.putAll(pendingValues);
+                pendingValues.clear();
+            }
         }
 
         final List<Operation<Success>> ops = new ArrayList<Operation<Success>>(valuesWriting.size());
