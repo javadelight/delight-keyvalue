@@ -108,7 +108,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                 }
             }
 
-            if (toProcessKeys.size() == 1) {
+            if (toProcessKeys.size() == 1 && false) {
                 final List<ValueCallback<V>> cbs = toProcessCbs.get(toProcessKeys.get(0));
 
                 // System.out.println("Get single.");
