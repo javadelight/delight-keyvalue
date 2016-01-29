@@ -51,9 +51,12 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
         final Object fromCache;
+        System.out.println("check " + key);
         synchronized (cache) {
             fromCache = this.cache.get(key);
         }
+
+        System.out.println("in cache " + fromCache);
         if (fromCache != null) {
             if (fromCache == NULL) {
                 callback.onSuccess(null);
