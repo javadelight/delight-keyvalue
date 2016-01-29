@@ -111,9 +111,21 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
             if (toProcessKeys.size() == 1) {
                 final List<ValueCallback<V>> cbs = toProcessCbs.get(toProcessKeys.get(0));
 
-                for (final ValueCallback<V> cb : cbs) {
-                    decorated.get(toProcessKeys.get(0), cb);
-                }
+                decorated.get(toProcessKeys.get(0), new ValueCallback<V>() {
+
+                    @Override
+                    public void onFailure(final Throwable t) {
+                        for (final ValueCallback<V> cb : cbs) {
+                            cb.onFailure(t);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(final V value) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
 
                 return;
             }
