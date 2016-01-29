@@ -109,7 +109,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
             }
 
             if (toProcessKeys.size() == 1) {
-                final List<ValueCallback<V>> cbs = toProcessCbs.get(e.getKey());
+                final List<ValueCallback<V>> cbs = toProcessCbs.get(toProcessCbs.get(0));
 
                 for (final ValueCallback<V> cb : cbs) {
                     decorated.get(toProcessKeys.get(0), cb);
