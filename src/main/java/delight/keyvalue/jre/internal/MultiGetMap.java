@@ -53,9 +53,8 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
         if (!scheduled.isEmpty() || processing.get() > 0) {
             waitTillEmpty();
-            // throw new RuntimeException(
-            // "Multi get map could not be shut down correctly. Items still
-            // processing: " + processing.get());
+            throw new RuntimeException("Multi get map could not be shut down correctly. Items still processing: "
+                    + processing.get() + " Scheduled: " + scheduled.size());
         }
 
     }
