@@ -188,6 +188,19 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
                     }
                 }
 
+                if (operation instanceof MultiGetOperation) {
+                    final MultiGetOperation mget = (MultiGetOperation) operation;
+
+                    final List<V> results = (List<V>) o;
+
+                    assert mget.getKeys().size() == results.size();
+
+                    for (int i = 0; i < results.size(); i++) {
+
+                    }
+
+                }
+
                 System.out.println(operation.getClass());
 
                 callback.onSuccess(o);
