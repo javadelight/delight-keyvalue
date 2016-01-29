@@ -156,7 +156,12 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
                 @Override
                 public void onSuccess(final Object value) {
+
+                    if (ENABLE_LOG) {
+                        System.out.println(MultiGetMap.this + ": Got " + value);
+                    }
                     processing.decrementAndGet();
+
                     @SuppressWarnings("unchecked")
                     final List<V> results = (List<V>) value;
 
