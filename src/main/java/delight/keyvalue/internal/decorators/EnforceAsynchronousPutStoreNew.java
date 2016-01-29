@@ -127,16 +127,15 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
             });
         }
 
-        Concurrent.sequential(ops, concurrency,
-                AsyncCommon.asListCallback(AsyncCommon.embed(callback, new Closure<Success>() {
+        Concurrent.parallel(ops, AsyncCommon.asListCallback(AsyncCommon.embed(callback, new Closure<Success>() {
 
-                    @Override
-                    public void apply(final Success o) {
-                        valuesWriting.clear();
-                        callback.onSuccess(Success.INSTANCE);
-                    }
+            @Override
+            public void apply(final Success o) {
+                valuesWriting.clear();
+                callback.onSuccess(Success.INSTANCE);
+            }
 
-                })));
+        })));
 
     }
 
