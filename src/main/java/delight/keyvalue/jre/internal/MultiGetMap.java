@@ -103,7 +103,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
             }
 
             if (ENABLE_LOG) {
-                if (toProcessKeys.size() > 0) {
+                if (toProcessKeys.size() > 1) {
                     System.out.println(this + ": Perform batch get for: " + toProcessKeys);
                 }
             }
