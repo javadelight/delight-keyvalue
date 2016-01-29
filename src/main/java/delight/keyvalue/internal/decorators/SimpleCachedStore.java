@@ -123,10 +123,15 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
         if (operation instanceof MultiGetOperation) {
             final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
-
+            
+            final List<Object> results = new ArrayList<Object>(multiGetOperation.getKeys().size());
+            
             for (final K key : multiGetOperation.getKeys()) {
                 synchronized (cache) {
-
+                    final Object res = cache.get(key);
+                    
+                    if (res )
+                    
                 }
             }
 
