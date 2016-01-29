@@ -251,8 +251,14 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
         if (operation instanceof MultiGetOperation) {
             final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
 
+            final int found = 0;
+            final List<V> results = new ArrayList<V>(multiGetOperation.getKeys().size());
             for (final K key : multiGetOperation.getKeys()) {
-
+                synchronized (pendingValues) {
+                    if (pendingValues.containsKey(key)) {
+                        results.add(safeGet(pendingValues.get(key)));
+                    }
+                }
             }
 
         }
