@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public final class MultiGetMap<K, V> implements Store<K, V> {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final Store<K, V> decorated;
     private final int delayInMs;
@@ -186,11 +186,12 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                     for (int i = 0; i < results.size(); i++) {
                         for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
 
+                            final int closedI = i;
                             cbExecutor.execute(new Runnable() {
 
                                 @Override
                                 public void run() {
-                                    cb.onSuccess(results.get(i));
+                                    cb.onSuccess(results.get(closedI));
                                 }
                             });
 
