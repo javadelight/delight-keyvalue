@@ -102,12 +102,6 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
             }
 
-            if (ENABLE_LOG) {
-                if (toProcessKeys.size() > 1) {
-                    System.out.println(this + ": Perform batch get for: " + toProcessKeys);
-                }
-            }
-
             if (toProcessKeys.size() == 1 && false) {
                 final List<ValueCallback<V>> cbs = toProcessCbs.get(toProcessKeys.get(0));
 
@@ -133,6 +127,12 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                 });
 
                 return;
+            }
+
+            if (ENABLE_LOG) {
+                if (toProcessKeys.size() > 1) {
+                    System.out.println(this + ": Perform batch get for: " + toProcessKeys);
+                }
             }
 
             decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
