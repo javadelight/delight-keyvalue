@@ -187,6 +187,9 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
                         }
                     }
                 }
+
+                System.out.println(operation.getClass());
+
                 callback.onSuccess(o);
 
             }
