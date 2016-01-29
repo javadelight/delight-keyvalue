@@ -7,6 +7,7 @@ import delight.functional.Closure;
 import delight.functional.Fn;
 import delight.functional.Success;
 import delight.keyvalue.Store;
+import delight.keyvalue.internal.operations.MultiGetOperation;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
 import delight.keyvalue.operations.StoreOperation;
 
@@ -119,6 +120,11 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
+
+        if (operation instanceof MultiGetOperation) {
+            final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
+
+        }
 
         this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
 
