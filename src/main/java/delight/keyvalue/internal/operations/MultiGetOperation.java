@@ -81,6 +81,11 @@ public class MultiGetOperation<K, V> implements StoreOperation<K, V> {
         callback.onSuccess(modifiedValues);
     }
 
+    @Override
+    public String toString() {
+        return "MultiGetOperation [keys=" + keys + "]";
+    }
+
     public MultiGetOperation(final List<K> keys) {
         super();
         this.keys = keys;
