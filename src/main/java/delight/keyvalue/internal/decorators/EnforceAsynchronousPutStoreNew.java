@@ -106,6 +106,8 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
         final List<Operation<Success>> ops = new ArrayList<Operation<Success>>(valuesWriting.size());
 
+        System.out.println("wirting values " + valuesWriting.size());
+
         for (final Entry<K, Object> e : valuesWriting.entrySet()) {
             ops.add(new Operation<Success>() {
 
