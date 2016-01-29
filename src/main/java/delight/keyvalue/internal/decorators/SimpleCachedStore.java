@@ -125,6 +125,8 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
         if (operation instanceof MultiGetOperation) {
             final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
 
+            System.out.println("check multi get " + multiGetOperation.getKeys());
+
             final List<V> results = new ArrayList<V>(multiGetOperation.getKeys().size());
 
             for (final K key : multiGetOperation.getKeys()) {
@@ -144,6 +146,7 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
             }
 
             if (results.size() == multiGetOperation.getKeys().size()) {
+                System.out.println("found multi get in cache!");
                 multiGetOperation.pushOnCallback(results, callback);
                 return;
             }
