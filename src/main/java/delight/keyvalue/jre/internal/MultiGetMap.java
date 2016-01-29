@@ -150,6 +150,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                 @Override
                 public void onSuccess(final Object value) {
                     processing.decrementAndGet();
+                    @SuppressWarnings("unchecked")
                     final List<V> results = (List<V>) value;
 
                     assert results.size() == toProcessCbs.size();
