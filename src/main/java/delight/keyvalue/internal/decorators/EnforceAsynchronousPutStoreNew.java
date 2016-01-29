@@ -108,17 +108,17 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
         System.out.println("wirting values " + valuesWriting.size());
 
-        for (final Entry<K, Object> e : valuesWriting.entrySet()) {
-            ops.add(new Operation<Success>() {
-
-                @SuppressWarnings("unchecked")
-                @Override
-                public void apply(final ValueCallback<Success> callback) {
-
-                }
-
-            });
-        }
+        // for (final Entry<K, Object> e : valuesWriting.entrySet()) {
+        // ops.add(new Operation<Success>() {
+        //
+        // @SuppressWarnings("unchecked")
+        // @Override
+        // public void apply(final ValueCallback<Success> callback) {
+        //
+        // }
+        //
+        // });
+        // }
 
         AsyncCommon.map(new ArrayList<Entry<K, Object>>(valuesWriting.entrySet()),
                 new AsyncFunction<Entry<K, Object>, Success>() {
