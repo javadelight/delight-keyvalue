@@ -103,7 +103,9 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
             }
 
             if (ENABLE_LOG) {
-                System.out.println(this + ": Perform batch get for: " + toProcessKeys);
+                if (toProcessKeys.size() > 0) {
+                    System.out.println(this + ": Perform batch get for: " + toProcessKeys);
+                }
             }
 
             decorated.performOperation(StoreOperations.<K, V> getAll(toProcessKeys), new ValueCallback<Object>() {
