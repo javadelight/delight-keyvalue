@@ -15,6 +15,10 @@ public class MultiGetOperation<K, V> implements StoreOperation<K, V> {
     private List<K> keys;
     private final List<Function<V, V>> valuesTrans;
 
+    public List<K> getKeys() {
+        return keys;
+    }
+
     @Override
     public void modifyKeys(final Function<K, K> func) {
         final List<K> newKeys = new ArrayList<K>(keys.size());
