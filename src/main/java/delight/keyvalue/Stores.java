@@ -114,7 +114,7 @@ public class Stores {
 
     public static <K, V> Store<K, V> trace(final Store<K, V> decorated) {
 
-        return StoreDecorators.trace("", decorated);
+        return trace("", decorated);
     }
 
     public static <K, V> Store<K, V> trace(final String prefix, final Store<K, V> decorated) {
@@ -123,7 +123,7 @@ public class Stores {
 
             @Override
             public void apply(final String o) {
-                System.out.println("Stores.trace: " + o);
+                System.out.println("Stores.trace: " + prefix + " " + o);
             }
         };
         return StoreDecorators.trace(messageReceiver, decorated);
