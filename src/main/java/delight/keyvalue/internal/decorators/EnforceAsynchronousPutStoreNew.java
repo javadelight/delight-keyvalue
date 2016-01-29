@@ -10,6 +10,7 @@ import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Success;
 import delight.keyvalue.Store;
+import delight.keyvalue.internal.operations.MultiGetOperation;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
 import delight.keyvalue.operations.StoreOperation;
 
@@ -244,6 +245,11 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
             }
             callback.onSuccess(Success.INSTANCE);
             return;
+
+        }
+
+        if (operation instanceof MultiGetOperation) {
+            final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
 
         }
 
