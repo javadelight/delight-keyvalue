@@ -135,7 +135,14 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                         // System.out.println("gottit");
                         processing.decrementAndGet();
                         for (final ValueCallback<V> cb : cbs) {
-                            cb.onSuccess(value);
+                            cbExecutor.execute(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    cb.onSuccess(value);
+                                }
+                            });
+
                         }
                     }
                 });
@@ -179,7 +186,14 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                     for (int i = 0; i < results.size(); i++) {
                         for (final ValueCallback<V> cb : toProcessCbs.get(toProcessKeys.get(i))) {
 
-                            cb.onSuccess(results.get(i));
+                            cbExecutor.execute(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    cb.onSuccess(results.get(i));
+                                }
+                            });
+
                         }
 
                     }
@@ -251,7 +265,14 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
             @Override
             public void run() {
-                decorated.stop(callback);
+                cbExecutor.shutdown(AsyncCommon.embed(callback, new Runnable() {
+
+                    @Override
+                    public void run() {
+                        decorated.stop(callback);
+                    }
+                }));
+
             }
         }));
 
