@@ -115,6 +115,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onFailure(final Throwable t) {
+                        processing.decrementAndGet();
                         for (final ValueCallback<V> cb : cbs) {
                             cb.onFailure(t);
                         }
@@ -122,8 +123,10 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onSuccess(final V value) {
-                        // TODO Auto-generated method stub
-
+                        processing.decrementAndGet();
+                        for (final ValueCallback<V> cb : cbs) {
+                            cb.onSuccess(value);
+                        }
                     }
                 });
 
