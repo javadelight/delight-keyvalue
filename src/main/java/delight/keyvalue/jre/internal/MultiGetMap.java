@@ -30,6 +30,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public final class MultiGetMap<K, V> implements Store<K, V> {
 
+    private final boolean ENABLE_LOG = true;
+
     private final Store<K, V> decorated;
     private final int delayInMs;
 
