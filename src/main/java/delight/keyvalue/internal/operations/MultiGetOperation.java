@@ -54,27 +54,31 @@ public class MultiGetOperation<K, V> implements StoreOperation<K, V> {
 
             @Override
             public void apply(final List<V> o) {
-                if (valuesTrans.size() == 0) {
-                    callback.onSuccess(o);
-                    return;
-                }
-
-                final List<V> modifiedValues = new ArrayList<V>(o.size());
-                for (final V v : o) {
-
-                    V value = v;
-
-                    for (final Function<V, V> trans : valuesTrans) {
-                        value = trans.apply(value);
-                    }
-
-                    modifiedValues.add(value);
-                }
-
-                callback.onSuccess(modifiedValues);
+                pushOnCallback(o);
 
             }
         }));
+    }
+
+    public void pushOnCallback(final List<V> o) {
+        if (valuesTrans.size() == 0) {
+            callback.onSuccess(o);
+            return;
+        }
+
+        final List<V> modifiedValues = new ArrayList<V>(o.size());
+        for (final V v : o) {
+
+            V value = v;
+
+            for (final Function<V, V> trans : valuesTrans) {
+                value = trans.apply(value);
+            }
+
+            modifiedValues.add(value);
+        }
+
+        callback.onSuccess(modifiedValues);
     }
 
     public MultiGetOperation(final List<K> keys) {
