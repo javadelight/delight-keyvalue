@@ -111,6 +111,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
             if (toProcessKeys.size() == 1) {
                 final List<ValueCallback<V>> cbs = toProcessCbs.get(toProcessKeys.get(0));
 
+                // System.out.println("Get single.");
                 decorated.get(toProcessKeys.get(0), new ValueCallback<V>() {
 
                     @Override
@@ -123,6 +124,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
                     @Override
                     public void onSuccess(final V value) {
+                        // System.out.println("gottit");
                         processing.decrementAndGet();
                         for (final ValueCallback<V> cb : cbs) {
                             cb.onSuccess(value);
