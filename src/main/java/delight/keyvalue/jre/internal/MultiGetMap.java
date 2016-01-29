@@ -40,6 +40,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
     private final Concurrency conn;
     private final MultiGetMap<K, V>.ProcessGets processGets;
     private final SimpleExecutor executor;
+    private final SimpleExecutor cbExecutor;
     private final MultiGetMap<K, V>.ProcessGetsDelayed processGetsDelayed;
 
     private final void waitTillEmpty() {
@@ -301,6 +302,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
         this.scheduled = new ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>>();
         this.conn = ConcurrencyJre.create();
         this.executor = this.conn.newExecutor().newParallelExecutor(1, this);
+        this.cbExecutor = this.conn.newExecutor().newParallelExecutor(4, this);
         this.processing = this.conn.newAtomicInteger(0);
         this.processGets = new ProcessGets();
         this.processGetsDelayed = new ProcessGetsDelayed();
