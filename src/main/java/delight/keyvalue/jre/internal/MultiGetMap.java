@@ -209,7 +209,10 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public V getSync(final K key) {
-        return Async.waitFor(new Operation<V>() {
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Sync get " + key);
+        }
+        final V value = Async.waitFor(new Operation<V>() {
 
             @Override
             public void apply(final ValueCallback<V> callback) {
@@ -217,6 +220,10 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                 executeGetsAfterDelay();
             }
         });
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Successful sync get " + key);
+        }
+        return value;
     }
 
     @Override
