@@ -120,31 +120,32 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
             });
         }
 
-        AsyncCommon.map(valuesWriting.entrySet(), new AsyncFunction<Entry<K, Object>, Success>() {
+        AsyncCommon.map(new ArrayList<Entry<K, Object>>(valuesWriting.entrySet()),
+                new AsyncFunction<Entry<K, Object>, Success>() {
 
-            @Override
-            public void apply(final Entry<K, Object> e, final ValueCallback<Success> callback) {
-                if (e.getValue() == REMOVE) {
-                    decorated.remove(e.getKey(), AsyncCommon.asSimpleCallback(callback));
-                } else {
-                    decorated.put(e.getKey(), (V) e.getValue(), AsyncCommon.asSimpleCallback(callback));
-                }
-            }
-        }, new ListCallback<Success>() {
+                    @Override
+                    public void apply(final Entry<K, Object> e, final ValueCallback<Success> callback) {
+                        if (e.getValue() == REMOVE) {
+                            decorated.remove(e.getKey(), AsyncCommon.asSimpleCallback(callback));
+                        } else {
+                            decorated.put(e.getKey(), (V) e.getValue(), AsyncCommon.asSimpleCallback(callback));
+                        }
+                    }
+                }, new ListCallback<Success>() {
 
-            @Override
-            public void onSuccess(final List<Success> value) {
-                valuesWriting.clear();
-                callback.onSuccess(Success.INSTANCE);
-            }
+                    @Override
+                    public void onSuccess(final List<Success> value) {
+                        valuesWriting.clear();
+                        callback.onSuccess(Success.INSTANCE);
+                    }
 
-            @Override
-            public void onFailure(final Throwable t) {
-                valuesWriting.clear();
-                callback.onFailure(t);
+                    @Override
+                    public void onFailure(final Throwable t) {
+                        valuesWriting.clear();
+                        callback.onFailure(t);
 
-            }
-        });
+                    }
+                });
 
     }
 
