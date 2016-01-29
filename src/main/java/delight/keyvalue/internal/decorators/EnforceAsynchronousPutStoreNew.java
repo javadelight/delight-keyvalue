@@ -3,11 +3,11 @@ package delight.keyvalue.internal.decorators;
 import delight.async.AsyncCommon;
 import delight.async.AsyncFunction;
 import delight.async.Operation;
+import delight.async.callbacks.ListCallback;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.concurrency.Concurrency;
 import delight.concurrency.schedule.SequentialOperationScheduler;
-import delight.functional.Closure;
 import delight.functional.Success;
 import delight.keyvalue.Store;
 import delight.keyvalue.internal.operations.MultiGetOperation;
@@ -127,19 +127,24 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
                 if (e.getValue() == REMOVE) {
                     decorated.remove(e.getKey(), AsyncCommon.asSimpleCallback(callback));
                 } else {
-
                     decorated.put(e.getKey(), (V) e.getValue(), AsyncCommon.asSimpleCallback(callback));
                 }
             }
-        }, AsyncCommon.asListCallback(AsyncCommon.embed(callback, new Closure<Success>() {
+        }, new ListCallback<Success>() {
 
             @Override
-            public void apply(final Success o) {
+            public void onSuccess(final List<Success> value) {
                 valuesWriting.clear();
                 callback.onSuccess(Success.INSTANCE);
             }
 
-        })));
+            @Override
+            public void onFailure(final Throwable t) {
+                valuesWriting.clear();
+                callback.onFailure(t);
+
+            }
+        });
 
     }
 
