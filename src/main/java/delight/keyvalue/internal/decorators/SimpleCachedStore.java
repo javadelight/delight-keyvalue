@@ -73,7 +73,11 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
             @Override
             public void apply(final V o) {
                 synchronized (cache) {
-                    cache.put(key, o);
+                    if (o != null) {
+                        cache.put(key, o);
+                    } else {
+                        cache.put(key, NULL);
+                    }
                 }
                 callback.onSuccess(o);
             }
@@ -96,8 +100,15 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
 
         }
 
-        V sync = decorated.getSync(key);
-        return sync;
+        final V o = decorated.getSync(key);
+        synchronized (cache) {
+            if (o != null) {
+                cache.put(key, o);
+            } else {
+                cache.put(key, NULL);
+            }
+        }
+        return o;
     }
 
     @Override
