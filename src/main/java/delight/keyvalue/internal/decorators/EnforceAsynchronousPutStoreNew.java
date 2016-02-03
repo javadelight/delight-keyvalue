@@ -104,7 +104,8 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
             }
         }
 
-        final List<Operation<Success>> ops = new ArrayList<Operation<Success>>(valuesWriting.size());
+        // final List<Operation<Success>> ops = new
+        // ArrayList<Operation<Success>>(valuesWriting.size());
 
         // System.out.println("wirting values " + valuesWriting.size());
 
