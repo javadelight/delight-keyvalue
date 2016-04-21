@@ -230,7 +230,8 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
             @Override
             public void onSuccess(final Success value) {
-                callback.onSuccess();
+                decorated.stop(callback);
+                // callback.onSuccess();
             }
         });
     }
