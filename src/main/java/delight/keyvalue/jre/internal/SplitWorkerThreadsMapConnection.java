@@ -215,6 +215,8 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements Store<K, V> 
 
                             @Override
                             public void run() {
+
+                                System.out.println("Shutdown executor.");
                                 executor.shutdown();
 
                                 try {
