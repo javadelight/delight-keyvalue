@@ -1,4 +1,4 @@
-package delight.keyvalue.internal;
+package delight.keyvalue.utils;
 
 import delight.functional.Function;
 

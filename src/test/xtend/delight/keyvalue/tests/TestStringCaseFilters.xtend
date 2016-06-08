@@ -1,6 +1,6 @@
 package delight.keyvalue.tests
 
-import delight.keyvalue.internal.EncodeCaseInsensitiveKey
+import delight.keyvalue.utils.EncodeCaseInsensitiveKey
 import junit.framework.Assert
 import org.junit.Test
 

@@ -4,9 +4,9 @@ import delight.concurrency.Concurrency;
 import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
-import delight.keyvalue.internal.EncodeCaseInsensitiveKey;
 import delight.keyvalue.internal.HashMapAsyncMap;
 import delight.keyvalue.internal.decorators.StoreDecorators;
+import delight.keyvalue.utils.EncodeCaseInsensitiveKey;
 
 import java.util.List;
 import java.util.Map;
