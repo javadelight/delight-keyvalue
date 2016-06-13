@@ -17,6 +17,7 @@ import delight.keyvalue.operations.StoreOperation;
 class KeyFilterStore<K, V> implements Store<K, V> {
 
     private final Function<K, K> filter;
+    private final Function<K, K> inverseFilter;
     private final Store<K, V> decorated;
 
     @Override
@@ -67,12 +68,15 @@ class KeyFilterStore<K, V> implements Store<K, V> {
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         operation.modifyKeys(filter);
+        operation.modifyKeysAfterGet(inverseFilter);
         this.decorated.performOperation(operation, callback);
     }
 
-    public KeyFilterStore(final Function<K, K> filter, final Store<K, V> decorated) {
+    public KeyFilterStore(final Function<K, K> filter, final Function<K, K> inverseFilter,
+            final Store<K, V> decorated) {
         super();
         this.filter = filter;
+        this.inverseFilter = inverseFilter;
         this.decorated = decorated;
     }
 

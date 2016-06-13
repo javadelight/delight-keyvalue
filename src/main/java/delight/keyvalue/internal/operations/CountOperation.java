@@ -44,6 +44,7 @@ public class CountOperation<V> implements StoreOperation<String, V> {
             callback.onSuccess(0);
             return;
         }
+        // System.out.println(this.getClass() + ": " + keyStartsWith);
         store.count(keyStartsWith, new ValueCallback<Integer>() {
 
             @Override

@@ -81,8 +81,9 @@ public class StoreDecorators {
         return new TieredCachesStore<K, V>(primaryCache, secondaryCache);
     }
 
-    public final static <K, V> Store<K, V> filterKeys(final Function<K, K> filter, final Store<K, V> decorated) {
-        return new KeyFilterStore<K, V>(filter, decorated);
+    public final static <K, V> Store<K, V> filterKeys(final Function<K, K> filter, final Function<K, K> inverseFilter,
+            final Store<K, V> decorated) {
+        return new KeyFilterStore<K, V>(filter, inverseFilter, decorated);
     }
 
     public final static <V> Store<String, V> prefixKeys(final String prefix, final Store<String, V> decorated) {

@@ -4,14 +4,17 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Function;
 import delight.keyvalue.Store;
+import delight.keyvalue.Stores;
 import delight.keyvalue.operations.StoreOperation;
+import delight.keyvalue.utils.InversePrefixFilter;
+import delight.keyvalue.utils.NoFilter;
 
 public class PrefixFilterStore<V> implements Store<String, V> {
 
     private final String prefix;
     private final Store<String, V> decorated;
 
-    private final KeyFilterStore<String, V> filterStore;
+    private final Store<String, V> filterStore;
     private final Function<String, String> inverseFilter;
 
     @Override
@@ -62,7 +65,7 @@ public class PrefixFilterStore<V> implements Store<String, V> {
 
     @Override
     public void performOperation(final StoreOperation<String, V> operation, final ValueCallback<Object> callback) {
-
+        // operation.modifyKeys(func);
         operation.modifyKeysAfterGet(this.inverseFilter);
         this.filterStore.performOperation(operation, callback);
 
@@ -75,25 +78,12 @@ public class PrefixFilterStore<V> implements Store<String, V> {
 
         final Function<String, String> filter = new Filter(prefix);
 
-        this.filterStore = new KeyFilterStore<String, V>(filter, decorated);
+        final int prefixLength = prefix.length();
 
-        final int prefixLenght = prefix.length();
+        this.inverseFilter = new InversePrefixFilter(prefixLength);
 
-        this.inverseFilter = new InverseFilter(prefixLenght);
-    }
+        this.filterStore = Stores.<String, V> filterKeys(filter, new NoFilter(), decorated);
 
-    private static final class InverseFilter implements Function<String, String> {
-        private final int prefixLenght;
-
-        private InverseFilter(final int prefixLenght) {
-            this.prefixLenght = prefixLenght;
-        }
-
-        @Override
-        public String apply(final String input) {
-
-            return input.substring(prefixLenght);
-        }
     }
 
     private static final class Filter implements Function<String, String> {
