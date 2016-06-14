@@ -289,7 +289,7 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
         // TODO can getAll be added here?
 
-        // System.out.println("Waiting for operation: " + operation);
+        Log.log(this + ": Waiting for operation: " + operation);
 
         putWorker.schedule(new Operation<Object>() {
 
