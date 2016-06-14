@@ -256,7 +256,14 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
                     }
                 }
             }
-            callback.onSuccess(Success.INSTANCE);
+            putWorker.schedule(new Operation<Object>() {
+
+                @Override
+                public void apply(final ValueCallback<Object> callback) {
+                    decorated.performOperation(operation, callback);
+                }
+
+            }, callback);
             return;
 
         }
@@ -289,7 +296,7 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
 
         // TODO can getAll be added here?
 
-        Log.log(this + ": Waiting for operation: " + operation);
+        // Log.println(this + ": Waiting for operation: " + operation);
 
         putWorker.schedule(new Operation<Object>() {
 

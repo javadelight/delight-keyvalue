@@ -10,12 +10,15 @@ import delight.keyvalue.Store;
 import delight.keyvalue.internal.operations.MultiGetOperation;
 import delight.keyvalue.internal.operations.RemoveAllOperation;
 import delight.keyvalue.operations.StoreOperation;
+import delight.simplelog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class SimpleCachedStore<K, V> implements Store<K, V> {
+final class SimpleCachedStore<K, V> implements Store<K, V> {
+
+    private final static boolean ENABLE_LOG = true;
 
     private final Store<K, V> decorated;
     private final Map<K, Object> cache;
@@ -146,11 +149,12 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
     @Override
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
 
+        if (ENABLE_LOG) {
+            Log.println(this + ": performOperation " + operation + " for " + this.decorated);
+        }
+
         if (operation instanceof MultiGetOperation) {
             final MultiGetOperation<K, V> multiGetOperation = (MultiGetOperation<K, V>) operation;
-
-            // System.out.println("check multi get " +
-            // multiGetOperation.getKeys());
 
             final List<V> results = new ArrayList<V>(multiGetOperation.getKeys().size());
 
@@ -175,7 +179,6 @@ class SimpleCachedStore<K, V> implements Store<K, V> {
                 multiGetOperation.pushOnCallback(results, callback);
                 return;
             }
-
         }
 
         this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
