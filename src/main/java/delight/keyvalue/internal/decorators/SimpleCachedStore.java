@@ -18,7 +18,7 @@ import java.util.Map;
 
 final class SimpleCachedStore<K, V> implements Store<K, V> {
 
-    private final static boolean ENABLE_LOG = true;
+    private final static boolean ENABLE_LOG = false;
 
     private final Store<K, V> decorated;
     private final Map<K, Object> cache;
