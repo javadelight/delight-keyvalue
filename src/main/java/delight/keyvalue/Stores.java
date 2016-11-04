@@ -5,6 +5,7 @@ import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
 import delight.keyvalue.internal.HashMapAsyncMap;
+import delight.keyvalue.internal.NullStore;
 import delight.keyvalue.internal.decorators.StoreDecorators;
 import delight.keyvalue.utils.EncodeCaseInsensitiveKey;
 
@@ -101,6 +102,16 @@ public class Stores {
      */
     public static <K, V> Store<K, V> hashMap() {
         return new HashMapAsyncMap<K, V>();
+    }
+
+    /**
+     * <p>
+     * A store that will forget anything stored into it.
+     * 
+     * @return
+     */
+    public static <K, V> Store<K, V> nullStore() {
+        return new NullStore<K, V>();
     }
 
     public static <K, V> void inject(final List<StoreEntry<K, V>> data, final Store<K, V> intoStore) {
