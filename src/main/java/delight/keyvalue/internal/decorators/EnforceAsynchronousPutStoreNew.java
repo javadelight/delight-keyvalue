@@ -316,7 +316,7 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
         this.concurrency = concurrency;
         this.pendingValues = new HashMap<K, Object>();
         this.valuesWriting = new HashMap<K, Object>();
-        this.putWorker = new SequentialOperationScheduler(concurrency);
+        this.putWorker = new SequentialOperationScheduler(this + "->forStore:" + decorated, concurrency);
         this.putWorker.setEnforceOwnThread(true);
         this.putWorker.setTimeout(60000);
     }
