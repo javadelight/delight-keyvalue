@@ -104,23 +104,6 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
             }
         }
 
-        // final List<Operation<Success>> ops = new
-        // ArrayList<Operation<Success>>(valuesWriting.size());
-
-        // System.out.println("wirting values " + valuesWriting.size());
-
-        // for (final Entry<K, Object> e : valuesWriting.entrySet()) {
-        // ops.add(new Operation<Success>() {
-        //
-        // @SuppressWarnings("unchecked")
-        // @Override
-        // public void apply(final ValueCallback<Success> callback) {
-        //
-        // }
-        //
-        // });
-        // }
-
         AsyncCommon.map(new ArrayList<Entry<K, Object>>(valuesWriting.entrySet()),
                 new AsyncFunction<Entry<K, Object>, Success>() {
 
@@ -295,8 +278,6 @@ final class EnforceAsynchronousPutStoreNew<K, V> implements Store<K, V> {
         }
 
         // TODO can getAll be added here?
-
-        // Log.println(this + ": Waiting for operation: " + operation);
 
         putWorker.schedule(new Operation<Object>() {
 
