@@ -124,6 +124,10 @@ public class Stores {
         return StoreDecorators.trace(messageReceiver, decorated);
     }
 
+    public static <K, V> Store<K, V> collectMetrics(final String metricName, final Store<K, V> decorated) {
+        return StoreDecorators.collectMetrics(metricName, decorated);
+    }
+
     public static <K, V> Store<K, V> trace(final Store<K, V> decorated) {
 
         return trace("", decorated);

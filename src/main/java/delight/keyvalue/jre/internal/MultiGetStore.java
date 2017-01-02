@@ -28,9 +28,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public final class MultiGetMap<K, V> implements Store<K, V> {
+public final class MultiGetStore<K, V> implements Store<K, V> {
 
-    private final boolean ENABLE_LOG = false;
+    private final boolean ENABLE_LOG = true;
 
     private final Store<K, V> decorated;
     private final int delayInMs;
@@ -38,10 +38,10 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
     private final ConcurrentLinkedQueue<Entry<K, ValueCallback<V>>> scheduled;
     private final SimpleAtomicInteger processing;
     private final Concurrency conn;
-    private final MultiGetMap<K, V>.ProcessGets processGets;
+    private final MultiGetStore<K, V>.ProcessGets processGets;
     private final SimpleExecutor executor;
     private final SimpleExecutor cbExecutor;
-    private final MultiGetMap<K, V>.ProcessGetsDelayed processGetsDelayed;
+    private final MultiGetStore<K, V>.ProcessGetsDelayed processGetsDelayed;
 
     private final void waitTillEmpty() {
         final long startedAt = new Date().getTime();
@@ -80,10 +80,13 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
         @Override
         public void run() {
-            try {
-                Thread.sleep(delayInMs);
-            } catch (final InterruptedException e) {
-                throw new RuntimeException(e);
+
+            if (delayInMs > 0) {
+                try {
+                    Thread.sleep(delayInMs);
+                } catch (final InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             processGets.run();
@@ -174,7 +177,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
                 public void onSuccess(final Object value) {
 
                     if (ENABLE_LOG) {
-                        System.out.println(MultiGetMap.this + ": Got " + value);
+                        System.out.println(MultiGetStore.this + ": Got " + value);
                     }
                     processing.decrementAndGet();
 
@@ -219,6 +222,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
+
         scheduled.offer(new EntryData<K, V>(key, callback));
         executeGetsAfterDelay();
     }
@@ -317,7 +321,7 @@ public final class MultiGetMap<K, V> implements Store<K, V> {
         }
     }
 
-    public MultiGetMap(final int delayInMs, final Store<K, V> decorated) {
+    public MultiGetStore(final int delayInMs, final Store<K, V> decorated) {
         super();
         this.decorated = decorated;
         this.delayInMs = delayInMs;

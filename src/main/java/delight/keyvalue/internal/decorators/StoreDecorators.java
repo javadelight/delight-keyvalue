@@ -117,6 +117,10 @@ public class StoreDecorators {
         return new TraceStore<K, V>(messageReceiver, decorated);
     }
 
+    public static <K, V> Store<K, V> collectMetrics(final String metricName, final Store<K, V> decorated) {
+        return new CollectMetricsStore<K, V>(metricName, decorated);
+    }
+
     public static Store<String, Object> exceptionOnStopAndStart(final String message,
             final Store<String, Object> decorated) {
 

@@ -2,7 +2,7 @@ package delight.keyvalue.jre;
 
 import delight.keyvalue.Store;
 import delight.keyvalue.Stores;
-import delight.keyvalue.jre.internal.MultiGetMap;
+import delight.keyvalue.jre.internal.MultiGetStore;
 import delight.keyvalue.jre.internal.SplitWorkerThreadsMapConnection;
 
 import java.util.WeakHashMap;
@@ -18,7 +18,7 @@ public class StoresJre {
     }
 
     public static final <K, V> Store<K, V> forceBatchGets(final int maxDelayInMs, final Store<K, V> decorated) {
-        return new MultiGetMap<K, V>(maxDelayInMs, decorated);
+        return new MultiGetStore<K, V>(maxDelayInMs, decorated);
     }
 
 }
