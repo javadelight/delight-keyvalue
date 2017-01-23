@@ -1,13 +1,13 @@
 package delight.keyvalue;
 
 import delight.concurrency.Concurrency;
-import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
 import delight.keyvalue.internal.HashMapAsyncMap;
 import delight.keyvalue.internal.NullStore;
 import delight.keyvalue.internal.decorators.StoreDecorators;
 import delight.keyvalue.utils.EncodeCaseInsensitiveKey;
+import delight.scheduler.SequentialOperationScheduler;
 
 import java.util.List;
 import java.util.Map;

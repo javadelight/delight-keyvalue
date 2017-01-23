@@ -4,9 +4,9 @@ import delight.async.AsyncCommon;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
-import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
+import delight.scheduler.SequentialOperationScheduler;
 
 public final class AssureNoConflictsWithSchedulerStore<K, V> implements Store<K, V> {
 

@@ -1,10 +1,10 @@
 package delight.keyvalue.internal.decorators;
 
 import delight.concurrency.Concurrency;
-import delight.concurrency.schedule.SequentialOperationScheduler;
 import delight.functional.Closure;
 import delight.functional.Function;
 import delight.keyvalue.Store;
+import delight.scheduler.SequentialOperationScheduler;
 
 import java.util.Map;
 
