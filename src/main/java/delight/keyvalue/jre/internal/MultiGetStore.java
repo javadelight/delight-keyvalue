@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public final class MultiGetStore<K, V> implements Store<K, V> {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final Store<K, V> decorated;
     private final int delayInMs;
