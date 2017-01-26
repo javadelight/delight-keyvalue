@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GetAllOperation<V> implements StoreOperation<String, V> {
+public final class GetAllOperation<V> implements StoreOperation<String, V> {
 
     private String keyStartsWith;
 

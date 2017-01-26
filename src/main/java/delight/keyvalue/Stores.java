@@ -100,7 +100,7 @@ public class Stores {
      * 
      * @return
      */
-    public static <K, V> Store<K, V> hashMap() {
+    public static <K extends Comparable<K>, V> Store<K, V> hashMap() {
         return new HashMapAsyncMap<K, V>();
     }
 

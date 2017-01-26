@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
+public class HashMapAsyncMap<K extends Comparable<K>, V> implements StoreImplementation<K, V> {
 
     private final static boolean ENABLE_LOG = false;
 
@@ -117,7 +117,32 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
     }
 
     @Override
-    public synchronized void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
+    public void getSize(final String keyStartsWith, final ValueCallback<Integer> callback) {
+
+        // System.out.println(this + " get size " + keyStartsWith);
+        // System.out.println(this);
+
+        getAll(keyStartsWith, 0, -1, AsyncCommon.embed(callback, new Closure<List<StoreEntry<K, V>>>() {
+
+            @Override
+            public void apply(final List<StoreEntry<K, V>> entries) {
+
+                int size = 0;
+                for (final StoreEntry<K, V> e : entries) {
+
+                    size += e.key().toString().length();
+                    size += e.value().toString().length();
+                }
+
+                callback.onSuccess(size);
+
+            }
+
+        }));
+    }
+
+    @Override
+    public void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
 
         if (ENABLE_LOG) {
             System.out.println(this + ": Count for  " + keyStartsWith);
@@ -168,6 +193,21 @@ public class HashMapAsyncMap<K, V> implements StoreImplementation<K, V> {
 
         }
         callback.onSuccess();
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+
+        final List<K> keys = new ArrayList<K>(map.keySet());
+
+        Collections.sort(keys);
+
+        for (final K k : keys) {
+            res += k + " -> " + map.get(k) + "\n";
+        }
+
+        return res;
     }
 
     public HashMapAsyncMap() {

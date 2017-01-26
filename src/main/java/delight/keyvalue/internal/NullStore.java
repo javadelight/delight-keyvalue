@@ -94,4 +94,9 @@ public class NullStore<K, V> implements StoreImplementation<K, V> {
         callback.onSuccess(list);
     }
 
+    @Override
+    public void getSize(final String keyStartsWith, final ValueCallback<Integer> callback) {
+        callback.onSuccess(0);
+    }
+
 }
