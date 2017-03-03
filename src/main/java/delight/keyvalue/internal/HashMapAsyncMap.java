@@ -79,7 +79,7 @@ public class HashMapAsyncMap<K extends Comparable<K>, V> implements StoreImpleme
         // System.out.println("XXXX removeAll " + keyStartsWith);
 
         for (final Entry<K, V> e : new HashMap<K, V>(this.map).entrySet()) {
-            assert e.getKey() instanceof String;
+            assert e.getKey().getClass().equals(String.class);
             // System.out.println("compare: " + keyStartsWith + " with " +
             // e.getKey());
             if (e.getKey().toString().startsWith(keyStartsWith)) {
