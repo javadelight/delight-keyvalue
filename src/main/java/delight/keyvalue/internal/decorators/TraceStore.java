@@ -44,7 +44,7 @@ final class TraceStore<K, V> implements Store<K, V> {
 
             @Override
             public void onSuccess(final V value) {
-                messageReceiver.apply("AFTER: get " + key + " got " + value);
+                messageReceiver.apply("AFTER: get " + key + " got " + value.getClass());
                 callback.onSuccess(value);
             }
         });
@@ -60,7 +60,7 @@ final class TraceStore<K, V> implements Store<K, V> {
     public V getSync(final K key) {
         messageReceiver.apply("BEFORE: getSync " + key);
         final V res = decorated.getSync(key);
-        messageReceiver.apply("AFTER: getSync got:" + res);
+        messageReceiver.apply("AFTER: getSync " + key + " got " + res.getClass());
         return res;
     }
 

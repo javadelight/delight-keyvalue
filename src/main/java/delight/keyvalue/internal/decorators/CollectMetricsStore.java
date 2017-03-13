@@ -96,7 +96,7 @@ final class CollectMetricsStore<K, V> implements Store<K, V> {
         final V res = decorated.getSync(key);
 
         final long duration = System.currentTimeMillis() - start;
-        MetricsCommon.get().record(MetricsCommon.value(metricName + "-put-stats", duration));
+        MetricsCommon.get().record(MetricsCommon.value(metricName + "-getSync-stats", duration));
         MetricsCommon.get().record(MetricsCommon.increment(metricName + "-getSync-total", duration));
         MetricsCommon.get().record(MetricsCommon.increment(metricName + "-total", duration));
 
