@@ -147,7 +147,7 @@ public class HashMapAsyncMap<K extends Comparable<K>, V> implements StoreImpleme
     public void count(final String keyStartsWith, final ValueCallback<Integer> callback) {
 
         if (ENABLE_LOG) {
-            System.out.println(this + ": Count for  " + keyStartsWith);
+            System.out.println(this.getClass() + ": Count for  " + keyStartsWith);
         }
 
         getAll(keyStartsWith, 0, -1, AsyncCommon.embed(callback, new Closure<List<StoreEntry<K, V>>>() {
@@ -155,7 +155,7 @@ public class HashMapAsyncMap<K extends Comparable<K>, V> implements StoreImpleme
             @Override
             public void apply(final List<StoreEntry<K, V>> matches) {
                 if (ENABLE_LOG) {
-                    System.out.println(HashMapAsyncMap.this + ": Found matches for count " + matches);
+                    System.out.println(HashMapAsyncMap.this.getClass() + ": Found matches for count " + matches);
                 }
                 callback.onSuccess(matches.size());
             }
@@ -182,7 +182,7 @@ public class HashMapAsyncMap<K extends Comparable<K>, V> implements StoreImpleme
     @Override
     public synchronized void stop(final SimpleCallback callback) {
         if (ENABLE_LOG) {
-            System.out.println(this + ": Stopping map. Has values:");
+            System.out.println(this.getClass() + ": Stopping map. Has values:");
 
             final Set<K> keys = map.keySet();
 
