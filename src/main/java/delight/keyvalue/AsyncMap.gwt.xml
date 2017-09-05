@@ -6,7 +6,7 @@
 	
 	<inherits name="delight.scheduler.Module" />
 
-	
+	<inherits name="delight.trie.Module" /> 
 
 	<!-- Specify the paths for translatable code -->
 	<source path=''>

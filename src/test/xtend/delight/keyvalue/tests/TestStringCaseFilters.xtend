@@ -6,7 +6,8 @@ import junit.framework.Assert
 import org.junit.Test
 
 class TestStringCaseFilters {
-	@Test def void test() {
+	@Test
+	def void test() {
 		val EncodeCaseInsensitiveKey filterIn = new EncodeCaseInsensitiveKey()
 		val DecodeCaseInsensitiveKey filterOut = new DecodeCaseInsensitiveKey()
 		val String lowerCase = filterIn.apply("Something_with_Uppercase")

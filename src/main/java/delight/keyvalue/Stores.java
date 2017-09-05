@@ -5,6 +5,7 @@ import delight.functional.Closure;
 import delight.functional.Function;
 import delight.keyvalue.internal.HashMapAsyncMap;
 import delight.keyvalue.internal.NullStore;
+import delight.keyvalue.internal.decorators.CacheNotExistingKeysStore;
 import delight.keyvalue.internal.decorators.StoreDecorators;
 import delight.keyvalue.utils.EncodeCaseInsensitiveKey;
 import delight.scheduler.SequentialOperationScheduler;
@@ -159,6 +160,18 @@ public class Stores {
         return StoreDecorators.assureNoConflictsWithScheduler(scheduler, decorated);
     }
 
+    /**
+     * <p>Enhances performance for lookups for non-existing keys,
+     * <p>Assumes that when the key <code>a</code> does not exist, that all keys <code>a/*</code> also do no exist.
+     * 
+     * @param conn
+     * @param decorated
+     * @return
+     */
+    public <V> Store<String, V> cacheNonExistingKeys(final Concurrency conn, Store<String, V> decorated) {
+    	return new CacheNotExistingKeysStore<V>(conn, decorated);
+    }
+    
     /**
      * <p>
      * Reports an exception with the specified message if start or stop is
