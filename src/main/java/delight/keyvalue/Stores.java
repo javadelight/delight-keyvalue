@@ -155,7 +155,7 @@ public class Stores {
      * @param decorated
      * @return
      */
-    public static <K, V> Store<K, V> assureNoConflictsWithSchedule(final SequentialOperationScheduler scheduler,
+    public static final <K, V> Store<K, V> assureNoConflictsWithSchedule(final SequentialOperationScheduler scheduler,
             final Store<K, V> decorated) {
         return StoreDecorators.assureNoConflictsWithScheduler(scheduler, decorated);
     }
@@ -168,7 +168,7 @@ public class Stores {
      * @param decorated
      * @return
      */
-    public <V> Store<String, V> cacheNonExistingKeys(final Concurrency conn, Store<String, V> decorated) {
+    public static final <V> Store<String, V> cacheNonExistingKeys(final Concurrency conn, Store<String, V> decorated) {
     	return new CacheNotExistingKeysStore<V>(conn, decorated);
     }
     
@@ -181,7 +181,7 @@ public class Stores {
      * @param decorated
      * @return
      */
-    public static Store<String, Object> exceptionOnStopAndStart(final String message,
+    public static final Store<String, Object> exceptionOnStopAndStart(final String message,
             final Store<String, Object> decorated) {
 
         return StoreDecorators.exceptionOnStopAndStart(message, decorated);

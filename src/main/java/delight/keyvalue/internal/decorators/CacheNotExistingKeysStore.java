@@ -4,80 +4,159 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import delight.async.AsyncCommon;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.concurrency.Concurrency;
+import delight.functional.Closure;
 import delight.keyvalue.Store;
 import delight.keyvalue.operations.StoreOperation;
+import delight.simplelog.Log;
 import delight.trie.TrieMap;
 
 public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 
-	
+	private final static boolean ENABLE_LOG = false;
+
 	private final Store<String, V> decorated;
 
 	private final TrieMap<Set<String>> missingKeyRanges;
 	private final Set<String> missingKeys;
 
-	private final void logNonExistend(String key) {
+	private final void logNonExistent(String key) {
+		if (ENABLE_LOG) {
+			Log.println(this, "Log not existent: " + key);
+		}
 		this.missingKeys.add(key);
+
+		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
+
+		if (bestMatchingPath != null) {
+			
+			TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
+			
+			for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
+
+				synchronized (entry.getValue()) {
+					entry.getValue().remove(key);
+				}
+
+			}
+			
+		}
+
 		this.missingKeyRanges.put(key + "/", new HashSet<String>(0));
+		
+		
+
 	}
 
-	private final void logExistend(String key) {
+	private final void logExistent(String key) {
+		if (ENABLE_LOG) {
+			Log.println(this, "Log exist: " + key);
+		}
 		this.missingKeys.remove(key);
 
-		for (Entry<String, Set<String>> entry : this.missingKeyRanges.getSubMap(key + "/").entrySet()) {
-			if (!entry.getKey().equals(key + "/")) {
+		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
+
+		//System.out.println(bestMatchingPath);
+		
+		if (bestMatchingPath != null) {
+			
+			TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
+			
+			
+			
+			for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
+
 				synchronized (entry.getValue()) {
 					entry.getValue().add(key);
 				}
+
 			}
+			
 		}
+		
+		//System.out.println("MAP");
+
+		//System.out.println(missingKeyRanges);
 
 	}
 
 	private final boolean canExist(String key) {
 		if (missingKeys.contains(key)) {
+			if (ENABLE_LOG) {
+				Log.println(this, "Miss from cache: " + key);
+			}
 			return false;
 		}
 
-		TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(key + "/");
+		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
+
+		if (bestMatchingPath == null) {
+			return true;
+		}
+
+		
+
+		TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
+
+		
+
 		for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
-			
+
 			synchronized (entry.getValue()) {
 				if (entry.getValue().contains(key)) {
 					return true;
 				}
 			}
-			
+
 		}
 
-		return matchingRanges.size() <= 0;
+		boolean canExist = matchingRanges.size() <= 0;
+
+		if (ENABLE_LOG) {
+			if (!canExist) {
+				Log.println(this, "Miss from range cache: " + key);
+			}
+		}
+
+		return canExist;
 	}
 
 	@Override
 	public void put(String key, V value, SimpleCallback callback) {
-		logExistend(key);
+		logExistent(key);
 		decorated.put(key, value, callback);
 
 	}
 
 	@Override
 	public void putSync(String key, V value) {
-		logExistend(key);
+		logExistent(key);
 		decorated.putSync(key, value);
 
 	}
 
 	@Override
-	public void get(String key, ValueCallback<V> callback) {
+	public void get(final String key, final ValueCallback<V> callback) {
 		if (!canExist(key)) {
 			callback.onSuccess(null);
 			return;
 		}
-		
-		decorated.get(key, callback);
+
+		decorated.get(key, AsyncCommon.embed(callback, new Closure<V>() {
+
+			@Override
+			public void apply(V v) {
+				if (v == null) {
+					logNonExistent(key);
+				}
+
+				callback.onSuccess(v);
+			}
+
+		}));
 	}
 
 	@Override
@@ -85,20 +164,24 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 		if (!canExist(key)) {
 			return null;
 		}
-		
-		return decorated.getSync(key);
+
+		V v = decorated.getSync(key);
+		if (v == null) {
+			logNonExistent(key);
+		}
+		return v;
 	}
 
 	@Override
 	public void remove(String key, SimpleCallback callback) {
-		logNonExistend(key);
+		logNonExistent(key);
 		decorated.remove(key, callback);
 
 	}
 
 	@Override
 	public void removeSync(String key) {
-		logNonExistend(key);
+		logNonExistent(key);
 		decorated.removeSync(key);
 	}
 
@@ -124,7 +207,7 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 
 	public CacheNotExistingKeysStore(Concurrency concurrency, Store<String, V> decorated) {
 		super();
-		
+
 		this.decorated = decorated;
 
 		this.missingKeyRanges = new TrieMap<Set<String>>(concurrency);
