@@ -31,4 +31,15 @@ public class TestNonExistentKeysCache {
     store.putSync("b", "v4");
     Assert.assertEquals("v4", store.getSync("b"));
   }
+  
+  @Test
+  public void testLongKeys() {
+    final Store<String, String> store = Stores.<String>cacheNonExistingKeys(ConcurrencyJre.create(), Stores.<String, String>hashMap());
+    store.getSync("test66/A1/B1/C1/D1/E1/F1");
+    store.putSync("test66/A1/B1/C1/D1/E1/F1", "v1");
+    store.getSync("test66/A1/B1/C1/D1/E1");
+    store.putSync("test66/A1/B1/C1/D1/E1", "v2");
+    Assert.assertEquals("v1", store.getSync("test66/A1/B1/C1/D1/E1/F1"));
+    Assert.assertEquals("v2", store.getSync("test66/A1/B1/C1/D1/E1"));
+  }
 }

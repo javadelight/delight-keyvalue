@@ -1,6 +1,7 @@
 package delight.keyvalue.internal.decorators;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import delight.trie.TrieMap;
 
 public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 
-	private final static boolean ENABLE_LOG = false;
+	private final static boolean ENABLE_LOG = true;
 
 	private final Store<String, V> decorated;
 
@@ -32,9 +33,9 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
 
 		if (bestMatchingPath != null) {
-			
+
 			TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
-			
+
 			for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
 
 				synchronized (entry.getValue()) {
@@ -42,12 +43,10 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 				}
 
 			}
-			
+
 		}
 
 		this.missingKeyRanges.put(key + "/", new HashSet<String>(0));
-		
-		
 
 	}
 
@@ -59,30 +58,24 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 			missingKeyRanges.clear();
 			return;
 		}
-		
+
 		this.missingKeys.remove(key);
 
-		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
+		List<Set<String>> parents = missingKeyRanges.getValuesOnPath(key + "/");
 
-		if (bestMatchingPath != null) {
-			
-			TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
-			
-			// to prevent too many ranges having to be updated
-			if (matchingRanges.size() > 5) {
-				missingKeyRanges.clear();
-				return;
-			}
-			
-			for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
-				
-				synchronized (entry.getValue()) {
-					entry.getValue().add(key);
-				}
-
-			}
-			
+		// to prevent too many ranges having to be updated
+		if (parents.size() > 20) {
+			missingKeyRanges.clear();
+			return;
 		}
+
+		for (Set<String> parent : parents) {
+			synchronized (parent) {
+				parent.add(key);
+			}
+		}
+
+		
 
 	}
 
@@ -100,17 +93,16 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 			return true;
 		}
 
-		
-
 		TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
-
-		
 
 		for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
 
-			synchronized (entry.getValue()) {
-				if (entry.getValue().contains(key)) {
-					return true;
+			if (entry.getKey().length() < bestMatchingPath.length()) {
+
+				synchronized (entry.getValue()) {
+					if (entry.getValue().contains(key)) {
+						return true;
+					}
 				}
 			}
 
