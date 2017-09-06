@@ -55,20 +55,27 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 		if (ENABLE_LOG) {
 			Log.println(this, "Log exist: " + key);
 		}
+		if (missingKeyRanges.size() > 200) {
+			missingKeyRanges.clear();
+			return;
+		}
+		
 		this.missingKeys.remove(key);
 
 		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
 
-		//System.out.println(bestMatchingPath);
-		
 		if (bestMatchingPath != null) {
 			
 			TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
 			
-			
+			// to prevent too many ranges having to be updated
+			if (matchingRanges.size() > 5) {
+				missingKeyRanges.clear();
+				return;
+			}
 			
 			for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
-
+				
 				synchronized (entry.getValue()) {
 					entry.getValue().add(key);
 				}
@@ -76,10 +83,6 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 			}
 			
 		}
-		
-		//System.out.println("MAP");
-
-		//System.out.println(missingKeyRanges);
 
 	}
 

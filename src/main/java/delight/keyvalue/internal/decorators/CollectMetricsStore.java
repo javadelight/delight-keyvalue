@@ -152,6 +152,8 @@ final class CollectMetricsStore<K, V> implements Store<K, V> {
     public void performOperation(final StoreOperation<K, V> operation, final ValueCallback<Object> callback) {
         final long start = System.currentTimeMillis();
 
+        //System.out.println(operation);
+        
         this.decorated.performOperation(operation, AsyncCommon.embed(callback, new Closure<Object>() {
             @Override
             public void apply(final Object o) {
