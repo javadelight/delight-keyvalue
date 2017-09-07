@@ -17,7 +17,7 @@ import delight.trie.TrieMap;
 
 public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 
-	private final static boolean ENABLE_LOG = true;
+	private final static boolean ENABLE_LOG = false;
 
 	private final Store<String, V> decorated;
 
@@ -30,20 +30,12 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 		}
 		this.missingKeys.add(key);
 
-		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
-
-		if (bestMatchingPath != null) {
-
-			TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
-
-			for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
-
-				synchronized (entry.getValue()) {
-					entry.getValue().remove(key);
-				}
-
+		List<Set<String>> parents = missingKeyRanges.getValuesOnPath(key + "/");
+		
+		for (Set<String> parent : parents) {
+			synchronized (parent) {
+				parent.remove(key);
 			}
-
 		}
 
 		this.missingKeyRanges.put(key + "/", new HashSet<String>(0));
@@ -54,12 +46,15 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 		if (ENABLE_LOG) {
 			Log.println(this, "Log exist: " + key);
 		}
+		
+		this.missingKeys.remove(key);
+		
 		if (missingKeyRanges.size() > 200) {
 			missingKeyRanges.clear();
 			return;
 		}
 
-		this.missingKeys.remove(key);
+		
 
 		List<Set<String>> parents = missingKeyRanges.getValuesOnPath(key + "/");
 
@@ -87,36 +82,24 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 			return false;
 		}
 
-		String bestMatchingPath = missingKeyRanges.getBestMatchingPath(key + "/");
-
-		if (bestMatchingPath == null) {
+		List<Set<String>> parents = missingKeyRanges.getValuesOnPath(key + "/");
+		if (parents.size() == 0) {
 			return true;
 		}
 
-		TrieMap<Set<String>> matchingRanges = missingKeyRanges.getSubMap(bestMatchingPath);
-
-		for (Entry<String, Set<String>> entry : matchingRanges.entrySet()) {
-
-			if (entry.getKey().length() < bestMatchingPath.length()) {
-
-				synchronized (entry.getValue()) {
-					if (entry.getValue().contains(key)) {
-						return true;
-					}
+		for (Set<String> parent : parents) {
+			synchronized (parent) {
+				if (parent.contains(key)) {
+					return true;
 				}
 			}
-
 		}
-
-		boolean canExist = matchingRanges.size() <= 0;
-
 		if (ENABLE_LOG) {
-			if (!canExist) {
-				Log.println(this, "Miss from range cache: " + key);
-			}
+			Log.println(this, "Miss from cache range: " + key);
 		}
-
-		return canExist;
+		logNonExistent(key);
+		// some parent is marked as being non existent and this no exception has been recoreded.
+		return false;
 	}
 
 	@Override

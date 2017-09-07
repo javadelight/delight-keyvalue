@@ -55,6 +55,7 @@ class TestNonExistentKeysCache {
 		val store = Stores.cacheNonExistingKeys(ConcurrencyJre.create(), Stores.hashMap)
 		
 		store.getSync("test66/A1/B1/C1/D1/E1/F1")
+		store.getSync("test66/A1/B1/C1/D1/E1/F1")
 		store.putSync("test66/A1/B1/C1/D1/E1/F1", "v1");
 		store.getSync("test66/A1/B1/C1/D1/E1")
 		store.putSync("test66/A1/B1/C1/D1/E1", "v2");
