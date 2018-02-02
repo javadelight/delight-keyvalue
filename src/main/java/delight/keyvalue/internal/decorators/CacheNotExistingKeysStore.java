@@ -17,7 +17,7 @@ import delight.trie.TrieMap;
 
 public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 
-	private final static boolean ENABLE_LOG = false;
+	private final static boolean ENABLE_TRACE = false;
 
 	private final Store<String, V> decorated;
 
@@ -25,7 +25,7 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 	private final Set<String> missingKeys;
 
 	private final void logNonExistent(String key) {
-		if (ENABLE_LOG) {
+		if (ENABLE_TRACE) {
 			Log.println(this, "Log not existent: " + key);
 		}
 		this.missingKeys.add(key);
@@ -43,7 +43,7 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 	}
 
 	private final void logExistent(String key) {
-		if (ENABLE_LOG) {
+		if (ENABLE_TRACE) {
 			Log.println(this, "Log exist: " + key);
 		}
 		
@@ -76,7 +76,7 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 
 	private final boolean canExist(String key) {
 		if (missingKeys.contains(key)) {
-			if (ENABLE_LOG) {
+			if (ENABLE_TRACE) {
 				Log.println(this, "Miss from cache: " + key);
 			}
 			return false;
@@ -94,11 +94,11 @@ public final class CacheNotExistingKeysStore<V> implements Store<String, V> {
 				}
 			}
 		}
-		if (ENABLE_LOG) {
+		if (ENABLE_TRACE) {
 			Log.println(this, "Miss from cache range: " + key);
 		}
 		logNonExistent(key);
-		// some parent is marked as being non existent and this no exception has been recoreded.
+		// some parent is marked as being non existent and this no exception has been recorded.
 		return false;
 	}
 
